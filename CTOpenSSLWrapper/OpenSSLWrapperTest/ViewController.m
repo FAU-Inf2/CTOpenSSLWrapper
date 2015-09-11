@@ -39,6 +39,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)extractPacketsFromBytes:(char *)bytes {
+
+}
+
 - (void)extractPublicKeyFromBytes:(char *)bytes {
     int pos = 0;
     char version = bytes[pos++];
