@@ -13,6 +13,7 @@
 		3D861E3B1BA306FA00DED4CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D861E391BA306FA00DED4CC /* Main.storyboard */; };
 		3D861E3D1BA306FA00DED4CC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D861E3C1BA306FA00DED4CC /* Images.xcassets */; };
 		3D861E401BA306FA00DED4CC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D861E3E1BA306FA00DED4CC /* LaunchScreen.xib */; };
+		3D861E551BA3263100DED4CC /* libCTOpenSSLWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7AA07FE14825387009DE810 /* libCTOpenSSLWrapper.a */; };
 		A712DF4D14826BE700F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
 		A712DF4E14826BE700F4E399 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4C14826BE700F4E399 /* libssl.a */; };
 		A712DF4F1482714200F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
@@ -37,6 +38,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3D861E531BA3262100DED4CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7AA07F514825387009DE810 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A7AA07FD14825387009DE810;
+			remoteInfo = CTOpenSSLWrapper;
+		};
 		A7AA081414825387009DE810 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A7AA07F514825387009DE810 /* Project object */;
@@ -87,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D861E551BA3263100DED4CC /* libCTOpenSSLWrapper.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +312,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				3D861E541BA3262100DED4CC /* PBXTargetDependency */,
 			);
 			name = OpenSSLWrapperTest;
 			productName = OpenSSLWrapperTest;
@@ -451,6 +461,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3D861E541BA3262100DED4CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A7AA07FD14825387009DE810 /* CTOpenSSLWrapper */;
+			targetProxy = 3D861E531BA3262100DED4CC /* PBXContainerItemProxy */;
+		};
 		A7AA081514825387009DE810 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A7AA07FD14825387009DE810 /* CTOpenSSLWrapper */;
