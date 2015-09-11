@@ -24,4 +24,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)extractPacketsFromBytes:(char *)bytes {
+
+}
+
+- (void)extractPublicKeyFromBytes:(char *)bytes {
+    
+}
+
 @end
