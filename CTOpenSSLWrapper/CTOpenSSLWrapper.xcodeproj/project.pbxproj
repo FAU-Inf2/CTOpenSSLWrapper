@@ -14,6 +14,7 @@
 		3D861E3D1BA306FA00DED4CC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D861E3C1BA306FA00DED4CC /* Images.xcassets */; };
 		3D861E401BA306FA00DED4CC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D861E3E1BA306FA00DED4CC /* LaunchScreen.xib */; };
 		3D861E551BA3263100DED4CC /* libCTOpenSSLWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7AA07FE14825387009DE810 /* libCTOpenSSLWrapper.a */; };
+		8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8E70CEED1BA32761003251D7 /* publicTestKey.asc */; };
 		A712DF4D14826BE700F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
 		A712DF4E14826BE700F4E399 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4C14826BE700F4E399 /* libssl.a */; };
 		A712DF4F1482714200F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
@@ -65,6 +66,7 @@
 		3D861E3A1BA306FA00DED4CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3D861E3C1BA306FA00DED4CC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3D861E3F1BA306FA00DED4CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		8E70CEED1BA32761003251D7 /* publicTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = publicTestKey.asc; sourceTree = "<group>"; };
 		A712DF4B14826BE700F4E399 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		A712DF4C14826BE700F4E399 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		A73718D2157E878E00AA362C /* CTOpenSSLSymmetricEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTOpenSSLSymmetricEncryption.h; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		3D861E2E1BA306FA00DED4CC /* OpenSSLWrapperTest */ = {
 			isa = PBXGroup;
 			children = (
+				8E70CEED1BA32761003251D7 /* publicTestKey.asc */,
 				3D861E331BA306FA00DED4CC /* AppDelegate.h */,
 				3D861E341BA306FA00DED4CC /* AppDelegate.m */,
 				3D861E361BA306FA00DED4CC /* ViewController.h */,
@@ -396,6 +399,7 @@
 			files = (
 				3D861E3B1BA306FA00DED4CC /* Main.storyboard in Resources */,
 				3D861E401BA306FA00DED4CC /* LaunchScreen.xib in Resources */,
+				8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */,
 				3D861E3D1BA306FA00DED4CC /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -730,6 +734,7 @@
 				3D861E4F1BA306FB00DED4CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A7AA07F814825387009DE810 /* Build configuration list for PBXProject "CTOpenSSLWrapper" */ = {
 			isa = XCConfigurationList;
