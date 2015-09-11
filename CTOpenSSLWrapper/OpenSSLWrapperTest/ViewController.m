@@ -25,6 +25,10 @@
 }
 
 - (void)extractPacketsFromBytes:(char *)bytes {
+
+}
+
+- (void)extractPublicKeyFromBytes:(char *)bytes {
     
 }
 

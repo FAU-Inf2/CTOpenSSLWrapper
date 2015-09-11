@@ -10,7 +10,11 @@
 
 @interface ViewController : UIViewController
 
+
 - (void) extractPacketsFromBytes:(char*)bytes;
+
+- (void)extractPublicKeyFromBytes:(char*) bytes;
+
 
 @end
 
