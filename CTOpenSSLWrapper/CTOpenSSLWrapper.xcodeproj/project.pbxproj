@@ -16,6 +16,8 @@
 		3D861E551BA3263100DED4CC /* libCTOpenSSLWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7AA07FE14825387009DE810 /* libCTOpenSSLWrapper.a */; };
 		3DBD4B1D1BA330F00071B668 /* PGPArmorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DBD4B1B1BA330F00071B668 /* PGPArmorHelper.h */; };
 		3DBD4B1E1BA330F00071B668 /* PGPArmorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBD4B1C1BA330F00071B668 /* PGPArmorHelper.m */; };
+		3DBD4B211BA349830071B668 /* Base64Coder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DBD4B1F1BA349830071B668 /* Base64Coder.h */; };
+		3DBD4B221BA349830071B668 /* Base64Coder.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBD4B201BA349830071B668 /* Base64Coder.m */; };
 		8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8E70CEED1BA32761003251D7 /* publicTestKey.asc */; };
 		A712DF4D14826BE700F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
 		A712DF4E14826BE700F4E399 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4C14826BE700F4E399 /* libssl.a */; };
@@ -70,6 +72,8 @@
 		3D861E3F1BA306FA00DED4CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		3DBD4B1B1BA330F00071B668 /* PGPArmorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPArmorHelper.h; path = CTOpenSSLWrapper/PGPArmorHelper.h; sourceTree = "<group>"; };
 		3DBD4B1C1BA330F00071B668 /* PGPArmorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPArmorHelper.m; path = CTOpenSSLWrapper/PGPArmorHelper.m; sourceTree = "<group>"; };
+		3DBD4B1F1BA349830071B668 /* Base64Coder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64Coder.h; path = CTOpenSSLWrapper/Base64Coder.h; sourceTree = "<group>"; };
+		3DBD4B201BA349830071B668 /* Base64Coder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64Coder.m; path = CTOpenSSLWrapper/Base64Coder.m; sourceTree = "<group>"; };
 		8E70CEED1BA32761003251D7 /* publicTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = publicTestKey.asc; sourceTree = "<group>"; };
 		A712DF4B14826BE700F4E399 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		A712DF4C14826BE700F4E399 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 				A7AA080314825387009DE810 /* CTOpenSSLWrapper */,
 				3DBD4B1B1BA330F00071B668 /* PGPArmorHelper.h */,
 				3DBD4B1C1BA330F00071B668 /* PGPArmorHelper.m */,
+				3DBD4B1F1BA349830071B668 /* Base64Coder.h */,
+				3DBD4B201BA349830071B668 /* Base64Coder.m */,
 				A7AA081714825387009DE810 /* CTOpenSSLWrapperTests */,
 				3D861E2E1BA306FA00DED4CC /* OpenSSLWrapperTest */,
 				A7AA080014825387009DE810 /* Frameworks */,
@@ -299,6 +305,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DBD4B211BA349830071B668 /* Base64Coder.h in Headers */,
 				A74A5A69157D3E64000C62B9 /* NSData+CTOpenSSL.h in Headers */,
 				A74A5AF2157E81B2000C62B9 /* CTOpenSSLDigest.h in Headers */,
 				A73718D4157E878E00AA362C /* CTOpenSSLSymmetricEncryption.h in Headers */,
@@ -454,6 +461,7 @@
 			files = (
 				A7AA080814825387009DE810 /* CTOpenSSLWrapper.m in Sources */,
 				A74A5A6A157D3E64000C62B9 /* NSData+CTOpenSSL.m in Sources */,
+				3DBD4B221BA349830071B668 /* Base64Coder.m in Sources */,
 				A74A5AF3157E81B2000C62B9 /* CTOpenSSLDigest.m in Sources */,
 				A73718D5157E878E00AA362C /* CTOpenSSLSymmetricEncryption.m in Sources */,
 				A73718DA157E88C800AA362C /* CTOpenSSLAsymmetricEncryption.m in Sources */,

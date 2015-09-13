@@ -18,7 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [PGPArmorHelper extractPacketsFromBytes:[PGPArmorHelper removeArmorFromKeyFile:[[NSBundle mainBundle] URLForResource:@"publicTestKey" withExtension:@"asc"]]];
+    //[PGPArmorHelper extractPacketsFromBytes:[PGPArmorHelper removeArmorFromKeyFile:[[NSBundle mainBundle] URLForResource:@"publicTestKey" withExtension:@"asc"]]];
 }
 
 - (void)didReceiveMemoryWarning {
