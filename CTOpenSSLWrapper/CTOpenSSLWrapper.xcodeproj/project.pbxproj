@@ -72,8 +72,8 @@
 		3D861E3F1BA306FA00DED4CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		3DBD4B1B1BA330F00071B668 /* PGPArmorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPArmorHelper.h; path = CTOpenSSLWrapper/PGPArmorHelper.h; sourceTree = "<group>"; };
 		3DBD4B1C1BA330F00071B668 /* PGPArmorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPArmorHelper.m; path = CTOpenSSLWrapper/PGPArmorHelper.m; sourceTree = "<group>"; };
-		3DBD4B1F1BA349830071B668 /* Base64Coder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64Coder.h; sourceTree = "<group>"; };
-		3DBD4B201BA349830071B668 /* Base64Coder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64Coder.m; sourceTree = "<group>"; };
+		3DBD4B1F1BA349830071B668 /* Base64Coder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64Coder.h; path = CTOpenSSLWrapper/Base64Coder.h; sourceTree = "<group>"; };
+		3DBD4B201BA349830071B668 /* Base64Coder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64Coder.m; path = CTOpenSSLWrapper/Base64Coder.m; sourceTree = "<group>"; };
 		8E70CEED1BA32761003251D7 /* publicTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = publicTestKey.asc; sourceTree = "<group>"; };
 		A712DF4B14826BE700F4E399 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		A712DF4C14826BE700F4E399 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
@@ -227,6 +227,8 @@
 				A7AA080314825387009DE810 /* CTOpenSSLWrapper */,
 				3DBD4B1B1BA330F00071B668 /* PGPArmorHelper.h */,
 				3DBD4B1C1BA330F00071B668 /* PGPArmorHelper.m */,
+				3DBD4B1F1BA349830071B668 /* Base64Coder.h */,
+				3DBD4B201BA349830071B668 /* Base64Coder.m */,
 				A7AA081714825387009DE810 /* CTOpenSSLWrapperTests */,
 				3D861E2E1BA306FA00DED4CC /* OpenSSLWrapperTest */,
 				A7AA080014825387009DE810 /* Frameworks */,
@@ -264,8 +266,6 @@
 				A74A5A64157D3E50000C62B9 /* FrameworkAddtions */,
 				A7AA080614825387009DE810 /* CTOpenSSLWrapper.h */,
 				A7AA080714825387009DE810 /* CTOpenSSLWrapper.m */,
-				3DBD4B1F1BA349830071B668 /* Base64Coder.h */,
-				3DBD4B201BA349830071B668 /* Base64Coder.m */,
 				A7AA080414825387009DE810 /* Supporting Files */,
 			);
 			path = CTOpenSSLWrapper;
