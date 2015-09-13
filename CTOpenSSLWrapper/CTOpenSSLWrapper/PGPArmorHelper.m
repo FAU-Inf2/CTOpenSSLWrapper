@@ -8,6 +8,7 @@
 
 #import "PGPArmorHelper.h"
 #import "NSString+CTOpenSSL.h"
+#import "Base64Coder.h"
 
 #define publicArmorBegin @"-----BEGIN PGP PUBLIC KEY BLOCK-----\n"
 #define publicArmorEnd @"-----END PGP PUBLIC KEY BLOCK-----\n"
@@ -43,12 +44,9 @@
 + (char *)removeArmorFromKeyFileString:(NSString*)fileContent {
     if ([PGPArmorHelper isArmored:fileContent]) {
         NSString *encodedBase64String = [PGPArmorHelper removeArmorFromString:fileContent];
-        NSData *data = [encodedBase64String dataFromBase64EncodedString];
-        NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        return (char *)[result UTF8String];
+        return (char *)[[Base64Coder getDecodedBase64StringFromString:encodedBase64String] UTF8String];
     } else {
-        NSData *data = [fileContent dataFromBase64EncodedString];
-        return (char *)[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] UTF8String];
+        return (char *)[[Base64Coder getDecodedBase64StringFromString:fileContent] UTF8String];
     }
 }
 
