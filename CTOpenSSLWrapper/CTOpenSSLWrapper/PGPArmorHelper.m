@@ -7,6 +7,7 @@
 //
 
 #import "PGPArmorHelper.h"
+#import "NSString+CTOpenSSL.h"
 
 #define publicArmorBegin @"-----BEGIN PGP PUBLIC KEY BLOCK-----\n"
 #define publicArmorEnd @"-----END PGP PUBLIC KEY BLOCK-----\n"
@@ -41,9 +42,13 @@
 
 + (char *)removeArmorFromKeyFileString:(NSString*)fileContent {
     if ([PGPArmorHelper isArmored:fileContent]) {
-        return (char *)[[PGPArmorHelper removeArmorFromString:fileContent] UTF8String];
+        NSString *encodedBase64String = [PGPArmorHelper removeArmorFromString:fileContent];
+        NSData *data = [encodedBase64String dataFromBase64EncodedString];
+        NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        return (char *)[result UTF8String];
     } else {
-        return (char *)[fileContent UTF8String];
+        NSData *data = [fileContent dataFromBase64EncodedString];
+        return (char *)[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] UTF8String];
     }
 }
 
@@ -56,7 +61,7 @@
     NSMutableString *mutableString = [string mutableCopy];
     NSRange range;
     while ((range = [mutableString rangeOfString:keyFileComment]).location != NSNotFound) {
-        int startIndex = range.location + range.length;
+        int startIndex = range.location;
         int endIndex = 0;
         for (int i = startIndex; startIndex < string.length; i++) {
             NSString* substring = [string substringWithRange:NSMakeRange(i, 1)];
@@ -70,7 +75,12 @@
         }
     }
     
-    return mutableString;
+    return [PGPArmorHelper trimmNewLinesFromString:mutableString];
+}
+
++ (NSString*)trimmNewLinesFromString:(NSString *)stringToTrimm {
+    NSCharacterSet *whiteSpaceCharacterSet = [NSCharacterSet newlineCharacterSet];
+    return [stringToTrimm stringByTrimmingCharactersInSet:whiteSpaceCharacterSet];
 }
 
 

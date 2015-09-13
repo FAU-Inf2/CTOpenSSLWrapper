@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "PGPArmorHelper.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    NSURL* keyFileURL = [[NSBundle mainBundle] URLForResource:@"publicTestKey" withExtension:@"asc"];
+    char* chars = [PGPArmorHelper removeArmorFromKeyFile:keyFileURL];
+    
 }
 
 - (void)didReceiveMemoryWarning {
