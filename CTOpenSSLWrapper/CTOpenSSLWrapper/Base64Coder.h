@@ -12,6 +12,6 @@
 
 + (char *)getDecodedBase64StringFromString:(NSString *)string;
 
-+ (NSString *)encodeBase64String:(NSString *)string;
++ (char *)encodeBase64String:(NSString *)string;
 
 @end
