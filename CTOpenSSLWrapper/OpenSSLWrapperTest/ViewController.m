@@ -33,8 +33,6 @@
     PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
 
     [PGPArmorHelper extractPublicKeyFromPacket:packet];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
