@@ -47,9 +47,9 @@
 + (char *)removeArmorFromKeyFileString:(NSString*)fileContent {
     if ([PGPArmorHelper isArmored:fileContent]) {
         NSString *encodedBase64String = [PGPArmorHelper removeArmorFromString:fileContent];
-        return (char *)[[Base64Coder getDecodedBase64StringFromString:encodedBase64String] UTF8String];
+        return [Base64Coder getDecodedBase64StringFromString:encodedBase64String];
     } else {
-        return (char *)[[Base64Coder getDecodedBase64StringFromString:fileContent] UTF8String];
+        return (char *)[fileContent UTF8String];
     }
 }
 
@@ -62,9 +62,9 @@
     NSMutableString *mutableString = [string mutableCopy];
     NSRange range;
     while ((range = [mutableString rangeOfString:keyFileComment]).location != NSNotFound) {
-        int startIndex = range.location;
-        int endIndex = 0;
-        for (int i = startIndex; startIndex < string.length; i++) {
+        NSUInteger startIndex = range.location;
+        NSUInteger endIndex = 0;
+        for (NSUInteger i = startIndex; startIndex < string.length; i++) {
             NSString* substring = [string substringWithRange:NSMakeRange(i, 1)];
             if([substring isEqualToString:@"\n"]) {
                 endIndex = i;
@@ -76,12 +76,16 @@
         }
     }
     
+    //Remove checksum from base64 string
+    mutableString = [[mutableString substringToIndex:mutableString.length - 5] mutableCopy];
+    
     return [PGPArmorHelper trimmNewLinesFromString:mutableString];
 }
 
 + (NSString*)trimmNewLinesFromString:(NSString *)stringToTrimm {
-    NSCharacterSet *whiteSpaceCharacterSet = [NSCharacterSet newlineCharacterSet];
+    NSCharacterSet *whiteSpaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     return [stringToTrimm stringByTrimmingCharactersInSet:whiteSpaceCharacterSet];
+    return [stringToTrimm substringFromIndex:2];
 }
 
 + (void)extractPacketsFromBytes:(char *)bytes {
@@ -93,6 +97,13 @@
     int fiveth_octet = bytes[5];
     int bodyLen = 0;
     int offset = 0;
+    
+    for (int i = 0; i < strlen(bytes); i++) {
+         NSLog(@"Index Value: %i", (int)bytes[i]);
+        if ((int)bytes[i] == 0xC6) {
+            NSLog(@"Found Tag on Index: %i", i);
+        }
+    }
     
     if (tag == 0xC6) { //Tag 6 == Public Key Packet
         NSLog(@"Tag == 6");
