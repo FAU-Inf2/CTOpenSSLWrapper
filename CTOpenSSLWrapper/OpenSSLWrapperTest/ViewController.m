@@ -7,20 +7,10 @@
 //
 
 #import "ViewController.h"
-#include <string.h>
+#import "PGPArmorHelper.h"
+#import "PGPPacketHelper.h"
 
 #import "CTOpenSSLWrapper.h"
-
-#import "openssl/evp.h"
-#import <openssl/rand.h>
-#import <openssl/rsa.h>
-#import <openssl/engine.h>
-#import <openssl/sha.h>
-#import <openssl/pem.h>
-#import <openssl/bio.h>
-#import <openssl/err.h>
-#import <openssl/ssl.h>
-#import <openssl/md5.h>
 
 @interface ViewController ()
 
@@ -31,6 +21,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"base64DecodedData" withExtension:@"txt"];
+    
+    NSData* contentOfURL = [NSData dataWithContentsOfURL:fileUrl];
+    //const char *decodedData = [contentOfURL ];
+ 
+    char* decodedData = (char*) contentOfURL.bytes;
+    
+    [PGPArmorHelper extractPacketsFromBytes:(char*)decodedData andWithPostion:0];
+    
+    PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
+
+    [PGPArmorHelper extractPublicKeyFromPacket:packet];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

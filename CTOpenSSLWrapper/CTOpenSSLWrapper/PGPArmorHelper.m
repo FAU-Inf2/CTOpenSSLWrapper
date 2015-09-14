@@ -12,6 +12,7 @@
 
 #import "NSString+CTOpenSSL.h"
 #import "Base64Coder.h"
+#import "PGPPacketHelper.h"
 
 #define publicArmorBegin @"-----BEGIN PGP PUBLIC KEY BLOCK-----\n"
 #define publicArmorEnd @"-----END PGP PUBLIC KEY BLOCK-----\n"
@@ -84,93 +85,103 @@
     return [stringToTrimm stringByTrimmingCharactersInSet:whiteSpaceCharacterSet];
 }
 
-+ (void)extractPacketsFromBytes:(char *)bytes {
-    int pos = 0;
-    int tag;
-    int format = 0; //0 = old format; 1 = new format
-    int packet_length_type;
-    int packet_length;
-    int packet_header = bytes[pos++];
++ (int)extractPacketsFromBytes:(char *)bytes andWithPostion:(int)position {
+    int pos = position;
+    int packet_tag = -1;
+    int packet_format = 0; //0 = old format; 1 = new format
+    int packet_length_type = -1;
+    size_t packet_length = -1;
+    int packet_header = (Byte) bytes[pos++];
     
     //Check format
     if ((packet_header & 0x40) != 0){ //RFC 4.2. Bit 6 -- New packet format if set
-        format = 1;
+        packet_format = 1;
     }
     
     //Get tag
-    if (format) {
+    if (packet_format) {
         //new format
-        tag = packet_header & 0x3F; //RFC 4.2. Bits 5-0 -- packet tag
+        packet_tag = packet_header & 0x3F; //RFC 4.2. Bits 5-0 -- packet tag
     }else {
         //old format
-        tag = (packet_header & 0x3CF) >> 2; //RFC 4.2. Bits 5-2 -- packet tag
+        packet_tag = (packet_header & 0x3C) >> 2; //RFC 4.2. Bits 5-2 -- packet tag
         packet_length_type = packet_header & 0x03; //RFC 4.2. Bits 1-0 -- length-type
     }
     
     //Get packet length
-    if (!format) {
+    if (!packet_format) {
         //RFC 4.2.1. Old Format Packet Lengths
         switch (packet_length_type) {
             case 0:
                 //RFC: The packet has a one-octet length.  The header is 2 octets long.
-                packet_length = bytes[pos++];
+                packet_length = (Byte) bytes[pos++];
                 break;
             case 1:
                 //RFC: The packet has a two-octet length.  The header is 3 octets long.
-                packet_length = (bytes[pos++] << 8);
-                packet_length = packet_length | bytes[pos++];
+                packet_length = ((Byte) bytes[pos++] << 8);
+                packet_length = packet_length | (Byte) bytes[pos++];
                 break;
             case 2:
                 //RFC: The packet has a four-octet length.  The header is 5 octets long.
-                packet_length = (bytes[pos++] << 24);
-                packet_length = packet_length | (bytes[pos++] << 16);
-                packet_length = packet_length | (bytes[pos++] << 8);
-                packet_length = packet_length | bytes[pos++];
+                packet_length = ((Byte) bytes[pos++] << 24);
+                packet_length = packet_length | ((Byte) bytes[pos++] << 16);
+                packet_length = packet_length | ((Byte) bytes[pos++] << 8);
+                packet_length = packet_length | (Byte) bytes[pos++];
                 break;
             case 3:
                 //TODO
+                return -1;
+                break;
             default:
+                return -1;
                 break;
         }
     }else {
         //RFC 4.2.2. New Format Packet Lengths
-        int first_octet = bytes[pos++];
+        int first_octet = (Byte) bytes[pos++];
         
         if(first_octet < 192) {
             //RFC 4.2.2.1. One-Octet Lengths
             packet_length = first_octet;
         } else if (first_octet < 234) {
             //RFC 4.2.2.2. Two-Octet Lengths
-            packet_length = ((first_octet - 192) << 8) + (bytes[pos++]) + 192;
+            packet_length = ((first_octet - 192) << 8) + ((Byte) bytes[pos++]) + 192;
         } else if (first_octet == 255) {
             //RFC 4.2.2.3. Five-Octet Lengths
-            packet_length = (bytes[pos++] << 24);
-            packet_length = packet_length | (bytes[pos++] << 16);
-            packet_length = packet_length | (bytes[pos++] << 8);
-            packet_length = packet_length | bytes[pos++];
+            packet_length = ((Byte) bytes[pos++] << 24);
+            packet_length = packet_length | ((Byte) bytes[pos++] << 16);
+            packet_length = packet_length | ((Byte) bytes[pos++] << 8);
+            packet_length = packet_length | (Byte) bytes[pos++];
         } else {
             //TODO
             /*RFC: When the length of the packet body is not known in advance by the issuer,
              Partial Body Length headers encode a packet of indeterminate length,
              effectively making it a stream.*/
-            return;
+            return -1;
         }
     }
     
-    //Get Packet
-    char packet[packet_length];
+    //Get Packet_bytes
+    //TODO: move allocation of memory to [PGPPacket initWithBytes]
+    char* packet_bytes = calloc(packet_length, sizeof(char));
     for (int i = 0; i < packet_length; i++) {
-        packet[i] = bytes[pos++];
+        packet_bytes[i] = bytes[i+pos];
+    }
+
+    PGPPacket *packet = [[PGPPacket alloc] initWithBytes:packet_bytes andWithLength:packet_length andWithTag:packet_tag andWithFormat:packet_format];
+    
+    [[PGPPacketHelper sharedManager] addPacketWithPGPPacket:packet];
+    
+    if (strlen(bytes) == position+packet_length+1){
+        return 0; //End of bytes
     }
     
-    if (tag == 6) { //Public-Key Packet
-        [self extractPublicKeyFromBytes:packet];
-    }
+    return pos;
 }
 
-+ (void)extractPublicKeyFromBytes:(char *)bytes {
++ (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet {
     int pos = 0;
-    char version = bytes[pos++];
+    int version = (Byte) packet.bytes[pos++];
     NSLog(@"PGP public key version: %d", version);
     
     if (version == 3 || version == 4) {
@@ -183,28 +194,40 @@
         }
     }
     
-    int algorithm = bytes[pos++];
+    int algorithm = (Byte) packet.bytes[pos++];
     NSLog(@"PGP public key algorithm: %d", algorithm);
     
-    char* bmpi = bytes + pos;
+    char* bmpi = packet.bytes + pos;
     int p = 0;
     
-    for (int i = 0; i < 2 && p < strlen(bmpi); i++) {
+    /*for (int i = 0; i < 2 && p < packet.length - pos; i++) {
         double len = (bmpi[p] << 8) | bmpi[p+1];
-        int byteLen = ceil(len / 8);
-        NSLog(@"MPI %d len: %d", i, byteLen);
+        size_t byteLen = ceil(len / 8);
+        NSLog(@"MPI %d len: %zu", i, byteLen);
         BIGNUM* payload = BN_new();
-        char mpi[strlen(bmpi)+2];
-        mpi[0] = 'a';
-        mpi[1] = 'a';
-        mpi[2] = '\0';
-        strncat(mpi, bmpi, strlen(bmpi));
+        char mpi[byteLen+4];
         mpi[0] = '\0';
         mpi[1] = '\0';
+        for (int j = 0; j < byteLen+2; j++) {
+            mpi[j+2] = bmpi[p+j];
+        }
         BN_mpi2bn((const unsigned char*) mpi, byteLen, payload);
-        NSLog(@"MPI %d value: %@", i, payload);
-        p += 2+len;
+        //NSLog(@"MPI %d value: %@", i, payload);
+        p += 2+byteLen;
+    }*/
+    
+    double len = (bmpi[p] << 8) | bmpi[p+1];
+    int byteLen = ceil(len / 8);
+    
+    char rsaKey[byteLen];
+    
+    for (int i = 0; i < byteLen; i++) {
+        rsaKey[i] = bmpi[i+2];
     }
+    
+    NSString* string = [[NSString alloc] initWithCString:rsaKey encoding:NSUnicodeStringEncoding];
+    
+    return [[NSData alloc] initWithBase64EncodedString:[Base64Coder encodeBase64String:string] options:0];
     
 }
 
