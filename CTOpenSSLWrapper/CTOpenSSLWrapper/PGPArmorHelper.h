@@ -12,5 +12,7 @@
 
 + (char *)removeArmorFromKeyFile:(NSURL*)fileUrl;
 + (char *)removeArmorFromKeyFileString:(NSString*)fileContent;
++ (void) extractPacketsFromBytes:(char*)bytes;
++ (void)extractPublicKeyFromBytes:(char*) bytes;
 
 @end
