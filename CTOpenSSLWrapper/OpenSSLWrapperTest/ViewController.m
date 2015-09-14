@@ -40,51 +40,88 @@
 }
 
 - (void)extractPacketsFromBytes:(char *)bytes {
-    int tag = bytes[0];
-    int first_octet = bytes[1];
-    int second_octet = bytes[2];
-    int third_octet = bytes[3];
-    int fourth_octet = bytes[4];
-    int fiveth_octet = bytes[5];
-    int bodyLen = 0;
+    int pos = 0;
+    int tag;
+    int format = 0; //0 = old format; 1 = new format
+    int packet_length_type;
+    int packet_length;
+    int packet_header = bytes[pos++];
     
-    if (tag == 0xC6) { //Tag 6 == Public Key Packet
-        NSLog(@"Tag == 6");
-        if (first_octet < 192) {
-            //Fill Body
-            bodyLen = first_octet;
-            NSLog(@"bodyLen = %d", bodyLen);
-            char body[bodyLen];
-            for (int i = 0; i < bodyLen; i++) {
-                body[i] = bytes[i+2];
-            }
-            [self extractPublicKeyFromBytes:body];
-            
-        }else if (first_octet < 234) {
-            //Fill Body
-            bodyLen = ((first_octet - 192) << 8) + (second_octet) + 192;
-            NSLog(@"bodyLen = %d", bodyLen);
-            char body[bodyLen];
-            for (int i = 0; i < bodyLen; i++) {
-                body[i] = bytes[i+3];
-            }
-            [self extractPublicKeyFromBytes:body];
-            
-        }else if (first_octet == 255) {
-            //Fill Body
-            bodyLen = (second_octet << 24) | (third_octet << 16) | (fourth_octet << 8)  | fiveth_octet;
-            NSLog(@"bodyLen = %d", bodyLen);
-            char body[bodyLen];
-            for (int i = 0; i < bodyLen; i++) {
-                body[i] = bytes[i+6];
-            }
-            [self extractPublicKeyFromBytes:body];
-            
-        }else {
-            //Exception
+    //Check format
+    if ((packet_header & 0x40) != 0){ //RFC 4.2. Bit 6 -- New packet format if set
+        format = 1;
+    }
+    
+    //Get tag
+    if (format) {
+        //new format
+        tag = packet_header & 0x3F; //RFC 4.2. Bits 5-0 -- packet tag
+    }else {
+        //old format
+        tag = (packet_header & 0x3CF) >> 2; //RFC 4.2. Bits 5-2 -- packet tag
+        packet_length_type = packet_header & 0x03; //RFC 4.2. Bits 1-0 -- length-type
+    }
+    
+    //Get packet length
+    if (!format) {
+        //RFC 4.2.1. Old Format Packet Lengths
+        switch (packet_length_type) {
+            case 0:
+                //RFC: The packet has a one-octet length.  The header is 2 octets long.
+                packet_length = bytes[pos++];
+                break;
+            case 1:
+                //RFC: The packet has a two-octet length.  The header is 3 octets long.
+                packet_length = (bytes[pos++] << 8);
+                packet_length = packet_length | bytes[pos++];
+                break;
+            case 2:
+                //RFC: The packet has a four-octet length.  The header is 5 octets long.
+                packet_length = (bytes[pos++] << 24);
+                packet_length = packet_length | (bytes[pos++] << 16);
+                packet_length = packet_length | (bytes[pos++] << 8);
+                packet_length = packet_length | bytes[pos++];
+                break;
+            case 3:
+                //TODO
+            default:
+                break;
+        }
+    }else {
+        //RFC 4.2.2. New Format Packet Lengths
+        int first_octet = bytes[pos++];
+        
+        if(first_octet < 192) {
+            //RFC 4.2.2.1. One-Octet Lengths
+            packet_length = first_octet;
+        } else if (first_octet < 234) {
+            //RFC 4.2.2.2. Two-Octet Lengths
+            packet_length = ((first_octet - 192) << 8) + (bytes[pos++]) + 192;
+        } else if (first_octet == 255) {
+            //RFC 4.2.2.3. Five-Octet Lengths
+            packet_length = (bytes[pos++] << 24);
+            packet_length = packet_length | (bytes[pos++] << 16);
+            packet_length = packet_length | (bytes[pos++] << 8);
+            packet_length = packet_length | bytes[pos++];
+        } else {
+            //TODO
+            /*RFC: When the length of the packet body is not known in advance by the issuer,
+            Partial Body Length headers encode a packet of indeterminate length,
+            effectively making it a stream.*/
             return;
         }
     }
+    
+    //Get Packet
+    char packet[packet_length];
+    for (int i = 0; i < packet_length; i++) {
+        packet[i] = bytes[pos++];
+    }
+    
+    if (tag == 6) { //Public-Key Packet
+        [self extractPublicKeyFromBytes:packet];
+    }
+    
 }
 
 - (void)extractPublicKeyFromBytes:(char *)bytes {
