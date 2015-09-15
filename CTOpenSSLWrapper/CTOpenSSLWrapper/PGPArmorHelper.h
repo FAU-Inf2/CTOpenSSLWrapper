@@ -11,7 +11,20 @@
 
 @interface PGPArmorHelper : NSObject
 
+/*
+ * Function: Remove armor and decode Base64 content from a fileurl
+ *
+ * @param {NSURL *} fileUrl: Content of fileUrl to remove armor and to decode with Base64
+ * @return {NSData *} returns a NSData object which has no armor and is Base64 decoded
+ */
 + (NSData *)removeArmorFromKeyFile:(NSURL*)fileUrl;
+
+/*
+ * Function: Remove armor and decode Base64 content from a string
+ *
+ * @param {NSString *} fileContent: String to remove armor and to decode with Base64
+ * @return {NSData *} returns a NSData object which has no armor and is Base64 decoded
+ */
 + (NSData *)removeArmorFromKeyFileString:(NSString*)fileContent;
 
 /*
