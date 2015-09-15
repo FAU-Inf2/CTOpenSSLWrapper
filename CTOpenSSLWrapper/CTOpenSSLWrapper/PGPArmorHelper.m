@@ -31,8 +31,7 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
         //BNerr(BN_F_BN_MPI2BN, BN_R_INVALID_LENGTH);
         return (NULL);
     }
-    len = ((long)d[0] << 24) | ((long)d[1] << 16) | ((int)d[2] << 8) | (int)
-    d[3];
+    len = ((long)d[0] << 24) | ((long)d[1] << 16) | ((int)d[2] << 8) | (int) d[3];
     double tmp = len;
     tmp = tmp / 8;
     len = ceil(tmp);
@@ -223,9 +222,7 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
 
     PGPPacket *packet = [[PGPPacket alloc] initWithBytes:packet_bytes andWithLength:packet_length andWithTag:packet_tag andWithFormat:packet_format];
     
-    if (packet.tag != NULL) {
-        [[PGPPacketHelper sharedManager] addPacketWithPGPPacket:packet];
-    }
+    [[PGPPacketHelper sharedManager] addPacketWithPGPPacket:packet];
     
     if (length <= pos+packet_length+1){
         return 0; //End of bytes
@@ -250,26 +247,13 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     }
     
     int algorithm =  packet.bytes[pos++];
+    if (algorithm != 1) {
+        return NULL;
+    }
     NSLog(@"PGP public key algorithm: %d", algorithm);
     
     char* bmpi = packet.bytes + pos;
     int p = 0;
-    
-    /*for (int i = 0; i < 2 && p < packet.length - pos; i++) {
-        double len = (bmpi[p] << 8) | bmpi[p+1];
-        size_t byteLen = ceil(len / 8);
-        NSLog(@"MPI %d len: %zu", i, byteLen);
-        BIGNUM* payload = BN_new();
-        char mpi[byteLen+4];
-        mpi[0] = '\0';
-        mpi[1] = '\0';
-        for (int j = 0; j < byteLen+2; j++) {
-            mpi[j+2] = bmpi[p+j];
-        }
-        BN_mpi2bn((const unsigned char*) mpi, byteLen, payload);
-        //NSLog(@"MPI %d value: %@", i, payload);
-        p += 2+byteLen;
-    }*/
     
     // get key data
     double key_len = (bmpi[p] << 8) | bmpi[p+1];
@@ -283,11 +267,6 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     }
     
     p = 2+key_byteLen;
-    
-    /*NSMutableString *rsaString = [NSMutableString new];
-    for (int i = 0; i < byteLen; i++) {
-        [rsaString appendFormat:@"%c", rsaKey[i]];
-    }*/
     
     // get public exponent
     double exp_len = (bmpi[p] << 8) | bmpi[p+1];
@@ -324,7 +303,6 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     
     BIO *bio = BIO_new(BIO_s_mem());
     
-    //PEM_write_bio_RSAPrivateKey(bio, pubKey, NULL, NULL, 0, NULL, NULL);
     PEM_write_bio_RSA_PUBKEY(bio, pubKey);
     
     char *bioData = NULL;
@@ -333,7 +311,6 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     NSLog(@"%@", [[NSString alloc] initWithData:result encoding:NSUnicodeStringEncoding]);
     BN_free(keyData);
     BN_free(exponentData);
-    //RSA_free(pubKey);
     BIO_free(bio);
     
     return result;
