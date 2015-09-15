@@ -134,13 +134,17 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     return [stringToTrimm substringFromIndex:2];
 }
 
-+ (int)extractPacketsFromBytes:(unsigned char *)bytes andWithPostion:(int)position {
++ (int)extractPacketsFromBytes:(unsigned char *)bytes withLength:(int)length andWithPostion:(int)position {
     int pos = position;
     int packet_tag = -1;
     int packet_format = 0; //0 = old format; 1 = new format
     int packet_length_type = -1;
     size_t packet_length = -1;
     int packet_header = bytes[pos++];
+    
+    if ((packet_header & 0x80) == 0) {
+        return -1;
+    }
     
     //Check format
     if ((packet_header & 0x40) != 0){ //RFC 4.2. Bit 6 -- New packet format if set
@@ -219,13 +223,15 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
 
     PGPPacket *packet = [[PGPPacket alloc] initWithBytes:packet_bytes andWithLength:packet_length andWithTag:packet_tag andWithFormat:packet_format];
     
-    [[PGPPacketHelper sharedManager] addPacketWithPGPPacket:packet];
+    if (packet.tag != NULL) {
+        [[PGPPacketHelper sharedManager] addPacketWithPGPPacket:packet];
+    }
     
-    /*if (strlen(bytes) == position+packet_length+1){
+    if (length <= pos+packet_length+1){
         return 0; //End of bytes
-    }*/
+    }
     
-    return pos;
+    return pos+packet_length;
 }
 
 + (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet {

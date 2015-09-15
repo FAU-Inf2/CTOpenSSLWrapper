@@ -649,6 +649,7 @@
 				OTHER_LDFLAGS = (
 					"-force_load",
 					"$(TARGET_BUILD_DIR)/libCTOpenSSLWrapper.a",
+					"-ObjC",
 				);
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = include;
@@ -681,6 +682,7 @@
 				OTHER_LDFLAGS = (
 					"-force_load",
 					"$(TARGET_BUILD_DIR)/libCTOpenSSLWrapper.a",
+					"-ObjC",
 				);
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = include;

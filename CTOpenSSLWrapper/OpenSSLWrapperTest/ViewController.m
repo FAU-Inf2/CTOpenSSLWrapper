@@ -34,15 +34,21 @@
  
     unsigned char* decodedData = (unsigned char*) contentOfURL.bytes;
     
-    [PGPArmorHelper extractPacketsFromBytes:decodedData andWithPostion:0];
+    int nextpos = 0;
+    do {
+        nextpos = [PGPArmorHelper extractPacketsFromBytes:decodedData withLength:contentOfURL.length andWithPostion:nextpos];
+    } while (nextpos > 0);
     
-    PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
+    PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:1];
+    
+    NSLog(@"packettag %d", packet.tag);
+    /*PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
 
     NSData* data = [PGPArmorHelper extractPublicKeyFromPacket:packet];
     
     NSData* shitbull = CTOpenSSLRSAEncrypt(data, [@"bullshit encoded" dataUsingEncoding:NSUTF8StringEncoding]);
     
-    NSLog(@"Shitbull: %@", [[NSString alloc] initWithData:shitbull encoding:NSUTF8StringEncoding]);
+    NSLog(@"Shitbull: %@", [[NSString alloc] initWithData:shitbull encoding:NSUTF8StringEncoding]);*/
     
 }
 
