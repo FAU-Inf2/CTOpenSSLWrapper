@@ -23,31 +23,20 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    /*NSData* privKey = CTOpenSSLGeneratePrivateRSAKey(2048, CTOpenSSLPrivateKeyFormatPEM);
-    
-    NSData* pubKey = CTOpenSSLExtractPublicKeyFromPrivateRSAKey(privKey);*/
-    
-    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"base64DecodedData" withExtension:@"txt"];
-    
-    NSData* contentOfURL = [NSData dataWithContentsOfURL:fileUrl];
-    //const char *decodedData = [contentOfURL ];
- 
-    unsigned char* decodedData = (unsigned char*) contentOfURL.bytes;
+    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"privateTestKey" withExtension:@".asc"];
+    NSData* decodedData = [PGPArmorHelper removeArmorFromKeyFile:fileUrl];
     
     int nextpos = 0;
     do {
-        nextpos = [PGPArmorHelper extractPacketsFromBytes:decodedData withLength:contentOfURL.length andWithPostion:nextpos];
+        nextpos = [PGPArmorHelper extractPacketsFromBytes:(unsigned char*) decodedData.bytes withLength:decodedData.length andWithPostion:nextpos];
     } while (nextpos > 0);
     
-    PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:1];
-    
-    NSLog(@"packettag %d", packet.tag);
-    /*PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
-
-    NSData* data = [PGPArmorHelper extractPublicKeyFromPacket:packet];
-    
-    NSData* shitbull = CTOpenSSLRSAEncrypt(data, [@"bullshit encoded" dataUsingEncoding:NSUTF8StringEncoding]);
-    
+    PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
+     
+    NSData* data = [PGPArmorHelper extractPrivateKeyFromPacket:packet];
+     
+    /*NSData* shitbull = CTOpenSSLRSAEncrypt(data, [@"bullshit encoded" dataUsingEncoding:NSUTF8StringEncoding]);
+     
     NSLog(@"Shitbull: %@", [[NSString alloc] initWithData:shitbull encoding:NSUTF8StringEncoding]);*/
     
 }

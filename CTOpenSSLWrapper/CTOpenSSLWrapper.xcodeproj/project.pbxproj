@@ -18,12 +18,12 @@
 		3DBD4B1E1BA330F00071B668 /* PGPArmorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBD4B1C1BA330F00071B668 /* PGPArmorHelper.m */; };
 		3DBD4B211BA349830071B668 /* Base64Coder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DBD4B1F1BA349830071B668 /* Base64Coder.h */; };
 		3DBD4B221BA349830071B668 /* Base64Coder.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBD4B201BA349830071B668 /* Base64Coder.m */; };
-		3DBD4B731BA85EA80071B668 /* privateTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 3DBD4B721BA85EA80071B668 /* privateTestKey.asc */; };
 		5B1E4E351BA702360086D75E /* PGPPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1E4E341BA702360086D75E /* PGPPacket.m */; };
 		5B1E4E381BA707390086D75E /* PGPPacketHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1E4E371BA707390086D75E /* PGPPacketHelper.m */; };
 		5B1E4E391BA70BE40086D75E /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
 		5B1E4E3A1BA70BE80086D75E /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4C14826BE700F4E399 /* libssl.a */; };
 		5B1E4E3C1BA7180A0086D75E /* base64DecodedData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */; };
+		5B3B481D1BA864E9009E6503 /* privateTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B481C1BA864E9009E6503 /* privateTestKey.asc */; };
 		8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8E70CEED1BA32761003251D7 /* publicTestKey.asc */; };
 		A712DF4D14826BE700F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
 		A712DF4E14826BE700F4E399 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4C14826BE700F4E399 /* libssl.a */; };
@@ -80,12 +80,12 @@
 		3DBD4B1C1BA330F00071B668 /* PGPArmorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPArmorHelper.m; path = CTOpenSSLWrapper/PGPArmorHelper.m; sourceTree = "<group>"; };
 		3DBD4B1F1BA349830071B668 /* Base64Coder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64Coder.h; path = CTOpenSSLWrapper/Base64Coder.h; sourceTree = "<group>"; };
 		3DBD4B201BA349830071B668 /* Base64Coder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64Coder.m; path = CTOpenSSLWrapper/Base64Coder.m; sourceTree = "<group>"; };
-		3DBD4B721BA85EA80071B668 /* privateTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = privateTestKey.asc; sourceTree = "<group>"; };
 		5B1E4E331BA702360086D75E /* PGPPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPPacket.h; path = CTOpenSSLWrapper/PGPPacket.h; sourceTree = "<group>"; };
 		5B1E4E341BA702360086D75E /* PGPPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPPacket.m; path = CTOpenSSLWrapper/PGPPacket.m; sourceTree = "<group>"; };
 		5B1E4E361BA707390086D75E /* PGPPacketHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPPacketHelper.h; path = CTOpenSSLWrapper/PGPPacketHelper.h; sourceTree = "<group>"; };
 		5B1E4E371BA707390086D75E /* PGPPacketHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPPacketHelper.m; path = CTOpenSSLWrapper/PGPPacketHelper.m; sourceTree = "<group>"; };
 		5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = base64DecodedData.txt; sourceTree = "<group>"; };
+		5B3B481C1BA864E9009E6503 /* privateTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = privateTestKey.asc; sourceTree = "<group>"; };
 		8E70CEED1BA32761003251D7 /* publicTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = publicTestKey.asc; sourceTree = "<group>"; };
 		A712DF4B14826BE700F4E399 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		A712DF4C14826BE700F4E399 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				8E70CEED1BA32761003251D7 /* publicTestKey.asc */,
-				3DBD4B721BA85EA80071B668 /* privateTestKey.asc */,
+				5B3B481C1BA864E9009E6503 /* privateTestKey.asc */,
 				5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */,
 				3D861E331BA306FA00DED4CC /* AppDelegate.h */,
 				3D861E341BA306FA00DED4CC /* AppDelegate.m */,
@@ -434,7 +434,7 @@
 				3D861E3B1BA306FA00DED4CC /* Main.storyboard in Resources */,
 				3D861E401BA306FA00DED4CC /* LaunchScreen.xib in Resources */,
 				8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */,
-				3DBD4B731BA85EA80071B668 /* privateTestKey.asc in Resources */,
+				5B3B481D1BA864E9009E6503 /* privateTestKey.asc in Resources */,
 				3D861E3D1BA306FA00DED4CC /* Images.xcassets in Resources */,
 				5B1E4E3C1BA7180A0086D75E /* base64DecodedData.txt in Resources */,
 			);

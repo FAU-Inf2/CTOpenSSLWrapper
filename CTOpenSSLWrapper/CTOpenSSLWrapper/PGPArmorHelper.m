@@ -22,48 +22,6 @@
 #define privateArmorEnd @"-----END PGP PRIVATE KEY BLOCK-----\n"
 #define keyFileComment @"Comment"
 
-static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
-{
-    long len;
-    int neg = 0;
-    
-    if (n < 4) {
-        //BNerr(BN_F_BN_MPI2BN, BN_R_INVALID_LENGTH);
-        return (NULL);
-    }
-    len = ((long)d[0] << 24) | ((long)d[1] << 16) | ((int)d[2] << 8) | (int) d[3];
-    double tmp = len;
-    tmp = tmp / 8;
-    len = ceil(tmp);
-    
-    if ((len + 4) != n) {
-        //BNerr(BN_F_BN_MPI2BN, BN_R_ENCODING_ERROR);
-        return (NULL);
-    }
-    
-    if (a == NULL)
-        a = BN_new();
-    if (a == NULL)
-        return (NULL);
-    
-    if (len == 0) {
-        a->neg = 0;
-        a->top = 0;
-        return (a);
-    }
-    d += 4;
-    if ((*d) & 0x80)
-        neg = 1;
-    if (BN_bin2bn(d, (int)len, a) == NULL)
-        return (NULL);
-    a->neg = neg;
-    if (neg) {
-        BN_clear_bit(a, BN_num_bits(a) - 1);
-    }
-    bn_check_top(a);
-    return (a);
-}
-
 @implementation PGPArmorHelper
 
 + (BOOL)isArmored:(NSString *)fileContent {
@@ -261,8 +219,11 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     
     unsigned char rsaKey[key_byteLen+4];
     
-    rsaKey[0] = rsaKey[1] = '\0';
-    for (int i = 0; i < key_byteLen+2; i++) {
+    rsaKey[0] = key_byteLen >> 24;
+    rsaKey[1] = key_byteLen >> 16;
+    rsaKey[2] = key_byteLen >> 8;
+    rsaKey[3] = key_byteLen;
+    for (int i = 2; i < key_byteLen+2; i++) {
         rsaKey[i+2] = bmpi[i];
     }
     
@@ -274,18 +235,21 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     
     unsigned char pub_exp[exp_byteLen+4];
     
-    pub_exp[0] = pub_exp[1] = '\0';
-    for (int i = 0; i < exp_byteLen+2; i++) {
+    pub_exp[0] = exp_byteLen >> 24;
+    pub_exp[1] = exp_byteLen >> 16;
+    pub_exp[2] = exp_byteLen >> 8;
+    pub_exp[3] = exp_byteLen;
+    for (int i = 2; i < exp_byteLen+2; i++) {
         pub_exp[i+2] = bmpi[p+i];
     }
     
     BIGNUM *keyData, *exponentData;
-    keyData = mpi2bn(rsaKey, key_byteLen+4, NULL);
+    keyData = BN_mpi2bn(rsaKey, key_byteLen+4, NULL);
     if (keyData->neg) {
         BN_set_bit(keyData, ((int) key_len) - 1);
         keyData->neg = 0;
     }
-    exponentData = mpi2bn(pub_exp, exp_byteLen+4, NULL);
+    exponentData = BN_mpi2bn(pub_exp, exp_byteLen+4, NULL);
     if (exponentData->neg) {
         BN_set_bit(exponentData, ((int) exp_len) - 1);
         exponentData->neg = 0;
@@ -314,6 +278,60 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     BIO_free(bio);
     
     return result;
+}
+
++ (NSData *)extractPrivateKeyFromPacket:(PGPPacket *)packet{
+    if (packet.tag != 5){
+        //Wrong packet
+        return NULL;
+    }
+    //RFC 5.5.3. A Public-Key or Public-Subkey packet, as described above.
+    int pos = 0;
+    int version =  packet.bytes[pos++];
+    NSLog(@"PGP private key version: %d", version);
+    
+    if (version == 3 || version == 4) {
+        //created = util.readDate(bytes.substr(pos, 4));
+        pos += 4;
+        
+        if (version == 3) {
+            //this.expirationTimeV3 = util.readNumber(bytes.substr(pos, 2));
+            pos += 2;
+        }
+    }
+    
+    int algorithm =  packet.bytes[pos++];
+    if (algorithm != 1) {
+        return NULL;
+    }
+    NSLog(@"PGP private key algorithm: %d", algorithm);
+    
+    /*int s2k = packet.bytes[pos++];
+    
+    if (s2k == 0) { //RFC 5.5.3. Zero indicates that the secret-key data is not encrypted
+        
+    }else if (s2k == 254 || s2k == 255){ //RFC 5.5.3. 255 or 254 indicates that a string-to-key specifier is being given
+        //[Optional] If string-to-key usage octet was 255 or 254, a one-octet symmetric encryption algorithm.
+        int sea = packet.bytes[pos++];
+        
+        //[Optional] If string-to-key usage octet was 255 or 254, a string-to-key specifier.  The length of the string-to-key specifier is implied by its type, as described above.
+        //TODO
+    }else { //RFC 5.5.3. Any other value is a symmetric-key encryption algorithm identifier
+        
+        //TODO
+    }*/
+    
+    int encrypted = packet.bytes[pos++];
+    
+    if (encrypted) {
+        
+    }else {
+        //Plain or encrypted multiprecision integers comprising the secret key data.  These algorithm-specific fields are as described below
+    }
+    
+    
+    
+    return NULL;
 }
 
 @end

@@ -23,8 +23,9 @@
  *               or 0 if the last packet was extracted
  *               or -1 on error
  */
-+ (int) extractPacketsFromBytes:(unsigned char*)bytes withLength:(int)length andWithPostion:(int)position;
++ (int)extractPacketsFromBytes:(unsigned char*)bytes withLength:(int)length andWithPostion:(int)position;
 
++ (NSData*)extractPrivateKeyFromPacket:(PGPPacket*) packet;
 + (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet;
 
 @end
