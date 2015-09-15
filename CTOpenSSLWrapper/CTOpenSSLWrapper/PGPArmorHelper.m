@@ -57,11 +57,11 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
         neg = 1;
     if (BN_bin2bn(d, (int)len, a) == NULL)
         return (NULL);
-    //a->neg = neg;
-    /*if (neg) {
+    a->neg = neg;
+    if (neg) {
         BN_clear_bit(a, BN_num_bits(a) - 1);
     }
-    bn_check_top(a);*/
+    bn_check_top(a);
     return (a);
 }
 
@@ -266,17 +266,17 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     }*/
     
     // get key data
-    double len = (bmpi[p] << 8) | bmpi[p+1];
-    int byteLen = ceil(len / 8);
+    double key_len = (bmpi[p] << 8) | bmpi[p+1];
+    int key_byteLen = ceil(key_len / 8);
     
-    unsigned char rsaKey[byteLen+4];
+    unsigned char rsaKey[key_byteLen+4];
     
     rsaKey[0] = rsaKey[1] = '\0';
-    for (int i = 0; i < byteLen+2; i++) {
+    for (int i = 0; i < key_byteLen+2; i++) {
         rsaKey[i+2] = bmpi[i];
     }
     
-    p = 2+byteLen;
+    p = 2+key_byteLen;
     
     /*NSMutableString *rsaString = [NSMutableString new];
     for (int i = 0; i < byteLen; i++) {
@@ -284,19 +284,27 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     }*/
     
     // get public exponent
-    len = (bmpi[p] << 8) | bmpi[p+1];
-    int exp_len = ceil(len / 8);
+    double exp_len = (bmpi[p] << 8) | bmpi[p+1];
+    int exp_byteLen = ceil(exp_len / 8);
     
-    unsigned char pub_exp[exp_len+4];
+    unsigned char pub_exp[exp_byteLen+4];
     
     pub_exp[0] = pub_exp[1] = '\0';
-    for (int i = 0; i < exp_len+2; i++) {
+    for (int i = 0; i < exp_byteLen+2; i++) {
         pub_exp[i+2] = bmpi[p+i];
     }
     
     BIGNUM *keyData, *exponentData;
-    keyData = mpi2bn(rsaKey, byteLen+4, NULL);
-    exponentData = mpi2bn(pub_exp, exp_len+4, NULL);
+    keyData = mpi2bn(rsaKey, key_byteLen+4, NULL);
+    if (keyData->neg) {
+        BN_set_bit(keyData, ((int) key_len) - 1);
+        keyData->neg = 0;
+    }
+    exponentData = mpi2bn(pub_exp, exp_byteLen+4, NULL);
+    if (exponentData->neg) {
+        BN_set_bit(exponentData, ((int) exp_len) - 1);
+        exponentData->neg = 0;
+    }
     
     RSA* pubKey = RSA_new();
     pubKey->n = keyData;
