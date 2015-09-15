@@ -78,7 +78,7 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     }
 }
 
-+ (unsigned char *)removeArmorFromKeyFile:(NSURL*)fileUrl {
++ (NSData *)removeArmorFromKeyFile:(NSURL*)fileUrl {
     NSError* error;
     NSString* contentOfURL = [NSString stringWithContentsOfURL:fileUrl encoding:NSUTF8StringEncoding error:&error];
     if (error) {
@@ -89,12 +89,12 @@ static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
     }
 }
 
-+ (unsigned char *)removeArmorFromKeyFileString:(NSString*)fileContent {
++ (NSData *)removeArmorFromKeyFileString:(NSString*)fileContent {
     if ([PGPArmorHelper isArmored:fileContent]) {
         NSString *encodedBase64String = [PGPArmorHelper removeArmorFromString:fileContent];
         return [Base64Coder getDecodedBase64StringFromString:encodedBase64String];
     } else {
-        return (unsigned char *)[fileContent UTF8String];
+        return [NSData dataWithBytes:[fileContent UTF8String] length:fileContent.length];
     }
 }
 
