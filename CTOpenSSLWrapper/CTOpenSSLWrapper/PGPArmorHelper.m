@@ -7,8 +7,10 @@
 //
 
 #import "PGPArmorHelper.h"
-#include <openssl/ossl_typ.h>
-#include <openssl/bn.h>
+#import <openssl/ossl_typ.h>
+#import <openssl/bn.h>
+#import <openssl/rsa.h>
+#import <openssl/pem.h>
 
 #import "NSString+CTOpenSSL.h"
 #import "Base64Coder.h"
@@ -220,26 +222,63 @@
         p += 2+byteLen;
     }*/
     
+    // get key data
     double len = (bmpi[p] << 8) | bmpi[p+1];
     int byteLen = ceil(len / 8);
     
-    char rsaKey[byteLen];
+    unsigned char rsaKey[byteLen+4];
     
-    for (int i = 0; i < byteLen; i++) {
-        rsaKey[i] = bmpi[i+2];
+    rsaKey[0] = rsaKey[1] = '\0';
+    for (int i = 0; i < byteLen+2; i++) {
+        rsaKey[i+2] = bmpi[i];
     }
     
-    NSMutableString *rsaString = [NSMutableString new];
+    p = 2+byteLen;
+    
+    /*NSMutableString *rsaString = [NSMutableString new];
     for (int i = 0; i < byteLen; i++) {
         [rsaString appendFormat:@"%c", rsaKey[i]];
+    }*/
+    
+    // get public exponent
+    len = (bmpi[p] << 8) | bmpi[p+1];
+    int exp_len = ceil(len / 8);
+    
+    unsigned char pub_exp[exp_len+4];
+    
+    pub_exp[0] = pub_exp[1] = '\0';
+    for (int i = 0; i < exp_len+2; i++) {
+        pub_exp[i+2] = bmpi[p+i];
     }
     
-    NSLog(@"%@", rsaString);
+    BIGNUM *keyData;
+    BIGNUM *exponentData = BN_new();
+    BN_set_word(exponentData, 65537);
+    keyData = BN_mpi2bn(rsaKey, 2048+4, NULL);
+    //exponentData = BN_mpi2bn(pub_exp, len+4, NULL);
     
-    //NSString* string = [[NSString alloc] initWithCString:rsaKey encoding:NSUnicodeStringEncoding];
+    RSA* pubKey = RSA_new();
+    pubKey->n = keyData;
+    pubKey->e = exponentData;
     
-    //return [[NSData alloc] initWithBase64EncodedString:[Base64Coder encodeBase64String:string] options:0];
-    return NULL;
+    /*int ret = RSA_check_key(pubKey);
+    NSLog(@"%d", ret);*/
+    
+    BIO *bio = BIO_new(BIO_s_mem());
+    
+    //PEM_write_bio_RSAPrivateKey(bio, pubKey, NULL, NULL, 0, NULL, NULL);
+    PEM_write_bio_RSA_PUBKEY(bio, pubKey);
+    
+    char *bioData = NULL;
+    long bioDataLength = BIO_get_mem_data(bio, &bioData);
+    NSData *result = [NSData dataWithBytes:bioData length:bioDataLength];
+    NSLog(@"%@", [[NSString alloc] initWithData:result encoding:NSUnicodeStringEncoding]);
+    BN_free(keyData);
+    BN_free(exponentData);
+    //RSA_free(pubKey);
+    BIO_free(bio);
+    
+    return result;
 }
 
 @end

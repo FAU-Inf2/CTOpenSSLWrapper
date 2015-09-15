@@ -11,6 +11,7 @@
 #import "PGPPacketHelper.h"
 
 #import "CTOpenSSLWrapper.h"
+#import "CTOpenSSLAsymmetricEncryption.h"
 
 @interface ViewController ()
 
@@ -21,6 +22,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    /*NSData* privKey = CTOpenSSLGeneratePrivateRSAKey(2048, CTOpenSSLPrivateKeyFormatPEM);
+    
+    NSData* pubKey = CTOpenSSLExtractPublicKeyFromPrivateRSAKey(privKey);*/
+    
     NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"base64DecodedData" withExtension:@"txt"];
     
     NSData* contentOfURL = [NSData dataWithContentsOfURL:fileUrl];
@@ -32,7 +38,12 @@
     
     PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
 
-    [PGPArmorHelper extractPublicKeyFromPacket:packet];
+    NSData* data = [PGPArmorHelper extractPublicKeyFromPacket:packet];
+    
+    NSData* shitbull = CTOpenSSLRSAEncrypt(data, [@"bullshit encoded" dataUsingEncoding:NSUTF8StringEncoding]);
+    
+    NSLog(@"Shitbull: %@", [[NSString alloc] initWithData:shitbull encoding:NSUTF8StringEncoding]);
+    
 }
 
 - (void)didReceiveMemoryWarning {
