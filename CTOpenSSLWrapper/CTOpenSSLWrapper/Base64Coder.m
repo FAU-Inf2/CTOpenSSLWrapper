@@ -14,7 +14,7 @@
 
 @implementation Base64Coder
 
-+ (char *)encodeBase64String:(NSString *)string {
++ (unsigned char *)encodeBase64String:(NSString *)string {
 
     BIO *bio, *b64;
     BIO *bio_err = BIO_new(BIO_s_file());
@@ -45,17 +45,17 @@
         NSLog(@"%@", error.description);
     }
     
-    return (char *)encodedData.bytes;
+    return (unsigned char *)encodedData.bytes;
     
 }
 
-+ (char *)getDecodedBase64StringFromString:(NSString *)encodedString {
++ (unsigned char *)getDecodedBase64StringFromString:(NSString *)encodedString {
     
     BIO *b64;
     BIO *input = NULL;
     BIO *bio_err = BIO_new(BIO_s_file());
     BIO_set_fp(bio_err, stderr, BIO_NOCLOSE);
-    char* buffer;
+    unsigned char* buffer;
     int decodeLen = [Base64Coder calcDecodeLenthWithString:encodedString];
     buffer = OPENSSL_malloc(EVP_ENCODE_LENGTH(decodeLen + 1));
     

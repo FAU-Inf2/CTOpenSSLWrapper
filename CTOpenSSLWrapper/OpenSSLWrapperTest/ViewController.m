@@ -32,9 +32,9 @@
     NSData* contentOfURL = [NSData dataWithContentsOfURL:fileUrl];
     //const char *decodedData = [contentOfURL ];
  
-    char* decodedData = (char*) contentOfURL.bytes;
+    unsigned char* decodedData = (unsigned char*) contentOfURL.bytes;
     
-    [PGPArmorHelper extractPacketsFromBytes:(char*)decodedData andWithPostion:0];
+    [PGPArmorHelper extractPacketsFromBytes:decodedData andWithPostion:0];
     
     PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
 

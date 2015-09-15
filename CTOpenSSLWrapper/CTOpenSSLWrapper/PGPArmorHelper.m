@@ -22,6 +22,49 @@
 #define privateArmorEnd @"-----END PGP PRIVATE KEY BLOCK-----\n"
 #define keyFileComment @"Comment"
 
+static BIGNUM *mpi2bn(const unsigned char *d, int n, BIGNUM *a)
+{
+    long len;
+    int neg = 0;
+    
+    if (n < 4) {
+        //BNerr(BN_F_BN_MPI2BN, BN_R_INVALID_LENGTH);
+        return (NULL);
+    }
+    len = ((long)d[0] << 24) | ((long)d[1] << 16) | ((int)d[2] << 8) | (int)
+    d[3];
+    double tmp = len;
+    tmp = tmp / 8;
+    len = ceil(tmp);
+    
+    if ((len + 4) != n) {
+        //BNerr(BN_F_BN_MPI2BN, BN_R_ENCODING_ERROR);
+        return (NULL);
+    }
+    
+    if (a == NULL)
+        a = BN_new();
+    if (a == NULL)
+        return (NULL);
+    
+    if (len == 0) {
+        a->neg = 0;
+        a->top = 0;
+        return (a);
+    }
+    d += 4;
+    if ((*d) & 0x80)
+        neg = 1;
+    if (BN_bin2bn(d, (int)len, a) == NULL)
+        return (NULL);
+    //a->neg = neg;
+    /*if (neg) {
+        BN_clear_bit(a, BN_num_bits(a) - 1);
+    }
+    bn_check_top(a);*/
+    return (a);
+}
+
 @implementation PGPArmorHelper
 
 + (BOOL)isArmored:(NSString *)fileContent {
@@ -36,7 +79,7 @@
     }
 }
 
-+ (char *)removeArmorFromKeyFile:(NSURL*)fileUrl {
++ (unsigned char *)removeArmorFromKeyFile:(NSURL*)fileUrl {
     NSError* error;
     NSString* contentOfURL = [NSString stringWithContentsOfURL:fileUrl encoding:NSUTF8StringEncoding error:&error];
     if (error) {
@@ -47,12 +90,12 @@
     }
 }
 
-+ (char *)removeArmorFromKeyFileString:(NSString*)fileContent {
++ (unsigned char *)removeArmorFromKeyFileString:(NSString*)fileContent {
     if ([PGPArmorHelper isArmored:fileContent]) {
         NSString *encodedBase64String = [PGPArmorHelper removeArmorFromString:fileContent];
         return [Base64Coder getDecodedBase64StringFromString:encodedBase64String];
     } else {
-        return (char *)[fileContent UTF8String];
+        return (unsigned char *)[fileContent UTF8String];
     }
 }
 
@@ -91,13 +134,13 @@
     return [stringToTrimm substringFromIndex:2];
 }
 
-+ (int)extractPacketsFromBytes:(char *)bytes andWithPostion:(int)position {
++ (int)extractPacketsFromBytes:(unsigned char *)bytes andWithPostion:(int)position {
     int pos = position;
     int packet_tag = -1;
     int packet_format = 0; //0 = old format; 1 = new format
     int packet_length_type = -1;
     size_t packet_length = -1;
-    int packet_header = (Byte) bytes[pos++];
+    int packet_header = bytes[pos++];
     
     //Check format
     if ((packet_header & 0x40) != 0){ //RFC 4.2. Bit 6 -- New packet format if set
@@ -120,19 +163,19 @@
         switch (packet_length_type) {
             case 0:
                 //RFC: The packet has a one-octet length.  The header is 2 octets long.
-                packet_length = (Byte) bytes[pos++];
+                packet_length =  bytes[pos++];
                 break;
             case 1:
                 //RFC: The packet has a two-octet length.  The header is 3 octets long.
-                packet_length = ((Byte) bytes[pos++] << 8);
-                packet_length = packet_length | (Byte) bytes[pos++];
+                packet_length = ( bytes[pos++] << 8);
+                packet_length = packet_length |  bytes[pos++];
                 break;
             case 2:
                 //RFC: The packet has a four-octet length.  The header is 5 octets long.
-                packet_length = ((Byte) bytes[pos++] << 24);
-                packet_length = packet_length | ((Byte) bytes[pos++] << 16);
-                packet_length = packet_length | ((Byte) bytes[pos++] << 8);
-                packet_length = packet_length | (Byte) bytes[pos++];
+                packet_length = ( bytes[pos++] << 24);
+                packet_length = packet_length | ( bytes[pos++] << 16);
+                packet_length = packet_length | ( bytes[pos++] << 8);
+                packet_length = packet_length |  bytes[pos++];
                 break;
             case 3:
                 //TODO
@@ -144,20 +187,20 @@
         }
     }else {
         //RFC 4.2.2. New Format Packet Lengths
-        int first_octet = (Byte) bytes[pos++];
+        int first_octet =  bytes[pos++];
         
         if(first_octet < 192) {
             //RFC 4.2.2.1. One-Octet Lengths
             packet_length = first_octet;
         } else if (first_octet < 234) {
             //RFC 4.2.2.2. Two-Octet Lengths
-            packet_length = ((first_octet - 192) << 8) + ((Byte) bytes[pos++]) + 192;
+            packet_length = ((first_octet - 192) << 8) + ( bytes[pos++]) + 192;
         } else if (first_octet == 255) {
             //RFC 4.2.2.3. Five-Octet Lengths
-            packet_length = ((Byte) bytes[pos++] << 24);
-            packet_length = packet_length | ((Byte) bytes[pos++] << 16);
-            packet_length = packet_length | ((Byte) bytes[pos++] << 8);
-            packet_length = packet_length | (Byte) bytes[pos++];
+            packet_length = ( bytes[pos++] << 24);
+            packet_length = packet_length | ( bytes[pos++] << 16);
+            packet_length = packet_length | ( bytes[pos++] << 8);
+            packet_length = packet_length |  bytes[pos++];
         } else {
             //TODO
             /*RFC: When the length of the packet body is not known in advance by the issuer,
@@ -178,16 +221,16 @@
     
     [[PGPPacketHelper sharedManager] addPacketWithPGPPacket:packet];
     
-    if (strlen(bytes) == position+packet_length+1){
+    /*if (strlen(bytes) == position+packet_length+1){
         return 0; //End of bytes
-    }
+    }*/
     
     return pos;
 }
 
 + (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet {
     int pos = 0;
-    int version = (Byte) packet.bytes[pos++];
+    int version =  packet.bytes[pos++];
     NSLog(@"PGP public key version: %d", version);
     
     if (version == 3 || version == 4) {
@@ -200,7 +243,7 @@
         }
     }
     
-    int algorithm = (Byte) packet.bytes[pos++];
+    int algorithm =  packet.bytes[pos++];
     NSLog(@"PGP public key algorithm: %d", algorithm);
     
     char* bmpi = packet.bytes + pos;
@@ -251,18 +294,19 @@
         pub_exp[i+2] = bmpi[p+i];
     }
     
-    BIGNUM *keyData;
-    BIGNUM *exponentData = BN_new();
-    BN_set_word(exponentData, 65537);
-    keyData = BN_mpi2bn(rsaKey, 2048+4, NULL);
-    //exponentData = BN_mpi2bn(pub_exp, len+4, NULL);
+    BIGNUM *keyData, *exponentData;
+    keyData = mpi2bn(rsaKey, byteLen+4, NULL);
+    exponentData = mpi2bn(pub_exp, exp_len+4, NULL);
     
     RSA* pubKey = RSA_new();
     pubKey->n = keyData;
     pubKey->e = exponentData;
-    
-    /*int ret = RSA_check_key(pubKey);
-    NSLog(@"%d", ret);*/
+    pubKey->d = NULL;
+    pubKey->p = NULL;
+    pubKey->q = NULL;
+    pubKey->dmp1 = NULL;
+    pubKey->dmq1 = NULL;
+    pubKey->iqmp = NULL;
     
     BIO *bio = BIO_new(BIO_s_mem());
     

@@ -11,8 +11,8 @@
 
 @interface PGPArmorHelper : NSObject
 
-+ (char *)removeArmorFromKeyFile:(NSURL*)fileUrl;
-+ (char *)removeArmorFromKeyFileString:(NSString*)fileContent;
++ (unsigned char *)removeArmorFromKeyFile:(NSURL*)fileUrl;
++ (unsigned char *)removeArmorFromKeyFileString:(NSString*)fileContent;
 
 /*
  * Function: Adding the packet to PGPPacketHelper.
@@ -23,7 +23,7 @@
  *               or 0 if the last packet was extracted
  *               or -1 on error
  */
-+ (int) extractPacketsFromBytes:(char*)bytes andWithPostion:(int)position;
++ (int) extractPacketsFromBytes:(unsigned char*)bytes andWithPostion:(int)position;
 
 + (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet;
 
