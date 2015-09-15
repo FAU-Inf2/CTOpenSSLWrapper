@@ -10,8 +10,8 @@
 
 @interface Base64Coder : NSObject
 
-+ (unsigned char *)getDecodedBase64StringFromString:(NSString *)string;
++ (NSData *)getDecodedBase64StringFromString:(NSString *)string;
 
-+ (unsigned char *)encodeBase64String:(NSString *)string;
++ (NSData *)encodeBase64String:(NSString *)string;
 
 @end
