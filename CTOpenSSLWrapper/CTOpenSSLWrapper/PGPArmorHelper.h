@@ -39,6 +39,6 @@
 + (int)extractPacketsFromBytes:(unsigned char*)bytes withLength:(int)length andWithPostion:(int)position;
 
 + (NSData*)extractPrivateKeyFromPacket:(PGPPacket*) packet;
-+ (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet;
++ (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet pos:(int*) position;
 
 @end

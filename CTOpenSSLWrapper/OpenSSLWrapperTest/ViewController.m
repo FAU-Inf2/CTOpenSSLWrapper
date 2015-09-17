@@ -32,12 +32,17 @@
     } while (nextpos > 0);
     
     PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
+    
+    NSData* pubKey = [PGPArmorHelper extractPublicKeyFromPacket:packet pos:NULL];
+    NSData* secKey = [PGPArmorHelper extractPrivateKeyFromPacket:packet];
      
-    NSData* data = [PGPArmorHelper extractPrivateKeyFromPacket:packet];
+    NSData* shitbull = CTOpenSSLRSAEncrypt(pubKey, [@"bullshit encoded" dataUsingEncoding:NSUTF8StringEncoding]);
      
-    /*NSData* shitbull = CTOpenSSLRSAEncrypt(data, [@"bullshit encoded" dataUsingEncoding:NSUTF8StringEncoding]);
-     
-    NSLog(@"Shitbull: %@", [[NSString alloc] initWithData:shitbull encoding:NSUTF8StringEncoding]);*/
+    NSLog(@"Shitbull: %@", [[NSString alloc] initWithData:shitbull encoding:NSUTF8StringEncoding]);
+    
+    NSData* bullshit = CTOpenSSLRSADecrypt(secKey, shitbull);
+    
+    NSLog(@"Bullshit: %@", [[NSString alloc] initWithData:bullshit encoding:NSUTF8StringEncoding]);
     
 }
 

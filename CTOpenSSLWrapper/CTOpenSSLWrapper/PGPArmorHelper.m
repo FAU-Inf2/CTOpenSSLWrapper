@@ -11,10 +11,12 @@
 #import <openssl/bn.h>
 #import <openssl/rsa.h>
 #import <openssl/pem.h>
+#import <openssl/err.h>
 
 #import "NSString+CTOpenSSL.h"
 #import "Base64Coder.h"
 #import "PGPPacketHelper.h"
+#import "PEMHelper.h"
 
 #define publicArmorBegin @"-----BEGIN PGP PUBLIC KEY BLOCK-----\n"
 #define publicArmorEnd @"-----END PGP PUBLIC KEY BLOCK-----\n"
@@ -189,7 +191,7 @@
     return pos+packet_length;
 }
 
-+ (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet {
++ (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet pos:(int*) position {
     int pos = 0;
     int version =  packet.bytes[pos++];
     NSLog(@"PGP public key version: %d", version);
@@ -243,6 +245,8 @@
         pub_exp[i+2] = bmpi[p+i];
     }
     
+    p += 2+exp_byteLen;
+    
     BIGNUM *keyData, *exponentData;
     keyData = BN_mpi2bn(rsaKey, key_byteLen+4, NULL);
     if (keyData->neg) {
@@ -265,19 +269,11 @@
     pubKey->dmq1 = NULL;
     pubKey->iqmp = NULL;
     
-    BIO *bio = BIO_new(BIO_s_mem());
+    if (position != NULL) {
+        *position = pos + p;
+    }
     
-    PEM_write_bio_RSA_PUBKEY(bio, pubKey);
-    
-    char *bioData = NULL;
-    long bioDataLength = BIO_get_mem_data(bio, &bioData);
-    NSData *result = [NSData dataWithBytes:bioData length:bioDataLength];
-    NSLog(@"%@", [[NSString alloc] initWithData:result encoding:NSUnicodeStringEncoding]);
-    BN_free(keyData);
-    BN_free(exponentData);
-    BIO_free(bio);
-    
-    return result;
+    return [PEMHelper writeKeyToPEMWithRSA:pubKey andIsPrivate:NO];
 }
 
 + (NSData *)extractPrivateKeyFromPacket:(PGPPacket *)packet{
@@ -285,53 +281,89 @@
         //Wrong packet
         return NULL;
     }
-    //RFC 5.5.3. A Public-Key or Public-Subkey packet, as described above.
+    
     int pos = 0;
-    int version =  packet.bytes[pos++];
-    NSLog(@"PGP private key version: %d", version);
+    unsigned char* bmpi = NULL;
+    int p = 0;
     
-    if (version == 3 || version == 4) {
-        //created = util.readDate(bytes.substr(pos, 4));
-        pos += 4;
-        
-        if (version == 3) {
-            //this.expirationTimeV3 = util.readNumber(bytes.substr(pos, 2));
-            pos += 2;
-        }
+    //Extract PublicKey from packet
+    RSA* secKey = [PEMHelper readPUBKEYFromPEMdata:[PGPArmorHelper extractPublicKeyFromPacket:packet pos:&pos]];
+    
+    int s2k = [packet bytes][pos++];
+    
+    switch (s2k) {
+        case 0:
+            // Indicates that the secret-key data is not encrypted
+            // Get MPIs
+            bmpi = (unsigned char*)[packet bytes] + pos;
+            
+            for (int i = 0; i < 4 && p < ([packet length] - pos); i++) {
+                double len = bmpi[p] << 8 | bmpi[p+1];
+                int byte_len = ceil(len/8);
+                
+                unsigned char mpi[byte_len+4];
+                mpi[0] = byte_len >> 24;
+                mpi[1] = byte_len >> 16;
+                mpi[2] = byte_len >> 8;
+                mpi[3] = byte_len;
+                for (int j = 4; j < byte_len+4; j++) {
+                    mpi[j] = bmpi[p+j-2];
+                }
+                BIGNUM* tmp = BN_mpi2bn(mpi, byte_len+4, NULL);
+                if (tmp->neg) {
+                    BN_set_bit(tmp, ((int) len) - 1);
+                    tmp->neg = 0;
+                }
+                switch (i) {
+                    case 0:
+                        secKey->d = tmp;
+                        break;
+                    case 1:
+                        secKey->p = tmp;
+                        break;
+                    case 2:
+                        secKey->q = tmp;
+                        break;
+                    default:
+                        break;
+                }
+                p += 2+byte_len;
+            }
+            
+            //calculate missing secret key parts
+            secKey->dmp1 = BN_new();
+            secKey->dmq1 = BN_new();
+            secKey->iqmp = BN_new();
+            BIGNUM* m = BN_new();
+            BN_CTX* ctx = BN_CTX_new();
+            
+            // calculate dmp1 = d mod (p-1)
+            BN_sub(m, secKey->p, BN_value_one());
+            BN_mod(secKey->dmp1, secKey->d, m, ctx);
+            
+            // calculate dmq1 = d mod (q-1)
+            BN_sub(m, secKey->q, BN_value_one());
+            BN_mod(secKey->dmq1, secKey->d, m, ctx);
+            
+            // calculate iqmp = q^-1 mod p?
+            BN_mod_inverse(secKey->iqmp, secKey->q, secKey->p, ctx);
+            
+            BN_CTX_free(ctx);
+            
+            break;
+        case 255:
+        case 254:
+            // Indicates that a string-to-key specifier is being given
+            break;
+        default:
+            // Any other value is a symmetric-key encryption algorithm identifier
+            break;
     }
     
-    int algorithm =  packet.bytes[pos++];
-    if (algorithm != 1) {
-        return NULL;
-    }
-    NSLog(@"PGP private key algorithm: %d", algorithm);
+    NSData* result = [PEMHelper writeKeyToPEMWithRSA:secKey andIsPrivate:YES];
+    RSA_free(secKey);
     
-    /*int s2k = packet.bytes[pos++];
-    
-    if (s2k == 0) { //RFC 5.5.3. Zero indicates that the secret-key data is not encrypted
-        
-    }else if (s2k == 254 || s2k == 255){ //RFC 5.5.3. 255 or 254 indicates that a string-to-key specifier is being given
-        //[Optional] If string-to-key usage octet was 255 or 254, a one-octet symmetric encryption algorithm.
-        int sea = packet.bytes[pos++];
-        
-        //[Optional] If string-to-key usage octet was 255 or 254, a string-to-key specifier.  The length of the string-to-key specifier is implied by its type, as described above.
-        //TODO
-    }else { //RFC 5.5.3. Any other value is a symmetric-key encryption algorithm identifier
-        
-        //TODO
-    }*/
-    
-    int encrypted = packet.bytes[pos++];
-    
-    if (encrypted) {
-        
-    }else {
-        //Plain or encrypted multiprecision integers comprising the secret key data.  These algorithm-specific fields are as described below
-    }
-    
-    
-    
-    return NULL;
+    return result;
 }
 
 @end
