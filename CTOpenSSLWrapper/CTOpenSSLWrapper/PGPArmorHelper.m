@@ -388,4 +388,17 @@
     return NULL;
 }
 
+
+
++ (NSData*)extractSymmetricEncryptedIntegrityProtectedDataFromPacket:(PGPPacket *)packet{
+    int pos = 0;
+    int version = [packet bytes][pos++]; //RFC: A one-octet version number.  The only currently defined value is 1.
+    
+    if (version != 1){
+       //Error
+    }
+    
+    //Encrypted data, the output of the selected symmetric-key cipher operating in Cipher Feedback mode with shift amount equal to the block size of the cipher (CFB-n where n is the block size)
+    
+}
 @end
