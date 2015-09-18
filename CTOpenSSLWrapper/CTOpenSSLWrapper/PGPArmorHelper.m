@@ -372,4 +372,20 @@
     return result;
 }
 
++ (NSData *)extractEncryptedSymmetricSessionKeyFromPacket:(PGPPacket *)packet {
+    int pos = 0;
+    int version = [packet bytes][pos++];
+    unsigned long long pubKeyID = (unsigned long long)[packet bytes][pos] << 56 |
+                    (unsigned long long)[packet bytes][pos+1] << 48 |
+                    (unsigned long long)[packet bytes][pos+2] << 40 |
+                    (unsigned long long)[packet bytes][pos+3] << 32 |
+                    [packet bytes][pos+4] << 24 |
+                    [packet bytes][pos+5] << 16 |
+                    [packet bytes][pos+6] << 8 |
+                    [packet bytes][pos+7];
+    
+    
+    return NULL;
+}
+
 @end

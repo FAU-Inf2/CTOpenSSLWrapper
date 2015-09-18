@@ -23,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"privateTestKey" withExtension:@".asc"];
+    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"pgpTestMessage" withExtension:@".txt"];
     NSData* decodedData = [PGPArmorHelper removeArmorFromKeyFile:fileUrl];
     
     int nextpos = 0;
@@ -31,7 +31,11 @@
         nextpos = [PGPArmorHelper extractPacketsFromBytes:(unsigned char*) decodedData.bytes withLength:decodedData.length andWithPostion:nextpos];
     } while (nextpos > 0);
     
-    PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
+    PGPPacket* packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:1];
+    
+    NSData* trust = [[NSData alloc] initWithBytes:[packet bytes] length:[packet length]];
+    
+    /*PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
     
     NSData* pubKey = [PGPArmorHelper extractPublicKeyFromPacket:packet pos:NULL];
     NSData* secKey = [PGPArmorHelper extractPrivateKeyFromPacket:packet];
@@ -42,7 +46,7 @@
     
     NSData* bullshit = CTOpenSSLRSADecrypt(secKey, shitbull);
     
-    NSLog(@"Bullshit: %@", [[NSString alloc] initWithData:bullshit encoding:NSUTF8StringEncoding]);
+    NSLog(@"Bullshit: %@", [[NSString alloc] initWithData:bullshit encoding:NSUTF8StringEncoding]);*/
     
 }
 
