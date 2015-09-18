@@ -41,5 +41,6 @@
 + (NSData*)extractPrivateKeyFromPacket:(PGPPacket*) packet;
 + (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet pos:(int*) position;
 + (NSData*)extractEncryptedSymmetricSessionKeyFromPacket:(PGPPacket*) packet;
++ (NSData*)extractSymmetricEncryptedIntegrityProtectedDataFromPacket: (PGPPacket*) packet;
 
 @end
