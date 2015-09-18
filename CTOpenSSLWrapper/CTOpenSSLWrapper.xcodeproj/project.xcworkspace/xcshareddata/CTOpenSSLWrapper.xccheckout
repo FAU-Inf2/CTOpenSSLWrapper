@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>AADBB578-AF76-4471-9D90-B4C0B84C15F1</string>
 	<key>IDESourceControlProjectName</key>
-	<string>CTOpenSSLWrapper</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>C329535ABC9C9967CE93B5B513C97E4B42CB1A1F</key>
 		<string>https://github.com/FAU-Inf2/CTOpenSSLWrapper.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>CTOpenSSLWrapper/CTOpenSSLWrapper.xcodeproj</string>
+	<string>CTOpenSSLWrapper/CTOpenSSLWrapper.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>C329535ABC9C9967CE93B5B513C97E4B42CB1A1F</key>
