@@ -25,6 +25,7 @@
 		5B1E4E3C1BA7180A0086D75E /* base64DecodedData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */; };
 		5B3B481D1BA864E9009E6503 /* privateTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B481C1BA864E9009E6503 /* privateTestKey.asc */; };
 		8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8E70CEED1BA32761003251D7 /* publicTestKey.asc */; };
+		8EABF2DF1BAC0E8B00FD6F2A /* pgpTestMessage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */; };
 		8EE84F831BAAC4600088E1EC /* PEMHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE84F811BAAC2E20088E1EC /* PEMHelper.m */; };
 		8EE84F841BAAC4680088E1EC /* PEMHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EE84F801BAAC2E20088E1EC /* PEMHelper.h */; };
 		A712DF4D14826BE700F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
@@ -89,6 +90,7 @@
 		5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = base64DecodedData.txt; sourceTree = "<group>"; };
 		5B3B481C1BA864E9009E6503 /* privateTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = privateTestKey.asc; sourceTree = "<group>"; };
 		8E70CEED1BA32761003251D7 /* publicTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = publicTestKey.asc; sourceTree = "<group>"; };
+		8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pgpTestMessage.txt; sourceTree = "<group>"; };
 		8EE84F801BAAC2E20088E1EC /* PEMHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMHelper.h; path = CTOpenSSLWrapper/PEMHelper.h; sourceTree = "<group>"; };
 		8EE84F811BAAC2E20088E1EC /* PEMHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMHelper.m; path = CTOpenSSLWrapper/PEMHelper.m; sourceTree = "<group>"; };
 		A712DF4B14826BE700F4E399 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			children = (
 				8E70CEED1BA32761003251D7 /* publicTestKey.asc */,
 				5B3B481C1BA864E9009E6503 /* privateTestKey.asc */,
+				8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */,
 				5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */,
 				3D861E331BA306FA00DED4CC /* AppDelegate.h */,
 				3D861E341BA306FA00DED4CC /* AppDelegate.m */,
@@ -444,6 +447,7 @@
 				5B3B481D1BA864E9009E6503 /* privateTestKey.asc in Resources */,
 				3D861E3D1BA306FA00DED4CC /* Images.xcassets in Resources */,
 				5B1E4E3C1BA7180A0086D75E /* base64DecodedData.txt in Resources */,
+				8EABF2DF1BAC0E8B00FD6F2A /* pgpTestMessage.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

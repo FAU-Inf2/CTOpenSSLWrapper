@@ -22,6 +22,8 @@
 #define publicArmorEnd @"-----END PGP PUBLIC KEY BLOCK-----\n"
 #define privateArmorBegin @"-----BEGIN PGP PRIVATE KEY BLOCK-----\n"
 #define privateArmorEnd @"-----END PGP PRIVATE KEY BLOCK-----\n"
+#define pgpMessageBegin @"-----BEGIN PGP MESSAGE-----\n"
+#define pgpMessageEnd @"-----END PGP MESSAGE-----\n"
 #define keyFileComment @"Comment"
 
 @implementation PGPArmorHelper
@@ -31,7 +33,9 @@
         [fileContent containsString:publicArmorEnd] ||
         [fileContent containsString:privateArmorBegin] ||
         [fileContent containsString:privateArmorEnd] ||
-        [fileContent containsString:keyFileComment]) {
+        [fileContent containsString:keyFileComment] ||
+        [fileContent containsString:pgpMessageBegin] ||
+        [fileContent containsString:pgpMessageEnd]) {
         return YES;
     } else {
         return NO;
@@ -63,6 +67,8 @@
     string = [string stringByReplacingOccurrencesOfString:publicArmorEnd withString:@""];
     string = [string stringByReplacingOccurrencesOfString:privateArmorBegin withString:@""];
     string = [string stringByReplacingOccurrencesOfString:privateArmorEnd withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:pgpMessageBegin withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:pgpMessageEnd withString:@""];
     
     NSMutableString *mutableString = [string mutableCopy];
     NSRange range;
