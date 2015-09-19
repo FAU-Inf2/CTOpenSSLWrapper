@@ -393,26 +393,18 @@
     double len = bmpi[0] << 8 | bmpi[1];
     int byte_len = ceil(len/8);
     
-    /*unsigned char mpi[byte_len+4];
+    unsigned char mpi[byte_len+4];
     mpi[0] = byte_len >> 24;
     mpi[1] = byte_len >> 16;
     mpi[2] = byte_len >> 8;
     mpi[3] = byte_len;
     for (int j = 4; j < byte_len+4; j++) {
-        mpi[j] = bmpi[p+j-2];
+        mpi[j] = bmpi[j-2];
     }
     BIGNUM* tmp = BN_mpi2bn(mpi, byte_len+4, NULL);
-    if (tmp->neg) {
-        BN_set_bit(tmp, ((int) len) - 1);
-        tmp->neg = 0;
-    }*/
-    
     unsigned char encryptedSessionKey[byte_len];
-    for (int i = 0; i < byte_len; i++) {
-        encryptedSessionKey[i] = bmpi[i+2];
-    }
     
-    
+    BN_bn2bin(tmp, encryptedSessionKey);
     
     return [[NSData alloc] initWithBytes:(const void*) encryptedSessionKey length:byte_len];
 }
@@ -429,5 +421,7 @@
     
     //Encrypted data, the output of the selected symmetric-key cipher operating in Cipher Feedback mode with shift amount equal to the block size of the cipher (CFB-n where n is the block size)
     
+    return NULL;
 }
+
 @end
