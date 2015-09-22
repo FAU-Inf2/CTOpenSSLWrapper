@@ -27,20 +27,4 @@
  */
 + (NSData *)removeArmorFromKeyFileString:(NSString*)fileContent;
 
-/*
- * Function: Adding the packet to PGPPacketHelper.
- *
- * @param {char*} bytes: decoded Base64 string
- * @param {int} position: start position of the packet
- * @return {int} returns the position where the next packet starts
- *               or 0 if the last packet was extracted
- *               or -1 on error
- */
-+ (int)extractPacketsFromBytes:(unsigned char*)bytes withLength:(int)length andWithPostion:(int)position;
-
-+ (NSData*)extractPrivateKeyFromPacket:(PGPPacket*) packet;
-+ (NSData*)extractPublicKeyFromPacket:(PGPPacket*) packet pos:(int*) position;
-+ (NSData*)extractEncryptedSymmetricSessionKeyFromPacket:(PGPPacket*) packet;
-+ (NSData*)extractSymmetricEncryptedIntegrityProtectedDataFromPacket: (PGPPacket*) packet;
-
 @end
