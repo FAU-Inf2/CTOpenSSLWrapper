@@ -10,11 +10,10 @@
 
 @interface PGPPacket : NSObject
 
-@property (nonatomic) char* bytes;
-@property (nonatomic) int length;
+@property (nonatomic) NSData* bytes;
 @property (nonatomic) int tag;
 @property (nonatomic) int format;
 
-- (id)initWithBytes:(char *)bytes andWithLength: (int)length andWithTag: (int) tag andWithFormat: (int) format;
+- (id)initWithBytes:(NSData*)bytes andWithTag: (int)tag andWithFormat:(int)format;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "PGPArmorHelper.h"
-#import "PGPPacketHelper.h"
+#import "PGPPacketParser.h"
 
 #import "CTOpenSSLWrapper.h"
 #import "CTOpenSSLAsymmetricEncryption.h"
@@ -23,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"pgpTestMessage" withExtension:@".txt"];
+    /*NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"2pgpTestMessage" withExtension:@".txt"];
     NSData* decodedData = [PGPArmorHelper removeArmorFromKeyFile:fileUrl];
     
     int nextpos = 0;
@@ -53,7 +53,7 @@
     
     NSData* symmetricKeyDec = CTOpenSSLRSADecryptWithPadding(secretKey, symmetricKeyEnc, 3);//CTOpenSSLRSADecrypt(secretKey, symmetricKeyEnc);
     
-    /*PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
+    PGPPacket *packet = [[[PGPPacketHelper sharedManager] packets] objectAtIndex:0];
     
     NSData* pubKey = [PGPArmorHelper extractPublicKeyFromPacket:packet pos:NULL];
     NSData* secKey = [PGPArmorHelper extractPrivateKeyFromPacket:packet];
