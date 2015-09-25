@@ -14,5 +14,6 @@
 @property (nonatomic) NSData *encryptedData;
 
 - (id)initWithBytes:(NSData*)bytes andWithTag:(int)tag andWithFormat:(int)format;
+- (NSData*)checkPacketFromDecryptedData:(NSData*)decryptedData;
 
 @end

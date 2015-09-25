@@ -21,3 +21,5 @@ xcuserdata/*
 profile
 
 *.asc
+Pods/
+Podfile.lock

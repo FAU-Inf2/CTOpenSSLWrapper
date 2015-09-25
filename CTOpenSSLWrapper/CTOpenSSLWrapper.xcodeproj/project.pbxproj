@@ -22,6 +22,8 @@
 		5B1E4E3A1BA70BE80086D75E /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4C14826BE700F4E399 /* libssl.a */; };
 		5B1E4E3C1BA7180A0086D75E /* base64DecodedData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */; };
 		5B3B481D1BA864E9009E6503 /* privateTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B481C1BA864E9009E6503 /* privateTestKey.asc */; };
+		648FBAA4D5DAA6F4E9442898 /* libPods-CTOpenSSLWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB705D5D4DE87A138378AC1 /* libPods-CTOpenSSLWrapper.a */; };
+		7449A3FC0A3F06F5E461AB3E /* libPods-OpenSSLWrapperTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A54DC1FBF3836521BB1C53D2 /* libPods-OpenSSLWrapperTest.a */; };
 		8E1C706D1BB0637E0071272B /* 2pgpTestMessage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8E1C706C1BB0637E0071272B /* 2pgpTestMessage.txt */; };
 		8E23A6071BB14E0200B2B61B /* PGPPacketParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1E4E371BA707390086D75E /* PGPPacketParser.m */; };
 		8E23A6081BB14E1C00B2B61B /* PGPPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B1E4E331BA702360086D75E /* PGPPacket.h */; };
@@ -35,10 +37,17 @@
 		8E23A6191BB15B4700B2B61B /* PGPSecretKeyPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E23A6171BB15B4700B2B61B /* PGPSecretKeyPacket.m */; };
 		8E23A61C1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E23A61A1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.h */; };
 		8E23A61D1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E23A61B1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m */; };
+		8E505A5D1BB427020055943D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EA3300F1BB4240B008CA8BA /* libz.dylib */; };
 		8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8E70CEED1BA32761003251D7 /* publicTestKey.asc */; };
+		8EA3300D1BB41143008CA8BA /* PGPCompressedDataPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EA3300B1BB41143008CA8BA /* PGPCompressedDataPacket.h */; };
+		8EA3300E1BB41143008CA8BA /* PGPCompressedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */; };
+		8EA330101BB4240B008CA8BA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EA3300F1BB4240B008CA8BA /* libz.dylib */; };
 		8EABF2DF1BAC0E8B00FD6F2A /* pgpTestMessage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */; };
+		8EC1432C1BB549EF007AAD64 /* PGPLiteralDataPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EC1432A1BB549EF007AAD64 /* PGPLiteralDataPacket.h */; };
+		8EC1432D1BB549EF007AAD64 /* PGPLiteralDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */; };
 		8EE84F831BAAC4600088E1EC /* PEMHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE84F811BAAC2E20088E1EC /* PEMHelper.m */; };
 		8EE84F841BAAC4680088E1EC /* PEMHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EE84F801BAAC2E20088E1EC /* PEMHelper.h */; };
+		8EF5C47B1BB3044C004AC290 /* outbase64.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8EF5C47A1BB3044C004AC290 /* outbase64.txt */; };
 		A712DF4D14826BE700F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
 		A712DF4E14826BE700F4E399 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4C14826BE700F4E399 /* libssl.a */; };
 		A712DF4F1482714200F4E399 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4B14826BE700F4E399 /* libcrypto.a */; };
@@ -100,6 +109,8 @@
 		5B1E4E371BA707390086D75E /* PGPPacketParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPPacketParser.m; path = CTOpenSSLWrapper/PGPPacketParser.m; sourceTree = "<group>"; };
 		5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = base64DecodedData.txt; sourceTree = "<group>"; };
 		5B3B481C1BA864E9009E6503 /* privateTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = privateTestKey.asc; sourceTree = "<group>"; };
+		887424220E4D9145FE883951 /* Pods-CTOpenSSLWrapper.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTOpenSSLWrapper.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CTOpenSSLWrapper/Pods-CTOpenSSLWrapper.debug.xcconfig"; sourceTree = "<group>"; };
+		8D25B94445DB14C901E79A38 /* Pods-CTOpenSSLWrapper.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTOpenSSLWrapper.release.xcconfig"; path = "Pods/Target Support Files/Pods-CTOpenSSLWrapper/Pods-CTOpenSSLWrapper.release.xcconfig"; sourceTree = "<group>"; };
 		8E1C706C1BB0637E0071272B /* 2pgpTestMessage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2pgpTestMessage.txt; sourceTree = "<group>"; };
 		8E23A60C1BB1531C00B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPPublicKeyEncryptedSessionKeyPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPPublicKeyEncryptedSessionKeyPacket.h; sourceTree = "<group>"; };
 		8E23A60D1BB1531C00B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPPublicKeyEncryptedSessionKeyPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPPublicKeyEncryptedSessionKeyPacket.m; sourceTree = "<group>"; };
@@ -110,9 +121,16 @@
 		8E23A61A1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPSymmetricEncryptedIntegrityProtectedDataPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPSymmetricEncryptedIntegrityProtectedDataPacket.h; sourceTree = "<group>"; };
 		8E23A61B1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPSymmetricEncryptedIntegrityProtectedDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPSymmetricEncryptedIntegrityProtectedDataPacket.m; sourceTree = "<group>"; };
 		8E70CEED1BA32761003251D7 /* publicTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = publicTestKey.asc; sourceTree = "<group>"; };
+		8EA3300B1BB41143008CA8BA /* PGPCompressedDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPCompressedDataPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPCompressedDataPacket.h; sourceTree = "<group>"; };
+		8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPCompressedDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPCompressedDataPacket.m; sourceTree = "<group>"; };
+		8EA3300F1BB4240B008CA8BA /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pgpTestMessage.txt; sourceTree = "<group>"; };
+		8EC1432A1BB549EF007AAD64 /* PGPLiteralDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPLiteralDataPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPLiteralDataPacket.h; sourceTree = "<group>"; };
+		8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPLiteralDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPLiteralDataPacket.m; sourceTree = "<group>"; };
 		8EE84F801BAAC2E20088E1EC /* PEMHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMHelper.h; path = CTOpenSSLWrapper/PEMHelper.h; sourceTree = "<group>"; };
 		8EE84F811BAAC2E20088E1EC /* PEMHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMHelper.m; path = CTOpenSSLWrapper/PEMHelper.m; sourceTree = "<group>"; };
+		8EF5C47A1BB3044C004AC290 /* outbase64.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = outbase64.txt; sourceTree = "<group>"; };
+		A54DC1FBF3836521BB1C53D2 /* libPods-OpenSSLWrapperTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpenSSLWrapperTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A712DF4B14826BE700F4E399 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		A712DF4C14826BE700F4E399 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		A73718D2157E878E00AA362C /* CTOpenSSLSymmetricEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTOpenSSLSymmetricEncryption.h; sourceTree = "<group>"; };
@@ -136,6 +154,9 @@
 		A7AA081B14825387009DE810 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A7AA081D14825387009DE810 /* CTOpenSSLWrapperTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTOpenSSLWrapperTests.h; sourceTree = "<group>"; };
 		A7AA081E14825387009DE810 /* CTOpenSSLWrapperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTOpenSSLWrapperTests.m; sourceTree = "<group>"; };
+		AB056A66298AA63F2D797EE1 /* Pods-OpenSSLWrapperTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenSSLWrapperTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OpenSSLWrapperTest/Pods-OpenSSLWrapperTest.debug.xcconfig"; sourceTree = "<group>"; };
+		BAB705D5D4DE87A138378AC1 /* libPods-CTOpenSSLWrapper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CTOpenSSLWrapper.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F16238F0C952B2102222C09C /* Pods-OpenSSLWrapperTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenSSLWrapperTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-OpenSSLWrapperTest/Pods-OpenSSLWrapperTest.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,9 +164,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E505A5D1BB427020055943D /* libz.dylib in Frameworks */,
 				5B1E4E391BA70BE40086D75E /* libcrypto.a in Frameworks */,
 				3D861E551BA3263100DED4CC /* libCTOpenSSLWrapper.a in Frameworks */,
 				5B1E4E3A1BA70BE80086D75E /* libssl.a in Frameworks */,
+				7449A3FC0A3F06F5E461AB3E /* libPods-OpenSSLWrapperTest.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,9 +176,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EA330101BB4240B008CA8BA /* libz.dylib in Frameworks */,
 				A7AA080214825387009DE810 /* Foundation.framework in Frameworks */,
 				A712DF4D14826BE700F4E399 /* libcrypto.a in Frameworks */,
 				A712DF4E14826BE700F4E399 /* libssl.a in Frameworks */,
+				648FBAA4D5DAA6F4E9442898 /* libPods-CTOpenSSLWrapper.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +202,7 @@
 		3D861E2E1BA306FA00DED4CC /* OpenSSLWrapperTest */ = {
 			isa = PBXGroup;
 			children = (
+				8EF5C47A1BB3044C004AC290 /* outbase64.txt */,
 				8E70CEED1BA32761003251D7 /* publicTestKey.asc */,
 				5B3B481C1BA864E9009E6503 /* privateTestKey.asc */,
 				8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */,
@@ -214,6 +240,10 @@
 				8E23A6171BB15B4700B2B61B /* PGPSecretKeyPacket.m */,
 				8E23A61A1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.h */,
 				8E23A61B1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m */,
+				8EA3300B1BB41143008CA8BA /* PGPCompressedDataPacket.h */,
+				8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */,
+				8EC1432A1BB549EF007AAD64 /* PGPLiteralDataPacket.h */,
+				8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */,
 			);
 			name = PGPPackets;
 			sourceTree = "<group>";
@@ -299,6 +329,7 @@
 				3D861E2E1BA306FA00DED4CC /* OpenSSLWrapperTest */,
 				A7AA080014825387009DE810 /* Frameworks */,
 				A7AA07FF14825387009DE810 /* Products */,
+				F5E9E2E3A9A7BDD6DD696775 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -315,10 +346,13 @@
 		A7AA080014825387009DE810 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8EA3300F1BB4240B008CA8BA /* libz.dylib */,
 				A712DF4B14826BE700F4E399 /* libcrypto.a */,
 				A712DF4C14826BE700F4E399 /* libssl.a */,
 				A7AA080114825387009DE810 /* Foundation.framework */,
 				A7AA080F14825387009DE810 /* SenTestingKit.framework */,
+				BAB705D5D4DE87A138378AC1 /* libPods-CTOpenSSLWrapper.a */,
+				A54DC1FBF3836521BB1C53D2 /* libPods-OpenSSLWrapperTest.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -364,6 +398,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		F5E9E2E3A9A7BDD6DD696775 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				887424220E4D9145FE883951 /* Pods-CTOpenSSLWrapper.debug.xcconfig */,
+				8D25B94445DB14C901E79A38 /* Pods-CTOpenSSLWrapper.release.xcconfig */,
+				AB056A66298AA63F2D797EE1 /* Pods-OpenSSLWrapperTest.debug.xcconfig */,
+				F16238F0C952B2102222C09C /* Pods-OpenSSLWrapperTest.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -373,11 +418,13 @@
 			files = (
 				3DBD4B211BA349830071B668 /* Base64Coder.h in Headers */,
 				8E23A6101BB158DB00B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.h in Headers */,
+				8EC1432C1BB549EF007AAD64 /* PGPLiteralDataPacket.h in Headers */,
 				A74A5A69157D3E64000C62B9 /* NSData+CTOpenSSL.h in Headers */,
 				A74A5AF2157E81B2000C62B9 /* CTOpenSSLDigest.h in Headers */,
 				8EE84F841BAAC4680088E1EC /* PEMHelper.h in Headers */,
 				8E23A6081BB14E1C00B2B61B /* PGPPacket.h in Headers */,
 				8E23A61C1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.h in Headers */,
+				8EA3300D1BB41143008CA8BA /* PGPCompressedDataPacket.h in Headers */,
 				A73718D4157E878E00AA362C /* CTOpenSSLSymmetricEncryption.h in Headers */,
 				A73718D9157E88C800AA362C /* CTOpenSSLAsymmetricEncryption.h in Headers */,
 				3DBD4B1D1BA330F00071B668 /* PGPArmorHelper.h in Headers */,
@@ -395,9 +442,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3D861E4D1BA306FB00DED4CC /* Build configuration list for PBXNativeTarget "OpenSSLWrapperTest" */;
 			buildPhases = (
+				DCA17AA86A5F78408F8FEFAB /* Check Pods Manifest.lock */,
 				3D861E291BA306FA00DED4CC /* Sources */,
 				3D861E2A1BA306FA00DED4CC /* Frameworks */,
 				3D861E2B1BA306FA00DED4CC /* Resources */,
+				000ECE88A97DAB237D9DD342 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -413,9 +462,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7AA082214825387009DE810 /* Build configuration list for PBXNativeTarget "CTOpenSSLWrapper" */;
 			buildPhases = (
+				6C9BCA37531A8C10DC07B40A /* Check Pods Manifest.lock */,
 				A7AA07FA14825387009DE810 /* Sources */,
 				A7AA07FB14825387009DE810 /* Frameworks */,
 				A7AA07FC14825387009DE810 /* Headers */,
+				6BE3D76DFF65D7E743E12227 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -490,6 +541,7 @@
 				5B3B481D1BA864E9009E6503 /* privateTestKey.asc in Resources */,
 				3D861E3D1BA306FA00DED4CC /* Images.xcassets in Resources */,
 				5B1E4E3C1BA7180A0086D75E /* base64DecodedData.txt in Resources */,
+				8EF5C47B1BB3044C004AC290 /* outbase64.txt in Resources */,
 				8EABF2DF1BAC0E8B00FD6F2A /* pgpTestMessage.txt in Resources */,
 				8E1C706D1BB0637E0071272B /* 2pgpTestMessage.txt in Resources */,
 			);
@@ -506,6 +558,51 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		000ECE88A97DAB237D9DD342 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OpenSSLWrapperTest/Pods-OpenSSLWrapperTest-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6BE3D76DFF65D7E743E12227 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CTOpenSSLWrapper/Pods-CTOpenSSLWrapper-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6C9BCA37531A8C10DC07B40A /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		A7AA080C14825387009DE810 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -518,6 +615,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		DCA17AA86A5F78408F8FEFAB /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -537,7 +649,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7AA080814825387009DE810 /* CTOpenSSLWrapper.m in Sources */,
+				8EC1432D1BB549EF007AAD64 /* PGPLiteralDataPacket.m in Sources */,
 				8E23A6191BB15B4700B2B61B /* PGPSecretKeyPacket.m in Sources */,
+				8EA3300E1BB41143008CA8BA /* PGPCompressedDataPacket.m in Sources */,
 				A74A5A6A157D3E64000C62B9 /* NSData+CTOpenSSL.m in Sources */,
 				8E23A60F1BB158D800B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.m in Sources */,
 				8EE84F831BAAC4600088E1EC /* PEMHelper.m in Sources */,
@@ -607,6 +721,7 @@
 /* Begin XCBuildConfiguration section */
 		3D861E4E1BA306FB00DED4CC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB056A66298AA63F2D797EE1 /* Pods-OpenSSLWrapperTest.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -646,6 +761,7 @@
 		};
 		3D861E4F1BA306FB00DED4CC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F16238F0C952B2102222C09C /* Pods-OpenSSLWrapperTest.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -756,6 +872,7 @@
 		};
 		A7AA082314825387009DE810 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 887424220E4D9145FE883951 /* Pods-CTOpenSSLWrapper.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CTOpenSSLWrapper.dst;
@@ -776,6 +893,7 @@
 		};
 		A7AA082414825387009DE810 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8D25B94445DB14C901E79A38 /* Pods-CTOpenSSLWrapper.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CTOpenSSLWrapper.dst;

@@ -9,10 +9,11 @@
 #import "PGPPacketParser.h"
 
 #import "PEMHelper.h"
-#import "PGPPackets/PGPPublicKeyEncryptedSessionKeyPacket.h"
-#import "PGPPackets/PGPPublicKeyPacket.h"
-#import "PGPPackets/PGPSecretKeyPacket.h"
-#import "PGPPackets/PGPSymmetricEncryptedIntegrityProtectedDataPacket.h"
+#import "PGPPublicKeyEncryptedSessionKeyPacket.h"
+#import "PGPPublicKeyPacket.h"
+#import "PGPSymmetricEncryptedIntegrityProtectedDataPacket.h"
+#import "PGPCompressedDataPacket.h"
+#import "PGPLiteralDataPacket.h"
 
 #import <openssl/ossl_typ.h>
 #import <openssl/bn.h>
@@ -35,7 +36,7 @@
     if (self = [super init]) {
         id arrays[20];
         for (int i = 0; i < 20; i++) {
-            arrays[i] =[[NSMutableArray alloc] init];
+            arrays[i] = [[NSMutableArray alloc] init];
         }
         self.packets = [NSArray arrayWithObjects:arrays count:20];
     }
@@ -63,6 +64,18 @@
             packet = [[PGPPublicKeyPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
             if ([PGPPacketParser parsePublicKeyPacket:packet] == -1) {
                 // error
+            }
+            break;
+        case 8:
+            packet = [[PGPCompressedDataPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
+            if ([PGPPacketParser parseCompressedDataPacket:packet] == -1) {
+                // error
+            }
+            break;
+        case 11:
+            packet = [[PGPLiteralDataPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
+            if ([PGPPacketParser parseLiteralDataPacket:packet] == -1) {
+                //error
             }
             break;
         case 18:
@@ -129,7 +142,7 @@
                 break;
             case 3:
                 //TODO
-                return -1;
+                packet_length = [bytes length] - pos;
                 break;
             default:
                 return -1;
@@ -142,7 +155,7 @@
         if(first_octet < 192) {
             //RFC 4.2.2.1. One-Octet Lengths
             packet_length = first_octet;
-        } else if (first_octet < 234) {
+        } else if (first_octet < 224) {
             //RFC 4.2.2.2. Two-Octet Lengths
             packet_length = ((first_octet - 192) << 8) + ( data[pos++]) + 192;
         } else if (first_octet == 255) {
@@ -175,14 +188,13 @@
 + (int)parsePublicKeyPacket:(PGPPublicKeyPacket*) packet {
     int pos = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
-    int version =  bytes[pos++];
-    NSLog(@"PGP public key version: %d", version);
+    packet.version =  bytes[pos++];
     
-    if (version == 3 || version == 4) {
+    if (packet.version == 3 || packet.version == 4) {
         packet.creationTime = bytes[pos] << 24 | bytes[pos+1] << 16 | bytes[pos+2] << 8 | bytes[pos+3];
         pos += 4;
         
-        if (version == 3) {
+        if (packet.version == 3) {
             packet.daysTillExpiration = bytes[pos] << 8 | bytes[pos+1];
             pos += 2;
         }
@@ -291,7 +303,39 @@
     return pos+byteLen+2; // bytes read
 }
 
-
++ (NSData*) getPEMFromSecretKeyPacket:(PGPSecretKeyPacket *)packet {
+    RSA* privateRSA = RSA_new();
+    
+    NSData* n = [[[packet pubKey] mpis] objectAtIndex:0];
+    privateRSA->n = BN_bin2bn((const unsigned char*) [n bytes], [n length], NULL);
+    
+    NSData* e = [[[packet pubKey] mpis] objectAtIndex:1];
+    privateRSA->e = BN_bin2bn((const unsigned char*) [e bytes], [e length], NULL);
+    
+    NSData* d = [[packet mpis] objectAtIndex:0];
+    privateRSA->d = BN_bin2bn((const unsigned char*) [d bytes], [d length], NULL);
+    
+    NSData* p = [[packet mpis] objectAtIndex:1];
+    privateRSA->p = BN_bin2bn((const unsigned char*) [p bytes], [p length], NULL);
+    
+    NSData* q = [[packet mpis] objectAtIndex:2];
+    privateRSA->q = BN_bin2bn((const unsigned char*) [q bytes], [q length], NULL);
+    
+    BN_CTX* ctx = BN_CTX_new();
+    BIGNUM* m = BN_new();
+    
+    privateRSA->dmp1 = BN_new();
+    BN_sub(m, privateRSA->p, BN_value_one());
+    BN_mod(privateRSA->dmp1, privateRSA->d, m, ctx);
+    
+    privateRSA->dmq1 = BN_new();
+    BN_sub(m, privateRSA->q, BN_value_one());
+    BN_mod(privateRSA->dmq1, privateRSA->d, m, ctx);
+    
+    privateRSA->iqmp = BN_mod_inverse(NULL, privateRSA->q, privateRSA->p, ctx);
+    
+    return [PEMHelper writeKeyToPEMWithRSA:privateRSA andIsPrivate:YES];
+}
 
 + (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket *)packet{
     int pos = 0;
@@ -303,11 +347,47 @@
     }
     
     //Encrypted data, the output of the selected symmetric-key cipher operating in Cipher Feedback mode with shift amount equal to the block size of the cipher (CFB-n where n is the block size)
-    unsigned char data[[packet.bytes length] - pos];
+    unsigned char data[[packet.bytes length]-pos];
     for (int i = 0; i < [packet.bytes length]-pos; i++) {
         data[i] = bytes[i+pos];
     }
-    packet.encryptedData = [NSData dataWithBytes:data length:([packet.bytes length]-pos)];
+    packet.encryptedData = [NSData dataWithBytes:data length:[packet.bytes length]-pos];
+    
+    return [packet.bytes length];
+}
+
++ (int)parseCompressedDataPacket:(PGPCompressedDataPacket *)packet {
+    int pos = 0;
+    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    
+    packet.algorithm = bytes[pos++];
+    
+    packet.compressedData = [NSData dataWithBytes:(const void*)bytes+pos length:[packet.bytes length]-pos];
+    
+    return [packet.bytes length];
+}
+
++ (int)parseLiteralDataPacket:(PGPLiteralDataPacket *)packet {
+    int pos = 0;
+    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    
+    packet.formatType = bytes[pos++];
+    
+    int strLen = bytes[pos++];
+    if (strLen == 0) {
+        packet.fileName = @"";
+    } else {
+        char str[strLen];
+        for (int i = 0; i < strLen; i++) {
+            str[i] = bytes[pos+i];
+        }
+    }
+    pos += strLen;
+    
+    packet.date = bytes[pos] << 24 | bytes[pos+1] << 16 | bytes[pos+2] << 8 | bytes[pos+3];
+    pos += 4;
+    
+    packet.literalData = [NSData dataWithBytes:(const void *) bytes+pos length:[packet.bytes length]-pos];
     
     return [packet.bytes length];
 }

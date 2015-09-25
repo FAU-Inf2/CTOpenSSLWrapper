@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PGPPacket.h"
+#import "PGPSecretKeyPacket.h"
 
 @interface PGPPacketParser : NSObject
 
@@ -20,6 +21,9 @@
 + (int)parseSecretKeyPacket:(PGPPacket*) packet;
 + (int)parsePublicKeyPacket:(PGPPacket*) packet;
 + (int)parsePublicKeyEncryptedSessionKeyPacket:(PGPPacket*) packet;
-+ (int)parseSymmetricEncryptedIntegrityProtectedDataPacket: (PGPPacket*) packet;
++ (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPPacket*) packet;
++ (int)parseCompressedDataPacket:(PGPPacket*) packet;
++ (int)parseLiteralDataPacket:(PGPPacket*) packet;
++ (NSData*)getPEMFromSecretKeyPacket:(PGPSecretKeyPacket*) packet;
 
 @end

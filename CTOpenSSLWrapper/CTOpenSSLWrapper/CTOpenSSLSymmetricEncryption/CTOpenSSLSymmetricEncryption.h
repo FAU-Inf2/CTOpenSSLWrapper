@@ -32,4 +32,6 @@ BOOL CTOpenSSLSymmetricEncrypt(CTOpenSSLCipher cipher, NSData *symmetricKeyData,
  */
 BOOL CTOpenSSLSymmetricDecrypt(CTOpenSSLCipher cipher, NSData *symmetricKeyData, NSData *encryptedData, NSData *__nullable *__nonnull decryptedData);
 
+BOOL CTOpenSSLSymmetricDecryptAES256CFB(NSData *symmetricKeyData, NSData *encryptedData, NSData *__nullable *__nonnull decryptedData);
+
 NS_ASSUME_NONNULL_END

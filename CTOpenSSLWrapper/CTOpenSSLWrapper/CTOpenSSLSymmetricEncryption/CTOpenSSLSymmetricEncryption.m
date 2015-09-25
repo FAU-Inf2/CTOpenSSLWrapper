@@ -154,3 +154,71 @@ BOOL CTOpenSSLSymmetricDecrypt(CTOpenSSLCipher CTCipher, NSData *symmetricKeyDat
 
     return YES;
 }
+
+BOOL CTOpenSSLSymmetricDecryptAES256CFB(NSData *symmetricKeyData, NSData *encryptedData, NSData **decryptedData)
+{
+    CTOpenSSLInitialize();
+    NSCParameterAssert(decryptedData);
+    
+    unsigned char *inputBytes = (unsigned char *)encryptedData.bytes;
+    unsigned char *outputBuffer = NULL;
+    unsigned char initializationVector[EVP_MAX_IV_LENGTH];
+    for (int i = 0; i < EVP_MAX_IV_LENGTH; i++) {
+        initializationVector[i] = '\0';
+    }
+    int outputLength = 0;
+    int temporaryLength = 0;
+    long inputLength = encryptedData.length;
+    
+    // Use symmetric decryption...
+    EVP_CIPHER_CTX cipherContext;
+    const EVP_CIPHER *cipher;
+    
+    NSString* cipherName = @"AES-256-CFB";
+    cipher = (EVP_CIPHER*)EVP_get_cipherbyname(cipherName.UTF8String);
+    if (!cipher) {
+        NSLog(@"unable to get cipher with name %@", cipherName);
+        return NO;
+    }
+    
+    EVP_CIPHER_CTX_init(&cipherContext);
+    
+    if (!EVP_DecryptInit(&cipherContext, cipher, [symmetricKeyData bytes], initializationVector)) {
+        NSLog(@"EVP_DecryptInit() failed!");
+        return NO;
+    }
+    
+    EVP_CIPHER_CTX_set_key_length(&cipherContext, EVP_MAX_KEY_LENGTH);
+    
+    if(EVP_CIPHER_CTX_block_size(&cipherContext) > 1) {
+        outputBuffer = (unsigned char *)calloc(inputLength + EVP_CIPHER_CTX_block_size(&cipherContext), sizeof(unsigned char));
+    } else {
+        outputBuffer = (unsigned char *)calloc(inputLength, sizeof(unsigned char));
+    }
+    
+    if (!outputBuffer) {
+        NSLog(@"Cannot allocate memory for buffer!");
+        return NO;
+    }
+    
+    if (!EVP_DecryptUpdate(&cipherContext, outputBuffer, &outputLength, inputBytes, (int)inputLength)) {
+        NSLog(@"EVP_DecryptUpdate() failed!");
+        return NO;
+    }
+    
+    if (!EVP_DecryptFinal(&cipherContext, outputBuffer + outputLength, &temporaryLength)) {
+        NSLog(@"EVP_DecryptFinal() failed!");
+        return NO;
+    }
+    
+    outputLength += temporaryLength;
+    EVP_CIPHER_CTX_cleanup(&cipherContext);
+    
+    *decryptedData = [NSData dataWithBytes:outputBuffer length:outputLength];
+    
+    if (outputBuffer) {
+        free(outputBuffer);
+    }
+    
+    return YES;
+}
