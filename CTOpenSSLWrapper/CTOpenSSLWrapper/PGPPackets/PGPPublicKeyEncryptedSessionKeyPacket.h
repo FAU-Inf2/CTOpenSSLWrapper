@@ -10,7 +10,7 @@
 @interface PGPPublicKeyEncryptedSessionKeyPacket : PGPPacket
 
 @property (nonatomic) int version;
-@property (nonatomic) unsigned long long pubKeyID;
+@property (nonatomic) unsigned char *pubKeyID;
 @property (nonatomic) int algorithm;
 @property (nonatomic) NSMutableArray *mpis;
 

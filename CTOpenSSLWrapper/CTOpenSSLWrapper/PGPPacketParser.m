@@ -9,11 +9,6 @@
 #import "PGPPacketParser.h"
 
 #import "PEMHelper.h"
-#import "PGPPublicKeyEncryptedSessionKeyPacket.h"
-#import "PGPPublicKeyPacket.h"
-#import "PGPSymmetricEncryptedIntegrityProtectedDataPacket.h"
-#import "PGPCompressedDataPacket.h"
-#import "PGPLiteralDataPacket.h"
 
 #import <openssl/ossl_typ.h>
 #import <openssl/bn.h>
@@ -41,6 +36,10 @@
         self.packets = [NSArray arrayWithObjects:arrays count:20];
     }
     return self;
+}
+
++ (NSMutableArray*)getPacketsWithTag:(int) tag {
+    return [[[self sharedManager] packets] objectAtIndex:tag];
 }
 
 - (void) addPacketWithTag:(int)tag andFormat:(int)format andData:(NSData *)data {
@@ -225,7 +224,7 @@
     return p+pos; // bytes read
 }
 
-+ (int)parseSecretKeyPacket:(PGPSecretKeyPacket *)packet{
++ (int)parseSecretKeyPacket:(PGPSecretKeyPacket *)packet {
     int pos = 0;
     unsigned char* bmpi = NULL;
     int p = 0;
@@ -277,15 +276,11 @@
     int pos = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
     packet.version = bytes[pos++];
-    packet.pubKeyID = (unsigned long long)bytes[pos] << 56 |
-                      (unsigned long long)bytes[pos+1] << 48 |
-                      (unsigned long long)bytes[pos+2] << 40 |
-                      (unsigned long long)bytes[pos+3] << 32 |
-                      (unsigned int)bytes[pos+4] << 24 |
-                      (unsigned int)bytes[pos+5] << 16 |
-                      (unsigned int)bytes[pos+6] << 8 |
-                      (unsigned int)bytes[pos+7];
-    pos += 8;
+    packet.pubKeyID = calloc(8, sizeof(char));
+    for (int i = 0; i < 8; i++) {
+        packet.pubKeyID[i] = bytes[pos++];
+    }
+
     packet.algorithm = bytes[pos++];
     
     // Get MPI
@@ -301,40 +296,6 @@
     [packet.mpis addObject:[NSData dataWithBytes:(const void*)mpi length:byteLen]];
     
     return pos+byteLen+2; // bytes read
-}
-
-+ (NSData*) getPEMFromSecretKeyPacket:(PGPSecretKeyPacket *)packet {
-    RSA* privateRSA = RSA_new();
-    
-    NSData* n = [[[packet pubKey] mpis] objectAtIndex:0];
-    privateRSA->n = BN_bin2bn((const unsigned char*) [n bytes], [n length], NULL);
-    
-    NSData* e = [[[packet pubKey] mpis] objectAtIndex:1];
-    privateRSA->e = BN_bin2bn((const unsigned char*) [e bytes], [e length], NULL);
-    
-    NSData* d = [[packet mpis] objectAtIndex:0];
-    privateRSA->d = BN_bin2bn((const unsigned char*) [d bytes], [d length], NULL);
-    
-    NSData* p = [[packet mpis] objectAtIndex:1];
-    privateRSA->p = BN_bin2bn((const unsigned char*) [p bytes], [p length], NULL);
-    
-    NSData* q = [[packet mpis] objectAtIndex:2];
-    privateRSA->q = BN_bin2bn((const unsigned char*) [q bytes], [q length], NULL);
-    
-    BN_CTX* ctx = BN_CTX_new();
-    BIGNUM* m = BN_new();
-    
-    privateRSA->dmp1 = BN_new();
-    BN_sub(m, privateRSA->p, BN_value_one());
-    BN_mod(privateRSA->dmp1, privateRSA->d, m, ctx);
-    
-    privateRSA->dmq1 = BN_new();
-    BN_sub(m, privateRSA->q, BN_value_one());
-    BN_mod(privateRSA->dmq1, privateRSA->d, m, ctx);
-    
-    privateRSA->iqmp = BN_mod_inverse(NULL, privateRSA->q, privateRSA->p, ctx);
-    
-    return [PEMHelper writeKeyToPEMWithRSA:privateRSA andIsPrivate:YES];
 }
 
 + (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket *)packet{
@@ -390,6 +351,64 @@
     packet.literalData = [NSData dataWithBytes:(const void *) bytes+pos length:[packet.bytes length]-pos];
     
     return [packet.bytes length];
+}
+
++ (NSData*) getPEMFromSecretKeyPacket:(PGPSecretKeyPacket *)packet {
+    RSA* privateRSA = RSA_new();
+    
+    NSData* n = [[[packet pubKey] mpis] objectAtIndex:0];
+    privateRSA->n = BN_bin2bn((const unsigned char*) [n bytes], [n length], NULL);
+    
+    NSData* e = [[[packet pubKey] mpis] objectAtIndex:1];
+    privateRSA->e = BN_bin2bn((const unsigned char*) [e bytes], [e length], NULL);
+    
+    NSData* d = [[packet mpis] objectAtIndex:0];
+    privateRSA->d = BN_bin2bn((const unsigned char*) [d bytes], [d length], NULL);
+    
+    NSData* p = [[packet mpis] objectAtIndex:1];
+    privateRSA->p = BN_bin2bn((const unsigned char*) [p bytes], [p length], NULL);
+    
+    NSData* q = [[packet mpis] objectAtIndex:2];
+    privateRSA->q = BN_bin2bn((const unsigned char*) [q bytes], [q length], NULL);
+    
+    BN_CTX* ctx = BN_CTX_new();
+    BIGNUM* m = BN_new();
+    
+    privateRSA->dmp1 = BN_new();
+    BN_sub(m, privateRSA->p, BN_value_one());
+    BN_mod(privateRSA->dmp1, privateRSA->d, m, ctx);
+    
+    privateRSA->dmq1 = BN_new();
+    BN_sub(m, privateRSA->q, BN_value_one());
+    BN_mod(privateRSA->dmq1, privateRSA->d, m, ctx);
+    
+    privateRSA->iqmp = BN_mod_inverse(NULL, privateRSA->q, privateRSA->p, ctx);
+    
+    return [PEMHelper writeKeyToPEMWithRSA:privateRSA andIsPrivate:YES];
+}
+
++ (NSData*) getPEMFromPublicKeyPacket:(PGPPublicKeyPacket *)packet {
+    RSA* publicRSA = RSA_new();
+    
+    NSData* n = [[packet mpis] objectAtIndex:0];
+    publicRSA->n = BN_bin2bn((const unsigned char*) [n bytes], [n length], NULL);
+    
+    NSData* e = [[packet mpis] objectAtIndex:1];
+    publicRSA->e = BN_bin2bn((const unsigned char*) [e bytes], [e length], NULL);
+    
+    publicRSA->d = NULL;
+    
+    publicRSA->p = NULL;
+    
+    publicRSA->q = NULL;
+    
+    publicRSA->dmp1 = NULL;
+    
+    publicRSA->dmq1 = NULL;
+    
+    publicRSA->iqmp = NULL;
+    
+    return [PEMHelper writeKeyToPEMWithRSA:publicRSA andIsPrivate:NO];
 }
 
 @end

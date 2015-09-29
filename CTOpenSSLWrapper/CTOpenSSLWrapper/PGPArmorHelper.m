@@ -11,12 +11,12 @@
 #import "NSString+CTOpenSSL.h"
 #import "Base64Coder.h"
 
-#define publicArmorBegin @"-----BEGIN PGP PUBLIC KEY BLOCK-----\n"
-#define publicArmorEnd @"-----END PGP PUBLIC KEY BLOCK-----\n"
-#define privateArmorBegin @"-----BEGIN PGP PRIVATE KEY BLOCK-----\n"
-#define privateArmorEnd @"-----END PGP PRIVATE KEY BLOCK-----\n"
-#define pgpMessageBegin @"-----BEGIN PGP MESSAGE-----\n"
-#define pgpMessageEnd @"-----END PGP MESSAGE-----\n"
+#define publicArmorBegin @"-----BEGIN PGP PUBLIC KEY BLOCK-----"
+#define publicArmorEnd @"-----END PGP PUBLIC KEY BLOCK-----"
+#define privateArmorBegin @"-----BEGIN PGP PRIVATE KEY BLOCK-----"
+#define privateArmorEnd @"-----END PGP PRIVATE KEY BLOCK-----"
+#define pgpMessageBegin @"-----BEGIN PGP MESSAGE-----"
+#define pgpMessageEnd @"-----END PGP MESSAGE-----"
 #define keyFileComment @"Comment"
 
 @implementation PGPArmorHelper
@@ -80,16 +80,18 @@
         }
     }
     
-    //Remove checksum from base64 string
-    mutableString = [[mutableString substringToIndex:mutableString.length - 5] mutableCopy];
+    //Remove newlines
+    mutableString = [[PGPArmorHelper trimmNewLinesFromString:mutableString] mutableCopy];
     
-    return [PGPArmorHelper trimmNewLinesFromString:mutableString];
+    //Remove checksum from base64 string
+    mutableString = [[mutableString substringToIndex:mutableString.length - 6] mutableCopy];
+    
+    return mutableString;
 }
 
 + (NSString*)trimmNewLinesFromString:(NSString *)stringToTrimm {
     NSCharacterSet *whiteSpaceCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     return [stringToTrimm stringByTrimmingCharactersInSet:whiteSpaceCharacterSet];
-    return [stringToTrimm substringFromIndex:2];
 }
 
 @end

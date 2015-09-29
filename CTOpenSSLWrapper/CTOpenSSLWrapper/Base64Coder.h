@@ -24,6 +24,6 @@
  * @param {NSString *} string: String to encode with Bas64
  * @return {NSData *} returns a NSData object which is Base64 encoded
  */
-+ (NSData *)encodeBase64String:(NSString *)string;
++ (NSData *)encodeBase64String:(NSData *)data;
 
 @end

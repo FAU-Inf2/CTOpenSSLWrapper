@@ -155,6 +155,60 @@ BOOL CTOpenSSLSymmetricDecrypt(CTOpenSSLCipher CTCipher, NSData *symmetricKeyDat
     return YES;
 }
 
+BOOL CTOpenSSLSymmetricEncryptAES256CFB(NSData *symmetricKeyData, NSData *data, NSData **encryptedData)
+{
+    CTOpenSSLInitialize();
+    
+    unsigned char *inputBytes = (unsigned char *)data.bytes;
+    int inputLength = (int)data.length;
+    unsigned char initializationVector[EVP_MAX_IV_LENGTH];
+    for (int i = 0; i < EVP_MAX_IV_LENGTH; i++) {
+        initializationVector[i] = '\0';
+    }
+    int temporaryLength = 0;
+    
+    // Perform symmetric encryption...
+    EVP_CIPHER_CTX cipherContext;
+    
+    NSString *cipherName = @"AES-256-CFB";
+    const EVP_CIPHER *cipher = EVP_get_cipherbyname(cipherName.UTF8String);
+    
+    if (!cipher) {
+        NSLog(@"unable to get cipher with name %@", cipherName);
+        return NO;
+    }
+    
+    EVP_CIPHER_CTX_init(&cipherContext);
+    
+    if (!EVP_EncryptInit(&cipherContext, cipher, [symmetricKeyData bytes], initializationVector)) {
+        return NO;
+    }
+    EVP_CIPHER_CTX_set_key_length(&cipherContext, EVP_MAX_KEY_LENGTH);
+    
+    unsigned char *outputBuffer = (unsigned char *)calloc(inputLength + EVP_CIPHER_CTX_block_size(&cipherContext) - 1, sizeof(unsigned char));
+    int outputLength = 0;
+    
+    if (!outputBuffer) {
+        NSLog(@"Cannot allocate memory for buffer!");
+        return NO;
+    }
+    
+    if (!EVP_EncryptUpdate(&cipherContext, outputBuffer, &outputLength, inputBytes, inputLength)) {
+        return NO;
+    }
+    
+    if (!EVP_EncryptFinal(&cipherContext, outputBuffer + outputLength, &temporaryLength)) {
+        NSLog(@"EVP_EncryptFinal() failed!");
+        return NO;
+    }
+    
+    outputLength += temporaryLength;
+    EVP_CIPHER_CTX_cleanup(&cipherContext);
+    
+    *encryptedData = [NSData dataWithBytesNoCopy:outputBuffer length:outputLength freeWhenDone:YES];
+    return YES;
+}
+
 BOOL CTOpenSSLSymmetricDecryptAES256CFB(NSData *symmetricKeyData, NSData *encryptedData, NSData **decryptedData)
 {
     CTOpenSSLInitialize();

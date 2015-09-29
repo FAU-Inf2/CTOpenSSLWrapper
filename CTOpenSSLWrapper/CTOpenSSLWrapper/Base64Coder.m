@@ -14,11 +14,11 @@
 
 @implementation Base64Coder
 
-+ (NSData *)encodeBase64String:(NSString *)string {
++ (NSData *)encodeBase64String:(NSData *)data {
 
     BIO *bio, *b64;
     BIO *bio_err = BIO_new(BIO_s_file());
-    char *message = (char *)[string UTF8String];
+    //char *message = (char *)[string UTF8String];
     
     NSString *docPath = [[Base64Coder applicationDocumentsDirectory] stringByAppendingPathComponent:@"stringToEncode.txt"];
     
@@ -32,10 +32,10 @@
     BIO_set_callback_arg(b64, (char *)bio_err);
 #endif
     BIO_push(b64, bio);
-    BIO_write(b64, message, strlen(message));
+    BIO_write(b64, [data bytes], [data length]);
     BIO_flush(b64);
     
-    BIO_free_all(bio);
+    BIO_free_all(b64);
     
     NSData *encodedData = [NSData dataWithContentsOfFile:docPath];
     
@@ -70,21 +70,24 @@
     BIO_read_filename(input, (char *)[docPath UTF8String]);
     
     b64 = BIO_new(BIO_f_base64());
-#ifndef NDEBUG
+/*#ifndef NDEBUG
     BIO_set_callback(b64, BIO_debug_callback);
     BIO_set_callback_arg(b64, (char *)bio_err);
     BIO_set_callback(input, BIO_debug_callback);
     BIO_set_callback_arg(input, (char *)bio_err);
-#endif
-    input = BIO_push(b64, input);
+#endif*/
+    BIO_push(b64, input);
     
-    (buffer)[decodeLen] = '\0';
-    BIO_read(input, buffer, decodeLen);
+    buffer[decodeLen] = '\0';
+    int ret = BIO_read(b64, buffer, decodeLen);
+    if (ret <= 0) {
+        BIO_printf(bio_err, "read error\n");
+    }
     
-#ifndef NDEBUG
+/*#ifndef NDEBUG
     BIO* bio_out = BIO_new_fp(stdout, BIO_NOCLOSE);
     BIO_write(bio_out, buffer, decodeLen);
-#endif
+#endif*/
     
     BIO_free_all(input);
     BIO_free_all(bio_err);
@@ -95,7 +98,11 @@
         NSLog(@"%@", error.description);
     }
     
-    return [[NSData alloc] initWithBytes:buffer length:decodeLen];
+    NSData* decodedData = [[NSData alloc] initWithBytes:buffer length:ret];
+    
+    OPENSSL_free(buffer);
+    
+    return decodedData;
 }
 
 + (size_t)calcDecodeLenthWithString:(NSString *)string {

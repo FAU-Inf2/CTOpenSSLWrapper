@@ -14,6 +14,7 @@
     self = [super initWithBytes:bytes andWithTag:tag andWithFormat:format];
     if (self != nil) {
         self.mpis = [[NSMutableArray alloc] init];
+        //self.pubKeyID = calloc(8, sizeof(char));
     }
     return self;
 }
