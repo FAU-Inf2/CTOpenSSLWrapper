@@ -12,6 +12,10 @@
 
 @property (nonatomic) PGPPublicKeyPacket *pubKey;
 @property (nonatomic) int s2k;
+@property (nonatomic) int symmetricEncAlgorithm;
+@property (nonatomic) int s2kSpecifier;
+@property (nonatomic) int s2kHashAlgorithm;
+@property (nonatomic) NSData* initialVector;
 @property (nonatomic) NSMutableArray *mpis;
 
 - (id)initWithBytes:(NSData*)bytes andWithTag:(int)tag andWithFormat:(int)format;

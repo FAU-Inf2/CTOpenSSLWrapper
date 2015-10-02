@@ -43,6 +43,8 @@
 		8EA3300E1BB41143008CA8BA /* PGPCompressedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */; };
 		8EA330101BB4240B008CA8BA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EA3300F1BB4240B008CA8BA /* libz.dylib */; };
 		8EABF2DF1BAC0E8B00FD6F2A /* pgpTestMessage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */; };
+		8EC10C801BBBD3B9007A2674 /* encPubKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8EC10C7E1BBBD3B9007A2674 /* encPubKey.asc */; };
+		8EC10C811BBBD3B9007A2674 /* encSecKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8EC10C7F1BBBD3B9007A2674 /* encSecKey.asc */; };
 		8EC1432C1BB549EF007AAD64 /* PGPLiteralDataPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EC1432A1BB549EF007AAD64 /* PGPLiteralDataPacket.h */; };
 		8EC1432D1BB549EF007AAD64 /* PGPLiteralDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */; };
 		8EC143301BB56E5C007AAD64 /* PGPMessageBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EC1432E1BB56E5C007AAD64 /* PGPMessageBuilder.h */; };
@@ -127,6 +129,8 @@
 		8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPCompressedDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPCompressedDataPacket.m; sourceTree = "<group>"; };
 		8EA3300F1BB4240B008CA8BA /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pgpTestMessage.txt; sourceTree = "<group>"; };
+		8EC10C7E1BBBD3B9007A2674 /* encPubKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = encPubKey.asc; sourceTree = "<group>"; };
+		8EC10C7F1BBBD3B9007A2674 /* encSecKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = encSecKey.asc; sourceTree = "<group>"; };
 		8EC1432A1BB549EF007AAD64 /* PGPLiteralDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPLiteralDataPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPLiteralDataPacket.h; sourceTree = "<group>"; };
 		8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPLiteralDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPLiteralDataPacket.m; sourceTree = "<group>"; };
 		8EC1432E1BB56E5C007AAD64 /* PGPMessageBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPMessageBuilder.h; path = CTOpenSSLWrapper/PGPMessageBuilder.h; sourceTree = "<group>"; };
@@ -209,6 +213,8 @@
 				8EF5C47A1BB3044C004AC290 /* outbase64.txt */,
 				8E70CEED1BA32761003251D7 /* publicTestKey.asc */,
 				5B3B481C1BA864E9009E6503 /* privateTestKey.asc */,
+				8EC10C7E1BBBD3B9007A2674 /* encPubKey.asc */,
+				8EC10C7F1BBBD3B9007A2674 /* encSecKey.asc */,
 				8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */,
 				8E1C706C1BB0637E0071272B /* 2pgpTestMessage.txt */,
 				5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */,
@@ -544,6 +550,8 @@
 			files = (
 				3D861E3B1BA306FA00DED4CC /* Main.storyboard in Resources */,
 				3D861E401BA306FA00DED4CC /* LaunchScreen.xib in Resources */,
+				8EC10C801BBBD3B9007A2674 /* encPubKey.asc in Resources */,
+				8EC10C811BBBD3B9007A2674 /* encSecKey.asc in Resources */,
 				8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */,
 				5B3B481D1BA864E9009E6503 /* privateTestKey.asc in Resources */,
 				3D861E3D1BA306FA00DED4CC /* Images.xcassets in Resources */,

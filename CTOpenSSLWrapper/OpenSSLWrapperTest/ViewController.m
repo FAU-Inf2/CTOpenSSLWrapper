@@ -27,10 +27,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    /*NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"pgpTestMessage" withExtension:@".txt"];
+    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"2pgpTestMessage" withExtension:@".txt"];
     NSData* decodedData = [PGPArmorHelper removeArmorFromKeyFile:fileUrl];
     
-    fileUrl = [[NSBundle mainBundle] URLForResource:@"privateTestKey" withExtension:@".asc"];
+    fileUrl = [[NSBundle mainBundle] URLForResource:@"encSecKey" withExtension:@".asc"];
     NSData* decodedKeyData = [PGPArmorHelper removeArmorFromKeyFile:fileUrl];
     
     int nextpos = 0;
@@ -55,7 +55,7 @@
     
     NSData* ret = NULL;
     PGPSymmetricEncryptedIntegrityProtectedDataPacket* p = [[PGPPacketParser getPacketsWithTag:18] objectAtIndex:0];
-    NSData* encrypted = [[[PGPPacketParser getPacketsWithTag:18] objectAtIndex:0] encryptedData];
+    NSData* encrypted = [p encryptedData];
     CTOpenSSLSymmetricDecryptAES256CFB(sessionKey, encrypted, &ret);
     
     //ret = [NSData dataWithBytes:[ret bytes] + 18 length:[ret length] - 18];
@@ -77,9 +77,9 @@
     nextpos = 0;
     do {
         nextpos = [PGPPacketParser extractPacketsFromBytes:plain atPostion:nextpos];
-    } while (nextpos > 0);*/
+    } while (nextpos > 0);
     
-    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"publicTestKey" withExtension:@".asc"];
+    /*NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"publicTestKey" withExtension:@".asc"];
     NSData* decodedKeyData = [PGPArmorHelper removeArmorFromKeyFile:fileUrl];
     
     int nextpos = 0;
@@ -102,7 +102,8 @@
     id[7] = 0xaa;
     NSData* pgpmessage = [builder buildPGPEncryptedMessageFromData:[@"Dies haben wir selbst verschluesselt" dataUsingEncoding:NSUTF8StringEncoding] withPGPPublicKey:pubKeyPEM andPubKeyID:id];
     NSData* checksum = [builder getChecksumForPGPMessageData:pgpmessage];
-    NSData* armouredMessage = [builder buildArmouredPGPMessageFromMessageData:pgpmessage andChecksum:checksum];
+    NSData* armouredMessage = [builder buildArmouredPGPMessageFromMessageData:pgpmessage andChecksum:checksum];*/
+    
 }
 
 - (void)didReceiveMemoryWarning {

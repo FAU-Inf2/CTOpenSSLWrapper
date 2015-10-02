@@ -9,7 +9,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum {
-    CTOpenSSLCipherAES256 = 0
+    CTOpenSSLCipherAES256 = 0,
+    CTOpenSSLCipherAES256CFB = 1,
+    CTOpenSSLCipherCAST5CFB = 2
 } CTOpenSSLCipher;
 
 NSString *NSStringFromCTOpenSSLCipher(CTOpenSSLCipher cipher);
@@ -34,5 +36,6 @@ BOOL CTOpenSSLSymmetricDecrypt(CTOpenSSLCipher cipher, NSData *symmetricKeyData,
 
 BOOL CTOpenSSLSymmetricEncryptAES256CFB(NSData *symmetricKeyData, NSData *data, NSData *__nullable *__nonnull encryptedData);
 BOOL CTOpenSSLSymmetricDecryptAES256CFB(NSData *symmetricKeyData, NSData *encryptedData, NSData *__nullable *__nonnull decryptedData);
+BOOL CTOpenSSLSymmetricDecryptWithIV(CTOpenSSLCipher CTCipher, NSData* initialVector, NSData *symmetricKeyData, NSData *encryptedData, NSData *__nullable *__nonnull decryptedData);
 
 NS_ASSUME_NONNULL_END

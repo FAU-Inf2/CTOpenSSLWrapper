@@ -10,6 +10,9 @@
 
 #import "PEMHelper.h"
 
+#import "CTOpenSSLDigest.h"
+#import "CTOpenSSLSymmetricEncryption.h"
+
 #import <openssl/ossl_typ.h>
 #import <openssl/bn.h>
 #import <openssl/rsa.h>
@@ -47,39 +50,39 @@
     switch (tag) {
         case 1:
             packet = [[PGPPublicKeyEncryptedSessionKeyPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parsePublicKeyEncryptedSessionKeyPacket:packet] == -1) {
+            if ([PGPPacketParser parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket*)packet] == -1) {
                 // error
             }
             break;
         case 5: // SecretKeyPacket
         case 7: // SecretSubKeyPacket
             packet = [[PGPSecretKeyPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parseSecretKeyPacket:packet] == -1) {
+            if ([PGPPacketParser parseSecretKeyPacket:(PGPSecretKeyPacket*)packet withPassphrase:@"GoMADyoumust1!"] == -1) {
                 // error
             }
             break;
         case 6:  // PublicKeyPacket
         case 14: // PublicSubKeyPacket
             packet = [[PGPPublicKeyPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parsePublicKeyPacket:packet] == -1) {
+            if ([PGPPacketParser parsePublicKeyPacket:(PGPPublicKeyPacket*)packet] == -1) {
                 // error
             }
             break;
         case 8:
             packet = [[PGPCompressedDataPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parseCompressedDataPacket:packet] == -1) {
+            if ([PGPPacketParser parseCompressedDataPacket:(PGPCompressedDataPacket*)packet] == -1) {
                 // error
             }
             break;
         case 11:
             packet = [[PGPLiteralDataPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parseLiteralDataPacket:packet] == -1) {
+            if ([PGPPacketParser parseLiteralDataPacket:(PGPLiteralDataPacket*)packet] == -1) {
                 //error
             }
             break;
         case 18:
             packet = [[PGPSymmetricEncryptedIntegrityProtectedDataPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parseSymmetricEncryptedIntegrityProtectedDataPacket:packet] == -1) {
+            if ([PGPPacketParser parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket*)packet] == -1) {
                 // error
             }
             break;
@@ -224,12 +227,13 @@
     return p+pos; // bytes read
 }
 
-+ (int)parseSecretKeyPacket:(PGPSecretKeyPacket *)packet {
++ (int)parseSecretKeyPacket:(PGPSecretKeyPacket *)packet withPassphrase:(NSString *)passphrase {
     int pos = 0;
     unsigned char* bmpi = NULL;
     int p = 0;
     int mpiCount = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    int hashAlgo = 0;
     
     //Extract PublicKey from packet
     PGPPublicKeyPacket *pubKey = [[PGPPublicKeyPacket alloc] initWithBytes:packet.bytes andWithTag:packet.tag andWithFormat:packet.format];
@@ -240,6 +244,8 @@
     packet.pubKey = pubKey;
     
     packet.s2k = bytes[pos++];
+    unsigned char saltValue[8];
+    int is2k_count = 0;
     
     switch (packet.s2k) {
         case 0:
@@ -259,17 +265,174 @@
                 [packet.mpis addObject:[NSData dataWithBytes:(const void*)mpi length:byteLen]];
                 p += byteLen+2;
             }
+            return p+pos;
             break;
         case 255:
+            hashAlgo = 1;
         case 254:
             // Indicates that a string-to-key specifier is being given
+            packet.symmetricEncAlgorithm = bytes[pos++];
+            packet.s2kSpecifier = bytes[pos++];
+            if (packet.s2kSpecifier == 2 || (packet.s2kSpecifier >= 100 && packet.s2kSpecifier <= 110)) {
+                return -1;
+            }
+            packet.s2kHashAlgorithm = bytes[pos++];
+            if (packet.s2kSpecifier > 0) {
+                for (int i = 0; i < 8; i++) {
+                    saltValue[i] = bytes[pos++];
+                }
+                if (packet.s2kSpecifier == 3) {
+                    is2k_count = bytes[pos++];
+                }
+            }
+            if (hashAlgo == 0) {
+                hashAlgo = 2;
+            }
             break;
         default:
             // Any other value is a symmetric-key encryption algorithm identifier
+            packet.symmetricEncAlgorithm = packet.s2k;
+            hashAlgo = 1;
             break;
     }
     
+    int blockSize = 0;
+    int keyLen = 0;
+    switch (packet.symmetricEncAlgorithm) {
+        case 3:
+            blockSize = 8;
+            keyLen = 16;
+            break;
+        case 9:
+            blockSize = 16;
+            keyLen = 32;
+            break;
+        default: //All other values are not supported yet
+            return -1;
+            break;
+    }
+    unsigned char iv[blockSize];
+    for (int i = 0; i < blockSize; i++) {
+        iv[i] = bytes[pos++];
+    }
+    packet.initialVector = [NSData dataWithBytes:(const void *)iv length:blockSize];
+    // Generate symm. key
+    NSData* symKey = [PGPPacketParser generateSymmKeyFromPassphrase:passphrase withSaltSpecifier:packet.s2kSpecifier andHashalgorithm:packet.s2kHashAlgorithm andSaltValue:[NSData dataWithBytes:(const void *)saltValue length:8] andSaltCount:is2k_count andKeyLen:keyLen];
+    
+    NSData* encryptedData = [NSData dataWithBytes:(const void *)(bytes+pos) length:[packet.bytes length]-pos];
+    NSData* mpis = NULL;
+    CTOpenSSLSymmetricDecryptWithIV(CTOpenSSLCipherCAST5CFB, packet.initialVector, symKey, encryptedData, &mpis);
+    
+    // parse mpis
+    bmpi = (unsigned char*)[mpis bytes];
+    mpiCount = 4; // only rsa supported at the moment
+    
+    for (int i = 0; i < mpiCount && p < ([packet.bytes length] - pos); i++) {
+        double len = bmpi[p] << 8 | bmpi[p+1];
+        int byteLen = ceil(len/8);
+        
+        unsigned char mpi[byteLen];
+        for (int j = 0; j < byteLen; j++) {
+            mpi[j] = bmpi[2+j+p];
+        }
+        [packet.mpis addObject:[NSData dataWithBytes:(const void*)mpi length:byteLen]];
+        
+        NSData* dataToCheck;
+        int checksum = 0;
+        int checkValue = 0;
+        switch (hashAlgo) {
+            case 1:
+                checksum = ((unsigned char*)[mpis bytes])[[mpis length]-2] << 8 | ((unsigned char*)[mpis bytes])[[mpis length]-1];
+                dataToCheck = [NSData dataWithBytes:[mpis bytes] length:[mpis length]-2];
+                for (int i = 0; i < [dataToCheck length]; i++) {
+                    checkValue += ((unsigned char*)[dataToCheck bytes])[i];
+                }
+                if ((checkValue % 65536) != (checksum)) {
+                    return -1;
+                }
+                break;
+            case 2:
+                dataToCheck = [NSData dataWithBytes:[mpis bytes] length:[mpis length]-20];
+                dataToCheck = CTOpenSSLGenerateDigestFromData(dataToCheck, CTOpenSSLDigestTypeSHA1);
+                for (int i = 0; i < 20; i++) {
+                    if (((unsigned char*)[dataToCheck bytes])[i] != ((unsigned char*)[mpis bytes])[([mpis length] - 20)+i]) {
+                        return -1;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        
+        p += byteLen+2;
+    }
+    
+    // Check Hash
+    
     return p+pos; // bytes read
+}
+
++ (NSData*)generateSymmKeyFromPassphrase:(NSString*)passphrase withSaltSpecifier:(int)s2k andHashalgorithm:(int)algorithm andSaltValue:(NSData*)salt andSaltCount:(int)count andKeyLen:(int)keyLen {
+    CTOpenSSLDigestType hash;
+    switch (algorithm) {
+        case 0:
+            break;
+        case 1:
+            hash = CTOpenSSLDigestTypeMD5;
+            break;
+        case 2:
+            hash = CTOpenSSLDigestTypeSHA1;
+            break;
+        case 8:
+            hash = CTOpenSSLDigestTypeSHA256;
+            break;
+        case 10:
+            hash = CTOpenSSLDigestTypeSHA512;
+            break;
+        default:
+            return NULL;
+            break;
+    }
+    NSMutableData* ret = [[NSMutableData alloc] initWithLength:0];
+    NSMutableData* prefix = [[NSMutableData alloc] initWithLength:0];
+    
+    while ([ret length] <= keyLen) {
+        
+        NSMutableData* dataToHash = [[NSMutableData alloc] init];
+        NSMutableData* isp = [prefix mutableCopy];
+        unsigned int octetsToHash = 0;
+        switch (s2k) {
+            case 1:
+                [dataToHash appendData:salt];
+            case 0:
+                [dataToHash appendData:[passphrase dataUsingEncoding:NSUTF8StringEncoding]];
+                break;
+            case 3:
+                octetsToHash = (16 + (count & 15)) << ((count >> 4) + 6);
+                [dataToHash appendData:salt];
+                [dataToHash appendData:[passphrase dataUsingEncoding:NSUTF8StringEncoding]];
+                while ([isp length] < octetsToHash) {
+                    [isp appendData:dataToHash];
+                }
+                if ([isp length] > octetsToHash) {
+                    dataToHash = [[NSData dataWithBytes:[isp bytes] length:octetsToHash] mutableCopy];
+                } else {
+                    dataToHash = isp;
+                }
+                break;
+            default:
+                [dataToHash appendData:[passphrase dataUsingEncoding:NSUTF8StringEncoding]];
+                hash = CTOpenSSLDigestTypeMD5;
+                break;
+        }
+        
+        [ret appendData: CTOpenSSLGenerateDigestFromData(dataToHash, hash)];
+        [prefix appendBytes:(const void *)"\0" length:1];
+        
+    }
+    
+    return [NSData dataWithBytes:[ret bytes] length:keyLen];
+    
 }
 
 + (int)parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket *)packet {

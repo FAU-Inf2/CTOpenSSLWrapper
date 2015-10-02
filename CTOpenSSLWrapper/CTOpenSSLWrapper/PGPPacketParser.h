@@ -25,7 +25,8 @@
 + (NSMutableArray*)getPacketsWithTag:(int) tag;
 
 + (int)extractPacketsFromBytes:(NSData*)bytes atPostion:(int)position;
-+ (int)parseSecretKeyPacket:(PGPSecretKeyPacket*) packet;
++ (int)parseSecretKeyPacket:(PGPSecretKeyPacket*) packet withPassphrase:(NSString*)passphrase;
++ (NSData*)generateSymmKeyFromPassphrase:(NSString*)passphrase withSaltSpecifier:(int)s2k andHashalgorithm:(int)algorithm andSaltValue:(NSData*)salt andSaltCount:(int)count andKeyLen:(int)keyLen;
 + (int)parsePublicKeyPacket:(PGPPublicKeyPacket*) packet;
 + (int)parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket*) packet;
 + (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket*) packet;
