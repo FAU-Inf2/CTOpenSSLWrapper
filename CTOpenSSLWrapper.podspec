@@ -10,6 +10,8 @@ Pod::Spec.new do |spec|
   spec.homepage      = 'https://github.com/ebf/CTOpenSSLWrapper'
   spec.summary       = 'Objc OpenSSL wrapper.'
   spec.author        = { 'Oliver Letterer' => 'oliver.letterer@gmail.com' }
+  
+  spec.libraries = 'Godzippa'
 
   spec.vendored_frameworks = 'openssl.framework'
 end
