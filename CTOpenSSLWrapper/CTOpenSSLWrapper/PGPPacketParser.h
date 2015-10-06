@@ -15,24 +15,25 @@
 #import "PGPSymmetricEncryptedIntegrityProtectedDataPacket.h"
 #import "PGPCompressedDataPacket.h"
 #import "PGPLiteralDataPacket.h"
+#import "PGPUserIDPacket.h"
 
 @interface PGPPacketParser : NSObject
 
 @property (nonatomic, strong) NSArray *packets;
 
-+ (id)sharedManager;
 - (void) addPacketWithTag:(int)tag andFormat:(int)format andData:(NSData*)data;
-+ (NSMutableArray*)getPacketsWithTag:(int) tag;
+- (NSMutableArray*)getPacketsWithTag:(int) tag;
 
-+ (int)extractPacketsFromBytes:(NSData*)bytes atPostion:(int)position;
-+ (int)parseSecretKeyPacket:(PGPSecretKeyPacket*) packet withPassphrase:(NSString*)passphrase;
-+ (NSData*)generateSymmKeyFromPassphrase:(NSString*)passphrase withSaltSpecifier:(int)s2k andHashalgorithm:(int)algorithm andSaltValue:(NSData*)salt andSaltCount:(int)count andKeyLen:(int)keyLen;
-+ (int)parsePublicKeyPacket:(PGPPublicKeyPacket*) packet;
-+ (int)parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket*) packet;
-+ (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket*) packet;
-+ (int)parseCompressedDataPacket:(PGPCompressedDataPacket*) packet;
-+ (int)parseLiteralDataPacket:(PGPLiteralDataPacket*) packet;
-+ (NSData*)getPEMFromSecretKeyPacket:(PGPSecretKeyPacket*) packet;
-+ (NSData*) getPEMFromPublicKeyPacket:(PGPPublicKeyPacket *)packet;
+- (int)extractPacketsFromBytes:(NSData*)bytes atPostion:(int)position;
+- (int)parseSecretKeyPacket:(PGPSecretKeyPacket*) packet;
+- (int)parsePublicKeyPacket:(PGPPublicKeyPacket*) packet;
+- (int)parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket*) packet;
+- (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket*) packet;
+- (int)parseCompressedDataPacket:(PGPCompressedDataPacket*) packet;
+- (int)parseLiteralDataPacket:(PGPLiteralDataPacket*) packet;
+- (int)parseUserIDPacket:(PGPUserIDPacket*) packet;
+- (NSData*)getPEMFromSecretKeyPacket:(PGPSecretKeyPacket*) packet;
+- (NSData*)getPEMFromPublicKeyPacket:(PGPPublicKeyPacket*) packet;
+- (NSData*)generateKeyID:(PGPPublicKeyPacket*) packet;
 
 @end

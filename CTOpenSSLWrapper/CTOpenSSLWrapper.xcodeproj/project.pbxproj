@@ -43,12 +43,18 @@
 		8EA3300E1BB41143008CA8BA /* PGPCompressedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */; };
 		8EA330101BB4240B008CA8BA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EA3300F1BB4240B008CA8BA /* libz.dylib */; };
 		8EABF2DF1BAC0E8B00FD6F2A /* pgpTestMessage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */; };
+		8EB2134D1BC2B97C00C762C2 /* PGPKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EB2134B1BC2B97B00C762C2 /* PGPKey.h */; };
+		8EB2134E1BC2B97C00C762C2 /* PGPKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EB2134C1BC2B97B00C762C2 /* PGPKey.m */; };
 		8EC10C801BBBD3B9007A2674 /* encPubKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8EC10C7E1BBBD3B9007A2674 /* encPubKey.asc */; };
 		8EC10C811BBBD3B9007A2674 /* encSecKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8EC10C7F1BBBD3B9007A2674 /* encSecKey.asc */; };
 		8EC1432C1BB549EF007AAD64 /* PGPLiteralDataPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EC1432A1BB549EF007AAD64 /* PGPLiteralDataPacket.h */; };
 		8EC1432D1BB549EF007AAD64 /* PGPLiteralDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */; };
 		8EC143301BB56E5C007AAD64 /* PGPMessageBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EC1432E1BB56E5C007AAD64 /* PGPMessageBuilder.h */; };
 		8EC143311BB56E5C007AAD64 /* PGPMessageBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1432F1BB56E5C007AAD64 /* PGPMessageBuilder.m */; };
+		8EE5036C1BC2C63000829CBB /* PGPUserIDPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EE5036A1BC2C63000829CBB /* PGPUserIDPacket.h */; };
+		8EE5036D1BC2C63000829CBB /* PGPUserIDPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE5036B1BC2C63000829CBB /* PGPUserIDPacket.m */; };
+		8EE503701BC2CAC100829CBB /* SMilePGP.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EE5036E1BC2CAC100829CBB /* SMilePGP.h */; };
+		8EE503711BC2CAC100829CBB /* SMilePGP.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE5036F1BC2CAC100829CBB /* SMilePGP.m */; };
 		8EE84F831BAAC4600088E1EC /* PEMHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE84F811BAAC2E20088E1EC /* PEMHelper.m */; };
 		8EE84F841BAAC4680088E1EC /* PEMHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EE84F801BAAC2E20088E1EC /* PEMHelper.h */; };
 		8EF5C47B1BB3044C004AC290 /* outbase64.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8EF5C47A1BB3044C004AC290 /* outbase64.txt */; };
@@ -129,12 +135,18 @@
 		8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPCompressedDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPCompressedDataPacket.m; sourceTree = "<group>"; };
 		8EA3300F1BB4240B008CA8BA /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8EABF2DE1BAC0E8B00FD6F2A /* pgpTestMessage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pgpTestMessage.txt; sourceTree = "<group>"; };
+		8EB2134B1BC2B97B00C762C2 /* PGPKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPKey.h; path = CTOpenSSLWrapper/PGPKey.h; sourceTree = "<group>"; };
+		8EB2134C1BC2B97B00C762C2 /* PGPKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPKey.m; path = CTOpenSSLWrapper/PGPKey.m; sourceTree = "<group>"; };
 		8EC10C7E1BBBD3B9007A2674 /* encPubKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = encPubKey.asc; sourceTree = "<group>"; };
 		8EC10C7F1BBBD3B9007A2674 /* encSecKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = encSecKey.asc; sourceTree = "<group>"; };
 		8EC1432A1BB549EF007AAD64 /* PGPLiteralDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPLiteralDataPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPLiteralDataPacket.h; sourceTree = "<group>"; };
 		8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPLiteralDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPLiteralDataPacket.m; sourceTree = "<group>"; };
 		8EC1432E1BB56E5C007AAD64 /* PGPMessageBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPMessageBuilder.h; path = CTOpenSSLWrapper/PGPMessageBuilder.h; sourceTree = "<group>"; };
 		8EC1432F1BB56E5C007AAD64 /* PGPMessageBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPMessageBuilder.m; path = CTOpenSSLWrapper/PGPMessageBuilder.m; sourceTree = "<group>"; };
+		8EE5036A1BC2C63000829CBB /* PGPUserIDPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGPUserIDPacket.h; sourceTree = "<group>"; };
+		8EE5036B1BC2C63000829CBB /* PGPUserIDPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGPUserIDPacket.m; sourceTree = "<group>"; };
+		8EE5036E1BC2CAC100829CBB /* SMilePGP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMilePGP.h; sourceTree = "<group>"; };
+		8EE5036F1BC2CAC100829CBB /* SMilePGP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMilePGP.m; sourceTree = "<group>"; };
 		8EE84F801BAAC2E20088E1EC /* PEMHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMHelper.h; path = CTOpenSSLWrapper/PEMHelper.h; sourceTree = "<group>"; };
 		8EE84F811BAAC2E20088E1EC /* PEMHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMHelper.m; path = CTOpenSSLWrapper/PEMHelper.m; sourceTree = "<group>"; };
 		8EF5C47A1BB3044C004AC290 /* outbase64.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = outbase64.txt; sourceTree = "<group>"; };
@@ -254,6 +266,8 @@
 				8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */,
 				8EC1432A1BB549EF007AAD64 /* PGPLiteralDataPacket.h */,
 				8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */,
+				8EE5036A1BC2C63000829CBB /* PGPUserIDPacket.h */,
+				8EE5036B1BC2C63000829CBB /* PGPUserIDPacket.m */,
 			);
 			name = PGPPackets;
 			sourceTree = "<group>";
@@ -326,6 +340,10 @@
 				A7AA080314825387009DE810 /* CTOpenSSLWrapper */,
 				3DBD4B1B1BA330F00071B668 /* PGPArmorHelper.h */,
 				3DBD4B1C1BA330F00071B668 /* PGPArmorHelper.m */,
+				8EE5036E1BC2CAC100829CBB /* SMilePGP.h */,
+				8EE5036F1BC2CAC100829CBB /* SMilePGP.m */,
+				8EB2134B1BC2B97B00C762C2 /* PGPKey.h */,
+				8EB2134C1BC2B97B00C762C2 /* PGPKey.m */,
 				5B1E4E331BA702360086D75E /* PGPPacket.h */,
 				5B1E4E341BA702360086D75E /* PGPPacket.m */,
 				5B1E4E361BA707390086D75E /* PGPPacketParser.h */,
@@ -430,7 +448,10 @@
 			files = (
 				3DBD4B211BA349830071B668 /* Base64Coder.h in Headers */,
 				8E23A6101BB158DB00B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.h in Headers */,
+				8EE5036C1BC2C63000829CBB /* PGPUserIDPacket.h in Headers */,
+				8EB2134D1BC2B97C00C762C2 /* PGPKey.h in Headers */,
 				8EC1432C1BB549EF007AAD64 /* PGPLiteralDataPacket.h in Headers */,
+				8EE503701BC2CAC100829CBB /* SMilePGP.h in Headers */,
 				A74A5A69157D3E64000C62B9 /* NSData+CTOpenSSL.h in Headers */,
 				A74A5AF2157E81B2000C62B9 /* CTOpenSSLDigest.h in Headers */,
 				8EE84F841BAAC4680088E1EC /* PEMHelper.h in Headers */,
@@ -664,6 +685,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7AA080814825387009DE810 /* CTOpenSSLWrapper.m in Sources */,
+				8EE503711BC2CAC100829CBB /* SMilePGP.m in Sources */,
 				8EC143311BB56E5C007AAD64 /* PGPMessageBuilder.m in Sources */,
 				8EC1432D1BB549EF007AAD64 /* PGPLiteralDataPacket.m in Sources */,
 				8E23A6191BB15B4700B2B61B /* PGPSecretKeyPacket.m in Sources */,
@@ -674,12 +696,14 @@
 				3DBD4B221BA349830071B668 /* Base64Coder.m in Sources */,
 				8E23A6091BB14E1F00B2B61B /* PGPPacket.m in Sources */,
 				8E23A6071BB14E0200B2B61B /* PGPPacketParser.m in Sources */,
+				8EE5036D1BC2C63000829CBB /* PGPUserIDPacket.m in Sources */,
 				A74A5AF3157E81B2000C62B9 /* CTOpenSSLDigest.m in Sources */,
 				8E23A6151BB1596000B2B61B /* PGPPublicKeyPacket.m in Sources */,
 				A73718D5157E878E00AA362C /* CTOpenSSLSymmetricEncryption.m in Sources */,
 				A73718DA157E88C800AA362C /* CTOpenSSLAsymmetricEncryption.m in Sources */,
 				3DBD4B1E1BA330F00071B668 /* PGPArmorHelper.m in Sources */,
 				8E23A61D1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m in Sources */,
+				8EB2134E1BC2B97C00C762C2 /* PGPKey.m in Sources */,
 				A7371966157FE36400AA362C /* NSString+CTOpenSSL.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

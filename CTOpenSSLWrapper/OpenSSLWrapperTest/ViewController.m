@@ -11,9 +11,12 @@
 #import "PGPPacketParser.h"
 #import "PGPMessageBuilder.h"
 #import "Base64Coder.h"
+#import "SMilePGP.h"
+#import "PGPKey.h"
 
 #import "CTOpenSSLWrapper.h"
 #import "CTOpenSSLAsymmetricEncryption.h"
+#import "CTOpenSSLDigest.h"
 
 #import "NSData+Godzippa.h"
 
@@ -27,6 +30,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    /*PGPPacketParser *parser = [[PGPPacketParser alloc] init];
+    
     NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"2pgpTestMessage" withExtension:@".txt"];
     NSData* decodedData = [PGPArmorHelper removeArmorFromKeyFile:fileUrl];
     
@@ -35,26 +40,26 @@
     
     int nextpos = 0;
     do {
-        nextpos = [PGPPacketParser extractPacketsFromBytes:decodedData atPostion:nextpos];
+        nextpos = [parser extractPacketsFromBytes:decodedData atPostion:nextpos];
     } while (nextpos > 0);
     
     nextpos = 0;
     do {
-        nextpos = [PGPPacketParser extractPacketsFromBytes:decodedKeyData atPostion:nextpos];
+        nextpos = [parser extractPacketsFromBytes:decodedKeyData atPostion:nextpos];
     } while (nextpos > 0);
     
-    PGPPublicKeyEncryptedSessionKeyPacket* packet = [[PGPPacketParser getPacketsWithTag:1] objectAtIndex:0];
+    PGPPublicKeyEncryptedSessionKeyPacket* packet = [[parser getPacketsWithTag:1] objectAtIndex:0];
     NSData* encryptedSessionKey = [[packet mpis] objectAtIndex:0];
     
-    PGPSecretKeyPacket* secretKey = [[PGPPacketParser getPacketsWithTag:7] objectAtIndex:0];
-    NSData* secretKeyPEM = [PGPPacketParser getPEMFromSecretKeyPacket:secretKey];
+    PGPSecretKeyPacket* secretKey = [[parser getPacketsWithTag:7] objectAtIndex:0];
+    NSData* secretKeyPEM = [parser getPEMFromSecretKeyPacket:secretKey];
     
     NSData* decryptedSessionKey = CTOpenSSLRSADecrypt(secretKeyPEM, encryptedSessionKey);
     
     NSData* sessionKey = [NSData dataWithBytes:decryptedSessionKey.bytes+1 length:decryptedSessionKey.length-3];
     
     NSData* ret = NULL;
-    PGPSymmetricEncryptedIntegrityProtectedDataPacket* p = [[PGPPacketParser getPacketsWithTag:18] objectAtIndex:0];
+    PGPSymmetricEncryptedIntegrityProtectedDataPacket* p = [[parser getPacketsWithTag:18] objectAtIndex:0];
     NSData* encrypted = [p encryptedData];
     CTOpenSSLSymmetricDecryptAES256CFB(sessionKey, encrypted, &ret);
     
@@ -63,10 +68,10 @@
     
     nextpos = 0;
     do {
-        nextpos = [PGPPacketParser extractPacketsFromBytes:ret atPostion:nextpos];
+        nextpos = [parser extractPacketsFromBytes:ret atPostion:nextpos];
     } while (nextpos > 0);
     
-    PGPCompressedDataPacket *cp = [[PGPPacketParser getPacketsWithTag:8] objectAtIndex:0];
+    PGPCompressedDataPacket *cp = [[parser getPacketsWithTag:8] objectAtIndex:0];
     
     NSError *error = NULL;
     NSData* plain = [[cp compressedData] dataByGZipDecompressingDataWithWindowSize:32 error:&error];
@@ -76,10 +81,10 @@
     
     nextpos = 0;
     do {
-        nextpos = [PGPPacketParser extractPacketsFromBytes:plain atPostion:nextpos];
+        nextpos = [parser extractPacketsFromBytes:plain atPostion:nextpos];
     } while (nextpos > 0);
     
-    /*NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"publicTestKey" withExtension:@".asc"];
+    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"publicTestKey" withExtension:@".asc"];
     NSData* decodedKeyData = [PGPArmorHelper removeArmorFromKeyFile:fileUrl];
     
     int nextpos = 0;
@@ -103,6 +108,14 @@
     NSData* pgpmessage = [builder buildPGPEncryptedMessageFromData:[@"Dies haben wir selbst verschluesselt" dataUsingEncoding:NSUTF8StringEncoding] withPGPPublicKey:pubKeyPEM andPubKeyID:id];
     NSData* checksum = [builder getChecksumForPGPMessageData:pgpmessage];
     NSData* armouredMessage = [builder buildArmouredPGPMessageFromMessageData:pgpmessage andChecksum:checksum];*/
+    
+    SMilePGP* pgp = [[SMilePGP alloc] init];
+    NSURL* fileUrl = [[NSBundle mainBundle] URLForResource:@"encSecKey" withExtension:@".asc"];
+    NSData* fileContent = [NSData dataWithContentsOfURL:fileUrl];
+    PGPKey* key = [pgp importPGPKeyFromArmouredFile:fileContent];
+    fileUrl = [[NSBundle mainBundle] URLForResource:@"2pgpTestMessage" withExtension:@".txt"];
+    fileContent = [NSData dataWithContentsOfURL:fileUrl];
+    NSString* keyID = [pgp getKeyIDFromArmoredPGPMessage:fileContent];
     
 }
 

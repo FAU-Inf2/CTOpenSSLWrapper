@@ -21,14 +21,14 @@
 
 @implementation PGPPacketParser
 
-+ (id)sharedManager {
+/*+ (id)sharedManager {
     static PGPPacketParser *sharedMyManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] init];
     });
     return sharedMyManager;
-}
+}*/
 
 - (id)init {
     if (self = [super init]) {
@@ -41,8 +41,8 @@
     return self;
 }
 
-+ (NSMutableArray*)getPacketsWithTag:(int) tag {
-    return [[[self sharedManager] packets] objectAtIndex:tag];
+- (NSMutableArray*)getPacketsWithTag:(int) tag {
+    return [[self packets] objectAtIndex:tag];
 }
 
 - (void) addPacketWithTag:(int)tag andFormat:(int)format andData:(NSData *)data {
@@ -50,40 +50,53 @@
     switch (tag) {
         case 1:
             packet = [[PGPPublicKeyEncryptedSessionKeyPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket*)packet] == -1) {
+            if ([self parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket*)packet] == -1) {
                 // error
+                return;
             }
             break;
         case 5: // SecretKeyPacket
         case 7: // SecretSubKeyPacket
             packet = [[PGPSecretKeyPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parseSecretKeyPacket:(PGPSecretKeyPacket*)packet withPassphrase:@"GoMADyoumust1!"] == -1) {
+            if ([self parseSecretKeyPacket:(PGPSecretKeyPacket*)packet] == -1) {
                 // error
+                return;
             }
             break;
         case 6:  // PublicKeyPacket
         case 14: // PublicSubKeyPacket
             packet = [[PGPPublicKeyPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parsePublicKeyPacket:(PGPPublicKeyPacket*)packet] == -1) {
+            if ([self parsePublicKeyPacket:(PGPPublicKeyPacket*)packet] == -1) {
                 // error
+                return;
             }
             break;
         case 8:
             packet = [[PGPCompressedDataPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parseCompressedDataPacket:(PGPCompressedDataPacket*)packet] == -1) {
+            if ([self parseCompressedDataPacket:(PGPCompressedDataPacket*)packet] == -1) {
                 // error
+                return;
             }
             break;
         case 11:
             packet = [[PGPLiteralDataPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parseLiteralDataPacket:(PGPLiteralDataPacket*)packet] == -1) {
+            if ([self parseLiteralDataPacket:(PGPLiteralDataPacket*)packet] == -1) {
                 //error
+                return;
+            }
+            break;
+        case 13:
+            packet = [[PGPUserIDPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
+            if ([self parseUserIDPacket:(PGPUserIDPacket*)packet] == -1) {
+                //error
+                return;
             }
             break;
         case 18:
             packet = [[PGPSymmetricEncryptedIntegrityProtectedDataPacket alloc] initWithBytes:data andWithTag:tag andWithFormat:format];
-            if ([PGPPacketParser parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket*)packet] == -1) {
+            if ([self parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket*)packet] == -1) {
                 // error
+                return;
             }
             break;
         default:
@@ -93,7 +106,7 @@
     [[self.packets objectAtIndex:packet.tag] addObject:packet];
 }
 
-+ (int)extractPacketsFromBytes:(NSData*)bytes atPostion:(int)position {
+- (int)extractPacketsFromBytes:(NSData*)bytes atPostion:(int)position {
     unsigned char* data = (unsigned char*)bytes.bytes;
     
     int pos = position;
@@ -178,7 +191,7 @@
     //Get Packet_bytes
     unsigned char* packet_bytes = data + pos;
     
-    [[self sharedManager] addPacketWithTag:packet_tag andFormat:packet_format andData:[NSData dataWithBytes:(const void*)packet_bytes length:packet_length]];
+    [self addPacketWithTag:packet_tag andFormat:packet_format andData:[NSData dataWithBytes:(const void*)packet_bytes length:packet_length]];
     
     if (bytes.length <= pos+packet_length+1){
         return 0; //End of bytes
@@ -187,7 +200,7 @@
     return pos+packet_length;
 }
 
-+ (int)parsePublicKeyPacket:(PGPPublicKeyPacket*) packet {
+- (int)parsePublicKeyPacket:(PGPPublicKeyPacket*) packet {
     int pos = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
     packet.version =  bytes[pos++];
@@ -223,21 +236,23 @@
         [packet.mpis addObject:[NSData dataWithBytes:(const void*)mpi length:byteLen]];
         p += byteLen+2;
     }
-    
+    packet.bytes = [NSData dataWithBytes:[packet.bytes bytes] length:p+pos];
     return p+pos; // bytes read
 }
 
-+ (int)parseSecretKeyPacket:(PGPSecretKeyPacket *)packet withPassphrase:(NSString *)passphrase {
+- (int)parseSecretKeyPacket:(PGPSecretKeyPacket *)packet {
     int pos = 0;
     unsigned char* bmpi = NULL;
     int p = 0;
     int mpiCount = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
-    int hashAlgo = 0;
+    NSData* dataToCheck;
+    int checksum = 0;
+    int checkValue = 0;
     
     //Extract PublicKey from packet
     PGPPublicKeyPacket *pubKey = [[PGPPublicKeyPacket alloc] initWithBytes:packet.bytes andWithTag:packet.tag andWithFormat:packet.format];
-    pos = [PGPPacketParser parsePublicKeyPacket:pubKey];
+    pos = [self parsePublicKeyPacket:pubKey];
     if (pos == -1) {
         return -1;
     }
@@ -265,10 +280,18 @@
                 [packet.mpis addObject:[NSData dataWithBytes:(const void*)mpi length:byteLen]];
                 p += byteLen+2;
             }
-            return p+pos;
+            checksum = bmpi[p] << 8 | bmpi[p+1];
+            dataToCheck = [NSData dataWithBytes:bmpi length:p];
+            for (int i = 0; i < [dataToCheck length]; i++) {
+                checkValue += ((unsigned char*)[dataToCheck bytes])[i];
+            }
+            if ((checkValue % 65536) != (checksum)) {
+                return -1;
+            }
+            packet.encryptedData = NULL;
+            return p+pos+2;
             break;
         case 255:
-            hashAlgo = 1;
         case 254:
             // Indicates that a string-to-key specifier is being given
             packet.symmetricEncAlgorithm = bytes[pos++];
@@ -281,31 +304,27 @@
                 for (int i = 0; i < 8; i++) {
                     saltValue[i] = bytes[pos++];
                 }
+                packet.s2kSaltValue = [NSData dataWithBytes:(const void *)saltValue length:8];
                 if (packet.s2kSpecifier == 3) {
-                    is2k_count = bytes[pos++];
+                    packet.s2kCount = bytes[pos++];
+                } else {
+                    packet.s2kCount = 0;
                 }
-            }
-            if (hashAlgo == 0) {
-                hashAlgo = 2;
             }
             break;
         default:
             // Any other value is a symmetric-key encryption algorithm identifier
             packet.symmetricEncAlgorithm = packet.s2k;
-            hashAlgo = 1;
             break;
     }
     
     int blockSize = 0;
-    int keyLen = 0;
     switch (packet.symmetricEncAlgorithm) {
         case 3:
             blockSize = 8;
-            keyLen = 16;
             break;
         case 9:
             blockSize = 16;
-            keyLen = 32;
             break;
         default: //All other values are not supported yet
             return -1;
@@ -316,126 +335,12 @@
         iv[i] = bytes[pos++];
     }
     packet.initialVector = [NSData dataWithBytes:(const void *)iv length:blockSize];
-    // Generate symm. key
-    NSData* symKey = [PGPPacketParser generateSymmKeyFromPassphrase:passphrase withSaltSpecifier:packet.s2kSpecifier andHashalgorithm:packet.s2kHashAlgorithm andSaltValue:[NSData dataWithBytes:(const void *)saltValue length:8] andSaltCount:is2k_count andKeyLen:keyLen];
+    packet.encryptedData = [NSData dataWithBytes:(const void *)bytes+pos length:[packet.bytes length]-pos];
     
-    NSData* encryptedData = [NSData dataWithBytes:(const void *)(bytes+pos) length:[packet.bytes length]-pos];
-    NSData* mpis = NULL;
-    CTOpenSSLSymmetricDecryptWithIV(CTOpenSSLCipherCAST5CFB, packet.initialVector, symKey, encryptedData, &mpis);
-    
-    // parse mpis
-    bmpi = (unsigned char*)[mpis bytes];
-    mpiCount = 4; // only rsa supported at the moment
-    
-    for (int i = 0; i < mpiCount && p < ([packet.bytes length] - pos); i++) {
-        double len = bmpi[p] << 8 | bmpi[p+1];
-        int byteLen = ceil(len/8);
-        
-        unsigned char mpi[byteLen];
-        for (int j = 0; j < byteLen; j++) {
-            mpi[j] = bmpi[2+j+p];
-        }
-        [packet.mpis addObject:[NSData dataWithBytes:(const void*)mpi length:byteLen]];
-        
-        NSData* dataToCheck;
-        int checksum = 0;
-        int checkValue = 0;
-        switch (hashAlgo) {
-            case 1:
-                checksum = ((unsigned char*)[mpis bytes])[[mpis length]-2] << 8 | ((unsigned char*)[mpis bytes])[[mpis length]-1];
-                dataToCheck = [NSData dataWithBytes:[mpis bytes] length:[mpis length]-2];
-                for (int i = 0; i < [dataToCheck length]; i++) {
-                    checkValue += ((unsigned char*)[dataToCheck bytes])[i];
-                }
-                if ((checkValue % 65536) != (checksum)) {
-                    return -1;
-                }
-                break;
-            case 2:
-                dataToCheck = [NSData dataWithBytes:[mpis bytes] length:[mpis length]-20];
-                dataToCheck = CTOpenSSLGenerateDigestFromData(dataToCheck, CTOpenSSLDigestTypeSHA1);
-                for (int i = 0; i < 20; i++) {
-                    if (((unsigned char*)[dataToCheck bytes])[i] != ((unsigned char*)[mpis bytes])[([mpis length] - 20)+i]) {
-                        return -1;
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-        
-        p += byteLen+2;
-    }
-    
-    // Check Hash
-    
-    return p+pos; // bytes read
+    return [packet.bytes length]; // bytes read
 }
 
-+ (NSData*)generateSymmKeyFromPassphrase:(NSString*)passphrase withSaltSpecifier:(int)s2k andHashalgorithm:(int)algorithm andSaltValue:(NSData*)salt andSaltCount:(int)count andKeyLen:(int)keyLen {
-    CTOpenSSLDigestType hash;
-    switch (algorithm) {
-        case 0:
-            break;
-        case 1:
-            hash = CTOpenSSLDigestTypeMD5;
-            break;
-        case 2:
-            hash = CTOpenSSLDigestTypeSHA1;
-            break;
-        case 8:
-            hash = CTOpenSSLDigestTypeSHA256;
-            break;
-        case 10:
-            hash = CTOpenSSLDigestTypeSHA512;
-            break;
-        default:
-            return NULL;
-            break;
-    }
-    NSMutableData* ret = [[NSMutableData alloc] initWithLength:0];
-    NSMutableData* prefix = [[NSMutableData alloc] initWithLength:0];
-    
-    while ([ret length] <= keyLen) {
-        
-        NSMutableData* dataToHash = [[NSMutableData alloc] init];
-        NSMutableData* isp = [prefix mutableCopy];
-        unsigned int octetsToHash = 0;
-        switch (s2k) {
-            case 1:
-                [dataToHash appendData:salt];
-            case 0:
-                [dataToHash appendData:[passphrase dataUsingEncoding:NSUTF8StringEncoding]];
-                break;
-            case 3:
-                octetsToHash = (16 + (count & 15)) << ((count >> 4) + 6);
-                [dataToHash appendData:salt];
-                [dataToHash appendData:[passphrase dataUsingEncoding:NSUTF8StringEncoding]];
-                while ([isp length] < octetsToHash) {
-                    [isp appendData:dataToHash];
-                }
-                if ([isp length] > octetsToHash) {
-                    dataToHash = [[NSData dataWithBytes:[isp bytes] length:octetsToHash] mutableCopy];
-                } else {
-                    dataToHash = isp;
-                }
-                break;
-            default:
-                [dataToHash appendData:[passphrase dataUsingEncoding:NSUTF8StringEncoding]];
-                hash = CTOpenSSLDigestTypeMD5;
-                break;
-        }
-        
-        [ret appendData: CTOpenSSLGenerateDigestFromData(dataToHash, hash)];
-        [prefix appendBytes:(const void *)"\0" length:1];
-        
-    }
-    
-    return [NSData dataWithBytes:[ret bytes] length:keyLen];
-    
-}
-
-+ (int)parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket *)packet {
+- (int)parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket *)packet {
     int pos = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
     packet.version = bytes[pos++];
@@ -461,7 +366,7 @@
     return pos+byteLen+2; // bytes read
 }
 
-+ (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket *)packet{
+- (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket *)packet{
     int pos = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
     packet.version = bytes[pos++]; //RFC: A one-octet version number.  The only currently defined value is 1.
@@ -480,7 +385,7 @@
     return [packet.bytes length];
 }
 
-+ (int)parseCompressedDataPacket:(PGPCompressedDataPacket *)packet {
+- (int)parseCompressedDataPacket:(PGPCompressedDataPacket *)packet {
     int pos = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
     
@@ -491,7 +396,7 @@
     return [packet.bytes length];
 }
 
-+ (int)parseLiteralDataPacket:(PGPLiteralDataPacket *)packet {
+- (int)parseLiteralDataPacket:(PGPLiteralDataPacket *)packet {
     int pos = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
     
@@ -516,7 +421,12 @@
     return [packet.bytes length];
 }
 
-+ (NSData*) getPEMFromSecretKeyPacket:(PGPSecretKeyPacket *)packet {
+- (int)parseUserIDPacket:(PGPUserIDPacket *)packet {
+    packet.userID = [[NSString alloc] initWithData:packet.bytes encoding:NSUTF8StringEncoding];
+    return [packet.bytes length];
+}
+
+- (NSData*) getPEMFromSecretKeyPacket:(PGPSecretKeyPacket *)packet {
     RSA* privateRSA = RSA_new();
     
     NSData* n = [[[packet pubKey] mpis] objectAtIndex:0];
@@ -550,7 +460,7 @@
     return [PEMHelper writeKeyToPEMWithRSA:privateRSA andIsPrivate:YES];
 }
 
-+ (NSData*) getPEMFromPublicKeyPacket:(PGPPublicKeyPacket *)packet {
+- (NSData*) getPEMFromPublicKeyPacket:(PGPPublicKeyPacket *)packet {
     RSA* publicRSA = RSA_new();
     
     NSData* n = [[packet mpis] objectAtIndex:0];
@@ -572,6 +482,27 @@
     publicRSA->iqmp = NULL;
     
     return [PEMHelper writeKeyToPEMWithRSA:publicRSA andIsPrivate:NO];
+}
+
+- (NSData*)generateKeyID:(PGPPublicKeyPacket *)packet {
+    NSData* keyID;
+    if (packet.version == 4) {
+        int pos = 0;
+        unsigned char bytesToHash[3+[packet.bytes length]];
+        bytesToHash[pos++] = '\x99';
+        bytesToHash[pos++] = (unsigned char)([packet.bytes length] >> 8);
+        bytesToHash[pos++] = (unsigned char)[packet.bytes length];
+        for (int i = 0; i < [packet.bytes length]; i++) {
+            bytesToHash[pos++] = ((unsigned char*)[packet.bytes bytes])[i];
+        }
+        NSData* dataToHash = [NSData dataWithBytes:(const void *)bytesToHash length:pos];
+        NSData* fingerprint = CTOpenSSLGenerateDigestFromData(dataToHash, CTOpenSSLDigestTypeSHA1);
+        keyID = [NSData dataWithBytes:[fingerprint bytes]+([fingerprint length]-8) length:8];
+    } else {
+        NSData* publicModulus = [[packet mpis] objectAtIndex:0];
+        keyID = [NSData dataWithBytes:[publicModulus bytes]+([publicModulus length]-8) length:8];
+    }
+    return keyID;
 }
 
 @end
