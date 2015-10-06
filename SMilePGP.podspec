@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name          = 'SMilePGP'
-  spec.version       = '1.3.1'
+  spec.version       = '1.4'
   spec.platform      = :ios, '7.0'
   spec.license       = 'MIT'
   spec.source        = { :git => 'https://github.com/FAU-Inf2/SMilePGP.git', :tag => spec.version.to_s }
