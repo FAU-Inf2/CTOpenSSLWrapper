@@ -79,8 +79,13 @@
 		A7AA081614825387009DE810 /* libCTOpenSSLWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7AA07FE14825387009DE810 /* libCTOpenSSLWrapper.a */; };
 		A7AA081C14825387009DE810 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7AA081A14825387009DE810 /* InfoPlist.strings */; };
 		A7AA081F14825387009DE810 /* CTOpenSSLWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA081E14825387009DE810 /* CTOpenSSLWrapperTests.m */; };
-		ADDB1D051BC57C5B001C36B6 /* NSData+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D021BC57C5B001C36B6 /* NSData+Godzippa.m */; settings = {ASSET_TAGS = (); }; };
-		ADDB1D061BC57C5B001C36B6 /* NSFileManager+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D041BC57C5B001C36B6 /* NSFileManager+Godzippa.m */; settings = {ASSET_TAGS = (); }; };
+		ADDB1D0C1BC58376001C36B6 /* NSData+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D091BC58376001C36B6 /* NSData+Godzippa.m */; settings = {ASSET_TAGS = (); }; };
+		ADDB1D0D1BC58376001C36B6 /* NSFileManager+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D0B1BC58376001C36B6 /* NSFileManager+Godzippa.m */; settings = {ASSET_TAGS = (); }; };
+		ADDB1D0F1BC58431001C36B6 /* NSData+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D091BC58376001C36B6 /* NSData+Godzippa.m */; };
+		ADDB1D101BC58431001C36B6 /* NSFileManager+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D0B1BC58376001C36B6 /* NSFileManager+Godzippa.m */; };
+		ADDB1D111BC58440001C36B6 /* Godzippa.h in Headers */ = {isa = PBXBuildFile; fileRef = ADDB1D071BC58376001C36B6 /* Godzippa.h */; };
+		ADDB1D121BC58440001C36B6 /* NSData+Godzippa.h in Headers */ = {isa = PBXBuildFile; fileRef = ADDB1D081BC58376001C36B6 /* NSData+Godzippa.h */; };
+		ADDB1D131BC58440001C36B6 /* NSFileManager+Godzippa.h in Headers */ = {isa = PBXBuildFile; fileRef = ADDB1D0A1BC58376001C36B6 /* NSFileManager+Godzippa.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,11 +180,11 @@
 		A7AA081B14825387009DE810 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A7AA081D14825387009DE810 /* CTOpenSSLWrapperTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTOpenSSLWrapperTests.h; sourceTree = "<group>"; };
 		A7AA081E14825387009DE810 /* CTOpenSSLWrapperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTOpenSSLWrapperTests.m; sourceTree = "<group>"; };
-		ADDB1D001BC57C5B001C36B6 /* Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Godzippa.h; sourceTree = "<group>"; };
-		ADDB1D011BC57C5B001C36B6 /* NSData+Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Godzippa.h"; sourceTree = "<group>"; };
-		ADDB1D021BC57C5B001C36B6 /* NSData+Godzippa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Godzippa.m"; sourceTree = "<group>"; };
-		ADDB1D031BC57C5B001C36B6 /* NSFileManager+Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Godzippa.h"; sourceTree = "<group>"; };
-		ADDB1D041BC57C5B001C36B6 /* NSFileManager+Godzippa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Godzippa.m"; sourceTree = "<group>"; };
+		ADDB1D071BC58376001C36B6 /* Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Godzippa.h; sourceTree = "<group>"; };
+		ADDB1D081BC58376001C36B6 /* NSData+Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Godzippa.h"; sourceTree = "<group>"; };
+		ADDB1D091BC58376001C36B6 /* NSData+Godzippa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Godzippa.m"; sourceTree = "<group>"; };
+		ADDB1D0A1BC58376001C36B6 /* NSFileManager+Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Godzippa.h"; sourceTree = "<group>"; };
+		ADDB1D0B1BC58376001C36B6 /* NSFileManager+Godzippa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Godzippa.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,10 +362,10 @@
 				3DBD4B201BA349830071B668 /* Base64Coder.m */,
 				8EE84F801BAAC2E20088E1EC /* PEMHelper.h */,
 				8EE84F811BAAC2E20088E1EC /* PEMHelper.m */,
+				ADDB1D0E1BC583D0001C36B6 /* Godzippa */,
 				8E23A60B1BB152CC00B2B61B /* PGPPackets */,
 				A7AA081714825387009DE810 /* CTOpenSSLWrapperTests */,
 				3D861E2E1BA306FA00DED4CC /* OpenSSLWrapperTest */,
-				ADDB1CFF1BC57BFE001C36B6 /* Godzippa */,
 				A7AA080014825387009DE810 /* Frameworks */,
 				A7AA07FF14825387009DE810 /* Products */,
 			);
@@ -429,14 +434,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		ADDB1CFF1BC57BFE001C36B6 /* Godzippa */ = {
+		ADDB1D0E1BC583D0001C36B6 /* Godzippa */ = {
 			isa = PBXGroup;
 			children = (
-				ADDB1D001BC57C5B001C36B6 /* Godzippa.h */,
-				ADDB1D011BC57C5B001C36B6 /* NSData+Godzippa.h */,
-				ADDB1D021BC57C5B001C36B6 /* NSData+Godzippa.m */,
-				ADDB1D031BC57C5B001C36B6 /* NSFileManager+Godzippa.h */,
-				ADDB1D041BC57C5B001C36B6 /* NSFileManager+Godzippa.m */,
+				ADDB1D071BC58376001C36B6 /* Godzippa.h */,
+				ADDB1D081BC58376001C36B6 /* NSData+Godzippa.h */,
+				ADDB1D091BC58376001C36B6 /* NSData+Godzippa.m */,
+				ADDB1D0A1BC58376001C36B6 /* NSFileManager+Godzippa.h */,
+				ADDB1D0B1BC58376001C36B6 /* NSFileManager+Godzippa.m */,
 			);
 			path = Godzippa;
 			sourceTree = "<group>";
@@ -448,6 +453,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADDB1D111BC58440001C36B6 /* Godzippa.h in Headers */,
+				ADDB1D121BC58440001C36B6 /* NSData+Godzippa.h in Headers */,
+				ADDB1D131BC58440001C36B6 /* NSFileManager+Godzippa.h in Headers */,
 				3DBD4B211BA349830071B668 /* Base64Coder.h in Headers */,
 				8E23A6101BB158DB00B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.h in Headers */,
 				8EE5036C1BC2C63000829CBB /* PGPUserIDPacket.h in Headers */,
@@ -614,11 +622,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADDB1D051BC57C5B001C36B6 /* NSData+Godzippa.m in Sources */,
+				ADDB1D0C1BC58376001C36B6 /* NSData+Godzippa.m in Sources */,
 				3D861E381BA306FA00DED4CC /* ViewController.m in Sources */,
 				3D861E351BA306FA00DED4CC /* AppDelegate.m in Sources */,
 				3D861E321BA306FA00DED4CC /* main.m in Sources */,
-				ADDB1D061BC57C5B001C36B6 /* NSFileManager+Godzippa.m in Sources */,
+				ADDB1D0D1BC58376001C36B6 /* NSFileManager+Godzippa.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +634,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADDB1D0F1BC58431001C36B6 /* NSData+Godzippa.m in Sources */,
+				ADDB1D101BC58431001C36B6 /* NSFileManager+Godzippa.m in Sources */,
 				A7AA080814825387009DE810 /* CTOpenSSLWrapper.m in Sources */,
 				8EE503711BC2CAC100829CBB /* SMilePGP.m in Sources */,
 				8EC143311BB56E5C007AAD64 /* PGPMessageBuilder.m in Sources */,
@@ -861,6 +871,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CTOpenSSLWrapper/CTOpenSSLWrapper-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Godzippa\"",
+					"\"$(SRCROOT)\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../OpenSSL\"",
@@ -881,6 +895,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CTOpenSSLWrapper/CTOpenSSLWrapper-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Godzippa\"",
+					"\"$(SRCROOT)\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../OpenSSL\"",
