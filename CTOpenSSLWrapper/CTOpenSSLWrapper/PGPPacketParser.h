@@ -16,6 +16,7 @@
 #import "PGPCompressedDataPacket.h"
 #import "PGPLiteralDataPacket.h"
 #import "PGPUserIDPacket.h"
+#import "PGPSymmetricallyEncryptedDataPacket.h"
 
 @interface PGPPacketParser : NSObject
 
@@ -32,6 +33,7 @@
 - (int)parseCompressedDataPacket:(PGPCompressedDataPacket*) packet;
 - (int)parseLiteralDataPacket:(PGPLiteralDataPacket*) packet;
 - (int)parseUserIDPacket:(PGPUserIDPacket*) packet;
+- (int)parseSymmetricallyEncryptedDataPacket:(PGPSymmetricallyEncryptedDataPacket*) packet;
 - (NSData*)getPEMFromSecretKeyPacket:(PGPSecretKeyPacket*) packet;
 - (NSData*)getPEMFromPublicKeyPacket:(PGPPublicKeyPacket*) packet;
 - (NSData*)generateKeyID:(PGPPublicKeyPacket*) packet;

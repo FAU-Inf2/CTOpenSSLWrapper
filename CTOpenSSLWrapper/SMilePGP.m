@@ -138,12 +138,24 @@
         if (nextpos == -1) {
             return NULL;
         }
+        NSData* decryptedData;
         if ([[parser getPacketsWithTag:9] count] > 0) {
             // not supported yet
-            return NULL;
+            PGPSymmetricallyEncryptedDataPacket* encData = [[parser getPacketsWithTag:9] objectAtIndex:0];
+            int algorithm = ((unsigned char*)[decryptedSessionKey bytes])[0];
+            switch (algorithm) {
+                case 9:
+                    if (!CTOpenSSLSymmetricDecryptAES256CFB(sessionKey, [encData encryptedData], &decryptedData)) {
+                        return NULL;
+                    }
+                    break;
+                default:
+                    // all other values are not supported yet
+                    return NULL;
+                    break;
+            }
         } else if ([[parser getPacketsWithTag:18] count] > 0) {
             PGPSymmetricEncryptedIntegrityProtectedDataPacket* encData = [[parser getPacketsWithTag:18] objectAtIndex:0];
-            NSData* decryptedData = NULL;
             int algorithm = ((unsigned char*)[decryptedSessionKey bytes])[0];
             switch (algorithm) {
                 case 9:
@@ -160,38 +172,38 @@
             if (decryptedData == NULL) {
                 return NULL;
             }
-            nextpos = 0;
-            if ([parser extractPacketsFromBytes:decryptedData atPostion:nextpos] == -1) {
-                return NULL;
+        } else {
+            return NULL;
+        }
+        nextpos = 0;
+        if ([parser extractPacketsFromBytes:decryptedData atPostion:nextpos] == -1) {
+            return NULL;
+        }
+        if ([[parser getPacketsWithTag:8] count] > 0) {
+            PGPCompressedDataPacket* compressedDataPacket = [[parser getPacketsWithTag:8] objectAtIndex:0];
+            NSData* plainData;
+            switch ([compressedDataPacket algorithm]) {
+                case 1:
+                    // not supported yet
+                    return NULL;
+                    break;
+                case 2:
+                    plainData = [[compressedDataPacket compressedData] dataByGZipDecompressingDataWithWindowSize:32 error:NULL];
+                    if ([parser extractPacketsFromBytes:plainData atPostion:nextpos] == -1) {
+                        return NULL;
+                    }
+                    return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];
+                    break;
+                case 3:
+                    // not supported yet
+                    return NULL;
+                    break;
+                default:
+                    return NULL;
+                    break;
             }
-            if ([[parser getPacketsWithTag:8] count] > 0) {
-                PGPCompressedDataPacket* compressedDataPacket = [[parser getPacketsWithTag:8] objectAtIndex:0];
-                NSData* plainData;
-                switch ([compressedDataPacket algorithm]) {
-                    case 1:
-                        // not supported yet
-                        return NULL;
-                        break;
-                    case 2:
-                        plainData = [[compressedDataPacket compressedData] dataByGZipDecompressingDataWithWindowSize:32 error:NULL];
-                        if ([parser extractPacketsFromBytes:plainData atPostion:nextpos] == -1) {
-                            return NULL;
-                        }
-                        return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];
-                        break;
-                    case 3:
-                        // not supported yet
-                        return NULL;
-                        break;
-                    default:
-                        return NULL;
-                        break;
-                }
-            } else if ([[parser getPacketsWithTag:11] count] > 0) {
-                return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];
-            } else {
-                return NULL;
-            }
+        } else if ([[parser getPacketsWithTag:11] count] > 0) {
+            return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];
         } else {
             return NULL;
         }
