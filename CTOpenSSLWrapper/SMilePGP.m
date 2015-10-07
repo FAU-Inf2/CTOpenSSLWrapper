@@ -118,6 +118,9 @@
         }
         
         NSData* decryptedSessionKey = CTOpenSSLRSADecrypt(secretKey, encSessionKey);
+        if (decryptedSessionKey == NULL) {
+            return NULL;
+        }
         
         NSData* sessionKey = [NSData dataWithBytes:decryptedSessionKey.bytes+1 length:decryptedSessionKey.length-3];
         // Check checksum
@@ -181,6 +184,7 @@
                         return NULL;
                         break;
                     default:
+                        return NULL;
                         break;
                 }
             } else if ([[parser getPacketsWithTag:11] count] > 0) {
@@ -212,6 +216,7 @@
                 return NULL;
                 break;
             default:
+                return NULL;
                 break;
         }
     } else if ([[parser getPacketsWithTag:11] count] > 0) {
@@ -221,78 +226,6 @@
         // Signed Message
         return NULL; // Not supported yet
     }
-    /*do {
-        nextpos = [parser extractPacketsFromBytes:packets atPostion:nextpos];
-    } while (nextpos > 0);
-    PGPPublicKeyEncryptedSessionKeyPacket* packet = [[parser getPacketsWithTag:1] objectAtIndex:0];
-    NSData* encryptedSessionKey = [[packet mpis] objectAtIndex:0];
-    
-    NSData* keyID = [NSData dataWithBytes:(const void *)[packet pubKeyID] length:8];
-    NSData* secretKey = NULL;
-    
-    if ([[secKey keyID] isEqualToData:keyID]) {
-        if ([secKey encryted]) {
-            secretKey = [secKey decryptKeyWithPassphrase:passphrase];
-        } else {
-            secretKey = [parser getPEMFromSecretKeyPacket:(PGPSecretKeyPacket*)[secKey keyData]];
-        }
-    } else {
-        for (int i = 0; i < [[secKey subKeys] count]; i++) {
-            PGPKey* subKey = [[secKey subKeys] objectAtIndex:i];
-            if ([[subKey keyID] isEqualToData:keyID]) {
-                if ([secKey encryted]) {
-                    secretKey = [subKey decryptKeyWithPassphrase:passphrase];
-                } else {
-                    secretKey = [parser getPEMFromSecretKeyPacket:(PGPSecretKeyPacket*)[subKey keyData]];
-                }
-                break;
-            }
-        }
-    }
-    if (secretKey == NULL) {
-        return NULL;
-    }
-    
-    NSData* decryptedSessionKey = CTOpenSSLRSADecrypt(secretKey, encryptedSessionKey);
-    
-    NSData* sessionKey = [NSData dataWithBytes:decryptedSessionKey.bytes+1 length:decryptedSessionKey.length-3];
-    // Check checksum
-    int checksum = ((unsigned char*)[decryptedSessionKey bytes])[[decryptedSessionKey length]-2] << 8 | ((unsigned char*)[decryptedSessionKey bytes])[[decryptedSessionKey length]-1];
-    int valueToCheck = 0;
-    for (int i = 0; i < [sessionKey length]; i++) {
-        valueToCheck += ((unsigned char*)[sessionKey bytes])[i];
-    }
-    valueToCheck %= 65536;
-    if (checksum != valueToCheck) {
-        return NULL;
-    }
-    
-    NSData* ret = NULL;
-    PGPSymmetricEncryptedIntegrityProtectedDataPacket* p = [[parser getPacketsWithTag:18] objectAtIndex:0];
-    NSData* encrypted = [p encryptedData];
-    CTOpenSSLSymmetricDecryptAES256CFB(sessionKey, encrypted, &ret);
-    
-    ret = [p checkPacketFromDecryptedData:ret];
-    
-    nextpos = 0;
-    do {
-        nextpos = [parser extractPacketsFromBytes:ret atPostion:nextpos];
-    } while (nextpos > 0);
-    
-    PGPCompressedDataPacket *cp = [[parser getPacketsWithTag:8] objectAtIndex:0];
-    
-    NSError *error = NULL;
-    NSData* plain = [[cp compressedData] dataByGZipDecompressingDataWithWindowSize:32 error:&error];
-    if (error != NULL) {
-        NSLog(@"%@", error.description);
-    }
-    
-    nextpos = 0;
-    do {
-        nextpos = [parser extractPacketsFromBytes:plain atPostion:nextpos];
-    } while (nextpos > 0);
-    return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];*/
-    
 }
 
 - (NSData*)buildPGPMessageFromData:(NSData*)data WithKey:(PGPKey*)pubKey {
