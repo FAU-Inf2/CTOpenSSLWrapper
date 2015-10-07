@@ -79,7 +79,41 @@
     NSData* packets = [PGPArmorHelper removeArmorFromKeyFileString:[[NSString alloc] initWithData:fileContent encoding:NSUTF8StringEncoding]];
     PGPPacketParser* parser = [[PGPPacketParser alloc] init];
     int nextpos = 0;
-    do {
+    nextpos = [parser extractPacketsFromBytes:packets atPostion:nextpos];
+    if ([[parser getPacketsWithTag:1] count] > 0 || [[parser getPacketsWithTag:9] count] > 0 || [[parser getPacketsWithTag:18] count] > 0) {
+        // Encrypted Message
+        
+    } else if ([[parser getPacketsWithTag:8] count] > 0) {
+        // Compressed Message
+        PGPCompressedDataPacket* compressedDataPacket = [[parser getPacketsWithTag:8] objectAtIndex:0];
+        NSData* plainData;
+        switch ([compressedDataPacket algorithm]) {
+            case 1:
+                // not supported yet
+                return NULL;
+                break;
+            case 2:
+                plainData = [[compressedDataPacket compressedData] dataByGZipDecompressingDataWithWindowSize:32 error:NULL];
+                if ([parser extractPacketsFromBytes:plainData atPostion:nextpos] == -1) {
+                    return NULL;
+                }
+                return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];
+                break;
+            case 3:
+                // not supported yet
+                return NULL;
+                break;
+            default:
+                break;
+        }
+    } else if ([[parser getPacketsWithTag:11] count] > 0) {
+        // Literal Message
+        return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];
+    } else {
+        // Signed Message
+        return NULL; // Not supported yet
+    }
+    /*do {
         nextpos = [parser extractPacketsFromBytes:packets atPostion:nextpos];
     } while (nextpos > 0);
     PGPPublicKeyEncryptedSessionKeyPacket* packet = [[parser getPacketsWithTag:1] objectAtIndex:0];
@@ -149,7 +183,8 @@
     do {
         nextpos = [parser extractPacketsFromBytes:plain atPostion:nextpos];
     } while (nextpos > 0);
-    return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];
+    return [[[parser getPacketsWithTag:11] objectAtIndex:0] literalData];*/
+    
 }
 
 - (NSData*)buildPGPMessageFromData:(NSData*)data WithKey:(PGPKey*)pubKey {
