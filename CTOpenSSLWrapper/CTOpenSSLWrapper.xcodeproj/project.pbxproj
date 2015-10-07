@@ -38,6 +38,8 @@
 		8E23A61C1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E23A61A1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.h */; };
 		8E23A61D1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E23A61B1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m */; };
 		8E505A5D1BB427020055943D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EA3300F1BB4240B008CA8BA /* libz.dylib */; };
+		8E611FE21BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E611FE01BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.h */; };
+		8E611FE31BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E611FE11BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.m */; };
 		8E70CEEE1BA32761003251D7 /* publicTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 8E70CEED1BA32761003251D7 /* publicTestKey.asc */; };
 		8EA3300D1BB41143008CA8BA /* PGPCompressedDataPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EA3300B1BB41143008CA8BA /* PGPCompressedDataPacket.h */; };
 		8EA3300E1BB41143008CA8BA /* PGPCompressedDataPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */; };
@@ -130,6 +132,8 @@
 		8E23A6171BB15B4700B2B61B /* PGPSecretKeyPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPSecretKeyPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPSecretKeyPacket.m; sourceTree = "<group>"; };
 		8E23A61A1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPSymmetricEncryptedIntegrityProtectedDataPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPSymmetricEncryptedIntegrityProtectedDataPacket.h; sourceTree = "<group>"; };
 		8E23A61B1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPSymmetricEncryptedIntegrityProtectedDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPSymmetricEncryptedIntegrityProtectedDataPacket.m; sourceTree = "<group>"; };
+		8E611FE01BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPSymmetricallyEncryptedDataPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPSymmetricallyEncryptedDataPacket.h; sourceTree = "<group>"; };
+		8E611FE11BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPSymmetricallyEncryptedDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPSymmetricallyEncryptedDataPacket.m; sourceTree = "<group>"; };
 		8E70CEED1BA32761003251D7 /* publicTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = publicTestKey.asc; sourceTree = "<group>"; };
 		8EA3300B1BB41143008CA8BA /* PGPCompressedDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPCompressedDataPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPCompressedDataPacket.h; sourceTree = "<group>"; };
 		8EA3300C1BB41143008CA8BA /* PGPCompressedDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPCompressedDataPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPCompressedDataPacket.m; sourceTree = "<group>"; };
@@ -268,6 +272,8 @@
 				8EC1432B1BB549EF007AAD64 /* PGPLiteralDataPacket.m */,
 				8EE5036A1BC2C63000829CBB /* PGPUserIDPacket.h */,
 				8EE5036B1BC2C63000829CBB /* PGPUserIDPacket.m */,
+				8E611FE01BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.h */,
+				8E611FE11BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.m */,
 			);
 			name = PGPPackets;
 			sourceTree = "<group>";
@@ -465,6 +471,7 @@
 				A7371965157FE36400AA362C /* NSString+CTOpenSSL.h in Headers */,
 				8E23A6141BB1595C00B2B61B /* PGPPublicKeyPacket.h in Headers */,
 				8E23A60A1BB14E2500B2B61B /* PGPPacketParser.h in Headers */,
+				8E611FE21BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.h in Headers */,
 				8E23A6181BB15B4700B2B61B /* PGPSecretKeyPacket.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,7 +543,6 @@
 		A7AA07F514825387009DE810 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = Home;
 				TargetAttributes = {
@@ -705,6 +711,7 @@
 				3DBD4B1E1BA330F00071B668 /* PGPArmorHelper.m in Sources */,
 				8E23A61D1BB16D4300B2B61B /* PGPSymmetricEncryptedIntegrityProtectedDataPacket.m in Sources */,
 				8EB2134E1BC2B97C00C762C2 /* PGPKey.m in Sources */,
+				8E611FE31BC54A7100BFB500 /* PGPSymmetricallyEncryptedDataPacket.m in Sources */,
 				A7371966157FE36400AA362C /* NSString+CTOpenSSL.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -848,6 +855,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -888,6 +896,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -917,7 +926,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CTOpenSSLWrapper.dst;
-				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CTOpenSSLWrapper/CTOpenSSLWrapper-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
@@ -939,7 +947,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CTOpenSSLWrapper.dst;
-				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CTOpenSSLWrapper/CTOpenSSLWrapper-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;

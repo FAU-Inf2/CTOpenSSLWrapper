@@ -385,6 +385,14 @@
     return [packet.bytes length];
 }
 
+- (int)parseSymmetricallyEncryptedDataPacket:(PGPSymmetricallyEncryptedDataPacket *)packet {
+    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    
+    packet.encryptedData = [NSData dataWithBytes:(const void *)bytes length:[packet.bytes length]];
+    
+    return [packet.bytes length];
+}
+
 - (int)parseCompressedDataPacket:(PGPCompressedDataPacket *)packet {
     int pos = 0;
     unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
