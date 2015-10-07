@@ -81,11 +81,6 @@
 		A7AA081F14825387009DE810 /* CTOpenSSLWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA081E14825387009DE810 /* CTOpenSSLWrapperTests.m */; };
 		ADDB1D0C1BC58376001C36B6 /* NSData+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D091BC58376001C36B6 /* NSData+Godzippa.m */; settings = {ASSET_TAGS = (); }; };
 		ADDB1D0D1BC58376001C36B6 /* NSFileManager+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D0B1BC58376001C36B6 /* NSFileManager+Godzippa.m */; settings = {ASSET_TAGS = (); }; };
-		ADDB1D0F1BC58431001C36B6 /* NSData+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D091BC58376001C36B6 /* NSData+Godzippa.m */; };
-		ADDB1D101BC58431001C36B6 /* NSFileManager+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D0B1BC58376001C36B6 /* NSFileManager+Godzippa.m */; };
-		ADDB1D111BC58440001C36B6 /* Godzippa.h in Headers */ = {isa = PBXBuildFile; fileRef = ADDB1D071BC58376001C36B6 /* Godzippa.h */; };
-		ADDB1D121BC58440001C36B6 /* NSData+Godzippa.h in Headers */ = {isa = PBXBuildFile; fileRef = ADDB1D081BC58376001C36B6 /* NSData+Godzippa.h */; };
-		ADDB1D131BC58440001C36B6 /* NSFileManager+Godzippa.h in Headers */ = {isa = PBXBuildFile; fileRef = ADDB1D0A1BC58376001C36B6 /* NSFileManager+Godzippa.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -453,9 +448,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADDB1D111BC58440001C36B6 /* Godzippa.h in Headers */,
-				ADDB1D121BC58440001C36B6 /* NSData+Godzippa.h in Headers */,
-				ADDB1D131BC58440001C36B6 /* NSFileManager+Godzippa.h in Headers */,
 				3DBD4B211BA349830071B668 /* Base64Coder.h in Headers */,
 				8E23A6101BB158DB00B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.h in Headers */,
 				8EE5036C1BC2C63000829CBB /* PGPUserIDPacket.h in Headers */,
@@ -634,8 +626,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADDB1D0F1BC58431001C36B6 /* NSData+Godzippa.m in Sources */,
-				ADDB1D101BC58431001C36B6 /* NSFileManager+Godzippa.m in Sources */,
 				A7AA080814825387009DE810 /* CTOpenSSLWrapper.m in Sources */,
 				8EE503711BC2CAC100829CBB /* SMilePGP.m in Sources */,
 				8EC143311BB56E5C007AAD64 /* PGPMessageBuilder.m in Sources */,
