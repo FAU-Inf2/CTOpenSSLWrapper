@@ -536,6 +536,7 @@
 		A7AA07F514825387009DE810 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = Home;
 				TargetAttributes = {
@@ -916,6 +917,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CTOpenSSLWrapper.dst;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CTOpenSSLWrapper/CTOpenSSLWrapper-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
@@ -937,6 +939,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CTOpenSSLWrapper.dst;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CTOpenSSLWrapper/CTOpenSSLWrapper-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
