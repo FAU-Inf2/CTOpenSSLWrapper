@@ -116,7 +116,7 @@
     fileUrl = [[NSBundle mainBundle] URLForResource:@"2pgpTestMessage" withExtension:@".txt"];
     fileContent = [NSData dataWithContentsOfURL:fileUrl];
     NSString* keyID = [pgp getKeyIDFromArmoredPGPMessage:fileContent];
-    
+    NSData* decrypted = [pgp decryptPGPMessageWithKey:key fromArmouredFile:fileContent WithPassphrase:@"GoMADyoumust1!"];
 }
 
 - (void)didReceiveMemoryWarning {
