@@ -3,12 +3,10 @@
 
 target 'OpenSSLWrapperTest' do
  pod 'Godzippa'
- pod 'OpenSSL'
 end
 
 target 'CTOpenSSLWrapper' do
  pod 'Godzippa'
- pod 'OpenSSL'
 end
 
 target 'CTOpenSSLWrapperTests' do
