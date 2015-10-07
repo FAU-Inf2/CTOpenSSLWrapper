@@ -22,8 +22,6 @@
 		5B1E4E3A1BA70BE80086D75E /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A712DF4C14826BE700F4E399 /* libssl.a */; };
 		5B1E4E3C1BA7180A0086D75E /* base64DecodedData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */; };
 		5B3B481D1BA864E9009E6503 /* privateTestKey.asc in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B481C1BA864E9009E6503 /* privateTestKey.asc */; };
-		648FBAA4D5DAA6F4E9442898 /* libPods-CTOpenSSLWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB705D5D4DE87A138378AC1 /* libPods-CTOpenSSLWrapper.a */; };
-		7449A3FC0A3F06F5E461AB3E /* libPods-OpenSSLWrapperTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A54DC1FBF3836521BB1C53D2 /* libPods-OpenSSLWrapperTest.a */; };
 		8E1C706D1BB0637E0071272B /* 2pgpTestMessage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8E1C706C1BB0637E0071272B /* 2pgpTestMessage.txt */; };
 		8E23A6071BB14E0200B2B61B /* PGPPacketParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1E4E371BA707390086D75E /* PGPPacketParser.m */; };
 		8E23A6081BB14E1C00B2B61B /* PGPPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B1E4E331BA702360086D75E /* PGPPacket.h */; };
@@ -81,6 +79,8 @@
 		A7AA081614825387009DE810 /* libCTOpenSSLWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7AA07FE14825387009DE810 /* libCTOpenSSLWrapper.a */; };
 		A7AA081C14825387009DE810 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7AA081A14825387009DE810 /* InfoPlist.strings */; };
 		A7AA081F14825387009DE810 /* CTOpenSSLWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA081E14825387009DE810 /* CTOpenSSLWrapperTests.m */; };
+		ADDB1D051BC57C5B001C36B6 /* NSData+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D021BC57C5B001C36B6 /* NSData+Godzippa.m */; settings = {ASSET_TAGS = (); }; };
+		ADDB1D061BC57C5B001C36B6 /* NSFileManager+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = ADDB1D041BC57C5B001C36B6 /* NSFileManager+Godzippa.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,8 +121,6 @@
 		5B1E4E371BA707390086D75E /* PGPPacketParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPPacketParser.m; path = CTOpenSSLWrapper/PGPPacketParser.m; sourceTree = "<group>"; };
 		5B1E4E3B1BA713C70086D75E /* base64DecodedData.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = base64DecodedData.txt; sourceTree = "<group>"; };
 		5B3B481C1BA864E9009E6503 /* privateTestKey.asc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = privateTestKey.asc; sourceTree = "<group>"; };
-		887424220E4D9145FE883951 /* Pods-CTOpenSSLWrapper.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTOpenSSLWrapper.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CTOpenSSLWrapper/Pods-CTOpenSSLWrapper.debug.xcconfig"; sourceTree = "<group>"; };
-		8D25B94445DB14C901E79A38 /* Pods-CTOpenSSLWrapper.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTOpenSSLWrapper.release.xcconfig"; path = "Pods/Target Support Files/Pods-CTOpenSSLWrapper/Pods-CTOpenSSLWrapper.release.xcconfig"; sourceTree = "<group>"; };
 		8E1C706C1BB0637E0071272B /* 2pgpTestMessage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2pgpTestMessage.txt; sourceTree = "<group>"; };
 		8E23A60C1BB1531C00B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PGPPublicKeyEncryptedSessionKeyPacket.h; path = CTOpenSSLWrapper/PGPPackets/PGPPublicKeyEncryptedSessionKeyPacket.h; sourceTree = "<group>"; };
 		8E23A60D1BB1531C00B2B61B /* PGPPublicKeyEncryptedSessionKeyPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PGPPublicKeyEncryptedSessionKeyPacket.m; path = CTOpenSSLWrapper/PGPPackets/PGPPublicKeyEncryptedSessionKeyPacket.m; sourceTree = "<group>"; };
@@ -154,7 +152,6 @@
 		8EE84F801BAAC2E20088E1EC /* PEMHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PEMHelper.h; path = CTOpenSSLWrapper/PEMHelper.h; sourceTree = "<group>"; };
 		8EE84F811BAAC2E20088E1EC /* PEMHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PEMHelper.m; path = CTOpenSSLWrapper/PEMHelper.m; sourceTree = "<group>"; };
 		8EF5C47A1BB3044C004AC290 /* outbase64.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = outbase64.txt; sourceTree = "<group>"; };
-		A54DC1FBF3836521BB1C53D2 /* libPods-OpenSSLWrapperTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpenSSLWrapperTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A712DF4B14826BE700F4E399 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		A712DF4C14826BE700F4E399 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		A73718D2157E878E00AA362C /* CTOpenSSLSymmetricEncryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTOpenSSLSymmetricEncryption.h; sourceTree = "<group>"; };
@@ -178,9 +175,11 @@
 		A7AA081B14825387009DE810 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A7AA081D14825387009DE810 /* CTOpenSSLWrapperTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTOpenSSLWrapperTests.h; sourceTree = "<group>"; };
 		A7AA081E14825387009DE810 /* CTOpenSSLWrapperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTOpenSSLWrapperTests.m; sourceTree = "<group>"; };
-		AB056A66298AA63F2D797EE1 /* Pods-OpenSSLWrapperTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenSSLWrapperTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OpenSSLWrapperTest/Pods-OpenSSLWrapperTest.debug.xcconfig"; sourceTree = "<group>"; };
-		BAB705D5D4DE87A138378AC1 /* libPods-CTOpenSSLWrapper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CTOpenSSLWrapper.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F16238F0C952B2102222C09C /* Pods-OpenSSLWrapperTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenSSLWrapperTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-OpenSSLWrapperTest/Pods-OpenSSLWrapperTest.release.xcconfig"; sourceTree = "<group>"; };
+		ADDB1D001BC57C5B001C36B6 /* Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Godzippa.h; sourceTree = "<group>"; };
+		ADDB1D011BC57C5B001C36B6 /* NSData+Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Godzippa.h"; sourceTree = "<group>"; };
+		ADDB1D021BC57C5B001C36B6 /* NSData+Godzippa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Godzippa.m"; sourceTree = "<group>"; };
+		ADDB1D031BC57C5B001C36B6 /* NSFileManager+Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Godzippa.h"; sourceTree = "<group>"; };
+		ADDB1D041BC57C5B001C36B6 /* NSFileManager+Godzippa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Godzippa.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,7 +191,6 @@
 				5B1E4E391BA70BE40086D75E /* libcrypto.a in Frameworks */,
 				3D861E551BA3263100DED4CC /* libCTOpenSSLWrapper.a in Frameworks */,
 				5B1E4E3A1BA70BE80086D75E /* libssl.a in Frameworks */,
-				7449A3FC0A3F06F5E461AB3E /* libPods-OpenSSLWrapperTest.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +202,6 @@
 				A7AA080214825387009DE810 /* Foundation.framework in Frameworks */,
 				A712DF4D14826BE700F4E399 /* libcrypto.a in Frameworks */,
 				A712DF4E14826BE700F4E399 /* libssl.a in Frameworks */,
-				648FBAA4D5DAA6F4E9442898 /* libPods-CTOpenSSLWrapper.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,9 +360,9 @@
 				8E23A60B1BB152CC00B2B61B /* PGPPackets */,
 				A7AA081714825387009DE810 /* CTOpenSSLWrapperTests */,
 				3D861E2E1BA306FA00DED4CC /* OpenSSLWrapperTest */,
+				ADDB1CFF1BC57BFE001C36B6 /* Godzippa */,
 				A7AA080014825387009DE810 /* Frameworks */,
 				A7AA07FF14825387009DE810 /* Products */,
-				F5E9E2E3A9A7BDD6DD696775 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -387,8 +384,6 @@
 				A712DF4C14826BE700F4E399 /* libssl.a */,
 				A7AA080114825387009DE810 /* Foundation.framework */,
 				A7AA080F14825387009DE810 /* SenTestingKit.framework */,
-				BAB705D5D4DE87A138378AC1 /* libPods-CTOpenSSLWrapper.a */,
-				A54DC1FBF3836521BB1C53D2 /* libPods-OpenSSLWrapperTest.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -434,15 +429,16 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		F5E9E2E3A9A7BDD6DD696775 /* Pods */ = {
+		ADDB1CFF1BC57BFE001C36B6 /* Godzippa */ = {
 			isa = PBXGroup;
 			children = (
-				887424220E4D9145FE883951 /* Pods-CTOpenSSLWrapper.debug.xcconfig */,
-				8D25B94445DB14C901E79A38 /* Pods-CTOpenSSLWrapper.release.xcconfig */,
-				AB056A66298AA63F2D797EE1 /* Pods-OpenSSLWrapperTest.debug.xcconfig */,
-				F16238F0C952B2102222C09C /* Pods-OpenSSLWrapperTest.release.xcconfig */,
+				ADDB1D001BC57C5B001C36B6 /* Godzippa.h */,
+				ADDB1D011BC57C5B001C36B6 /* NSData+Godzippa.h */,
+				ADDB1D021BC57C5B001C36B6 /* NSData+Godzippa.m */,
+				ADDB1D031BC57C5B001C36B6 /* NSFileManager+Godzippa.h */,
+				ADDB1D041BC57C5B001C36B6 /* NSFileManager+Godzippa.m */,
 			);
-			name = Pods;
+			path = Godzippa;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -483,11 +479,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3D861E4D1BA306FB00DED4CC /* Build configuration list for PBXNativeTarget "OpenSSLWrapperTest" */;
 			buildPhases = (
-				DCA17AA86A5F78408F8FEFAB /* Check Pods Manifest.lock */,
 				3D861E291BA306FA00DED4CC /* Sources */,
 				3D861E2A1BA306FA00DED4CC /* Frameworks */,
 				3D861E2B1BA306FA00DED4CC /* Resources */,
-				000ECE88A97DAB237D9DD342 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -503,11 +497,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7AA082214825387009DE810 /* Build configuration list for PBXNativeTarget "CTOpenSSLWrapper" */;
 			buildPhases = (
-				6C9BCA37531A8C10DC07B40A /* Check Pods Manifest.lock */,
 				A7AA07FA14825387009DE810 /* Sources */,
 				A7AA07FB14825387009DE810 /* Frameworks */,
 				A7AA07FC14825387009DE810 /* Headers */,
-				6BE3D76DFF65D7E743E12227 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -543,6 +535,7 @@
 		A7AA07F514825387009DE810 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = Home;
 				TargetAttributes = {
@@ -601,51 +594,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		000ECE88A97DAB237D9DD342 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OpenSSLWrapperTest/Pods-OpenSSLWrapperTest-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6BE3D76DFF65D7E743E12227 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CTOpenSSLWrapper/Pods-CTOpenSSLWrapper-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6C9BCA37531A8C10DC07B40A /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		A7AA080C14825387009DE810 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -659,21 +607,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
-		DCA17AA86A5F78408F8FEFAB /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -681,9 +614,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADDB1D051BC57C5B001C36B6 /* NSData+Godzippa.m in Sources */,
 				3D861E381BA306FA00DED4CC /* ViewController.m in Sources */,
 				3D861E351BA306FA00DED4CC /* AppDelegate.m in Sources */,
 				3D861E321BA306FA00DED4CC /* main.m in Sources */,
+				ADDB1D061BC57C5B001C36B6 /* NSFileManager+Godzippa.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -769,7 +704,6 @@
 /* Begin XCBuildConfiguration section */
 		3D861E4E1BA306FB00DED4CC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AB056A66298AA63F2D797EE1 /* Pods-OpenSSLWrapperTest.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -809,7 +743,6 @@
 		};
 		3D861E4F1BA306FB00DED4CC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F16238F0C952B2102222C09C /* Pods-OpenSSLWrapperTest.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -922,7 +855,6 @@
 		};
 		A7AA082314825387009DE810 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 887424220E4D9145FE883951 /* Pods-CTOpenSSLWrapper.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CTOpenSSLWrapper.dst;
@@ -943,7 +875,6 @@
 		};
 		A7AA082414825387009DE810 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D25B94445DB14C901E79A38 /* Pods-CTOpenSSLWrapper.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				DSTROOT = /tmp/CTOpenSSLWrapper.dst;
