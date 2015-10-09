@@ -17,10 +17,12 @@
 
 @implementation PGPKey
 
-- (id)initWithKeyID:(NSData *)keyID andWithUserID:(NSString*)userID andWithKeyData:(PGPPacket *)keyData andIsPrivate:(BOOL)isPrivate andIsEncrypted:(BOOL)encrypted {
+- (id)initWithKeyID:(NSData *)keyID andWithFingerPrint:(NSData*)fingerprint andWithUserIDs:(NSMutableArray*)userIDs andWithKeyLength:(int)keyLength andWithKeyData:(PGPPacket *)keyData andIsPrivate:(BOOL)isPrivate andIsEncrypted:(BOOL)encrypted {
     if (self = [super init]) {
         self.keyID = keyID;
-        self.userID = userID;
+        self.fingerprint = fingerprint;
+        self.userIDs = userIDs;
+        self.keyLength = keyLength;
         self.keyData = keyData;
         self.isPrivate = isPrivate;
         self.encryted = encrypted;
@@ -32,12 +34,23 @@
 - (NSString*)getKeyID {
     NSString* keyid = [[self.keyID description] uppercaseString];
     keyid = [keyid substringFromIndex:1];
-    keyid = [keyid substringToIndex:[keyid length]-2];
+    keyid = [keyid substringToIndex:[keyid length]-1];
     return keyid;
 }
 
-- (NSString*)getUserID {
-    return self.userID;
+- (NSString*)getFingerPrint {
+    NSString* fingerprint = [[self.fingerprint description] uppercaseString];
+    fingerprint = [fingerprint substringFromIndex:1];
+    fingerprint = [fingerprint substringToIndex:[fingerprint length]-1];
+    return fingerprint;
+}
+
+- (NSMutableArray*)getUserIDs {
+    return self.userIDs;
+}
+
+- (int)getKeyLength {
+    return self.keyLength;
 }
 
 - (int)getKeyVersion {

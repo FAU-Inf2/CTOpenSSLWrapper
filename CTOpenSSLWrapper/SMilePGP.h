@@ -12,10 +12,10 @@
 
 @interface SMilePGP : NSObject
 
-- (PGPKey*)importPGPKeyFromArmouredFile:(NSData*)fileContent;
-- (NSString*)getKeyIDFromArmoredPGPMessage:(NSData*)messageData;
-- (NSData*)decryptPGPMessageWithKey:(PGPKey*)secKey fromArmouredFile:(NSData*)fileContent;
-- (NSData*)decryptPGPMessageWithKey:(PGPKey*)secKey fromArmouredFile:(NSData*)fileContent WithPassphrase:(NSString*)passphrase;
-- (NSData*)buildPGPMessageFromData:(NSData*)data WithKey:(PGPKey*)pubKey;
+- (nullable PGPKey*)importPGPKeyFromArmouredFile:(nonnull NSData*)fileContent;
+- (nullable NSString*)getKeyIDFromArmoredPGPMessage:(nonnull NSData*)messageData;
+- (nullable NSData*)decryptPGPMessageWithKey:(nonnull PGPKey*)secKey fromArmouredFile:(nonnull NSData*)fileContent;
+- (nullable NSData*)decryptPGPMessageWithKey:(nonnull PGPKey*)secKey fromArmouredFile:(nonnull NSData*)fileContent WithPassphrase:(nullable NSString*)passphrase;
+- (nullable NSData*)buildPGPMessageFromData:(nonnull NSData* )data WithKey:(nonnull PGPKey*)pubKey;
 
 @end

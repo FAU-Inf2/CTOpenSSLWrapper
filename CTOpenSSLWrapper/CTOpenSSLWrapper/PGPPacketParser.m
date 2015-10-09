@@ -260,7 +260,6 @@
     
     packet.s2k = bytes[pos++];
     unsigned char saltValue[8];
-    int is2k_count = 0;
     
     switch (packet.s2k) {
         case 0:
@@ -495,6 +494,18 @@
 - (NSData*)generateKeyID:(PGPPublicKeyPacket *)packet {
     NSData* keyID;
     if (packet.version == 4) {
+        NSData* fingerprint = [self generateFingerprint:packet];
+        keyID = [NSData dataWithBytes:[fingerprint bytes]+([fingerprint length]-8) length:8];
+    } else {
+        NSData* publicModulus = [[packet mpis] objectAtIndex:0];
+        keyID = [NSData dataWithBytes:[publicModulus bytes]+([publicModulus length]-8) length:8];
+    }
+    return keyID;
+}
+
+- (NSData*)generateFingerprint:(PGPPublicKeyPacket *)packet {
+    NSData* fingerprint;
+    if (packet.version == 4) {
         int pos = 0;
         unsigned char bytesToHash[3+[packet.bytes length]];
         bytesToHash[pos++] = '\x99';
@@ -504,13 +515,21 @@
             bytesToHash[pos++] = ((unsigned char*)[packet.bytes bytes])[i];
         }
         NSData* dataToHash = [NSData dataWithBytes:(const void *)bytesToHash length:pos];
-        NSData* fingerprint = CTOpenSSLGenerateDigestFromData(dataToHash, CTOpenSSLDigestTypeSHA1);
-        keyID = [NSData dataWithBytes:[fingerprint bytes]+([fingerprint length]-8) length:8];
+        fingerprint = CTOpenSSLGenerateDigestFromData(dataToHash, CTOpenSSLDigestTypeSHA1);
     } else {
-        NSData* publicModulus = [[packet mpis] objectAtIndex:0];
-        keyID = [NSData dataWithBytes:[publicModulus bytes]+([publicModulus length]-8) length:8];
+        int pos = 0;
+        int length = [[[packet mpis] objectAtIndex:0] length] + [[[packet mpis] objectAtIndex:1] length];
+        unsigned char bytesToHash[length];
+        for (int i = 0; i < [[[packet mpis] objectAtIndex:0] length]; i++) {
+            bytesToHash[pos++] = ((unsigned char*)[[[packet mpis] objectAtIndex:0] bytes])[i];
+        }
+        for (int i = 0; i < [[[packet mpis] objectAtIndex:1] length]; i++) {
+            bytesToHash[pos++] = ((unsigned char*)[[[packet mpis] objectAtIndex:1] bytes])[i];
+        }
+        NSData* dataToHash = [NSData dataWithBytes:bytesToHash length:length];
+        fingerprint = CTOpenSSLGenerateDigestFromData(dataToHash, CTOpenSSLDigestTypeMD5);
     }
-    return keyID;
+    return fingerprint;
 }
 
 @end

@@ -18,6 +18,7 @@
 #define pgpMessageBegin @"-----BEGIN PGP MESSAGE-----"
 #define pgpMessageEnd @"-----END PGP MESSAGE-----"
 #define keyFileComment @"Comment"
+#define keyFileVersion @"Version"
 
 @implementation PGPArmorHelper
 
@@ -66,6 +67,21 @@
     NSMutableString *mutableString = [string mutableCopy];
     NSRange range;
     while ((range = [mutableString rangeOfString:keyFileComment]).location != NSNotFound) {
+        NSUInteger startIndex = range.location;
+        NSUInteger endIndex = 0;
+        for (NSUInteger i = startIndex; startIndex < string.length; i++) {
+            NSString* substring = [string substringWithRange:NSMakeRange(i, 1)];
+            if([substring isEqualToString:@"\n"]) {
+                endIndex = i;
+                break;
+            }
+        }
+        if (endIndex != 0) {
+            [mutableString deleteCharactersInRange:NSMakeRange(startIndex, endIndex - startIndex)];
+        }
+    }
+    
+    while ((range = [mutableString rangeOfString:keyFileVersion]).location != NSNotFound) {
         NSUInteger startIndex = range.location;
         NSUInteger endIndex = 0;
         for (NSUInteger i = startIndex; startIndex < string.length; i++) {

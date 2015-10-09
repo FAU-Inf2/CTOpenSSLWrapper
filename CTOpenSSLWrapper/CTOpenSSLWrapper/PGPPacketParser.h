@@ -37,5 +37,6 @@
 - (NSData*)getPEMFromSecretKeyPacket:(PGPSecretKeyPacket*) packet;
 - (NSData*)getPEMFromPublicKeyPacket:(PGPPublicKeyPacket*) packet;
 - (NSData*)generateKeyID:(PGPPublicKeyPacket*) packet;
+- (NSData*)generateFingerprint:(PGPPublicKeyPacket*) packet;
 
 @end

@@ -29,26 +29,40 @@
     } while (nextpos > 0);
     if (isPrivate) {
         PGPSecretKeyPacket* mainKeyPacket = [[parser getPacketsWithTag:5] objectAtIndex:0];
-        PGPUserIDPacket* userIDPacket = [[parser getPacketsWithTag:13] objectAtIndex:0];
+        int keyLen = [[[[mainKeyPacket pubKey] mpis] objectAtIndex:0] length]*8;
+        NSMutableArray* userIDs = [[NSMutableArray alloc] init];
+        for (int i = 0; i < [[parser getPacketsWithTag:13] count]; i++) {
+            PGPUserIDPacket* userIDPacket = [[parser getPacketsWithTag:13] objectAtIndex:i];
+            [userIDs addObject:[userIDPacket userID]];
+        }
         NSData* keyID = [parser generateKeyID:[mainKeyPacket pubKey]];
+        NSData* fingerprint = [parser generateFingerprint:[mainKeyPacket pubKey]];
         BOOL encrypted = (mainKeyPacket.s2k != 0);
-        PGPKey* mainKey = [[PGPKey alloc] initWithKeyID:keyID andWithUserID:[userIDPacket userID] andWithKeyData:mainKeyPacket andIsPrivate:isPrivate andIsEncrypted:encrypted];
+        PGPKey* mainKey = [[PGPKey alloc] initWithKeyID:keyID andWithFingerPrint:fingerprint andWithUserIDs:userIDs andWithKeyLength:keyLen andWithKeyData:mainKeyPacket andIsPrivate:isPrivate andIsEncrypted:encrypted];
         for (int i = 0; i < [[parser getPacketsWithTag:7] count]; i++) {
             PGPSecretKeyPacket *subKeyPacket = [[parser getPacketsWithTag:7] objectAtIndex:i];
             NSData* subKeyID = [parser generateKeyID:[subKeyPacket pubKey]];
-            PGPKey* subKey = [[PGPKey alloc] initWithKeyID:subKeyID andWithUserID:[userIDPacket userID] andWithKeyData:subKeyPacket andIsPrivate:isPrivate andIsEncrypted:encrypted];
+            NSData* subFingerprint = [parser generateFingerprint:[subKeyPacket pubKey]];
+            PGPKey* subKey = [[PGPKey alloc] initWithKeyID:subKeyID andWithFingerPrint:subFingerprint andWithUserIDs:userIDs andWithKeyLength:keyLen andWithKeyData:subKeyPacket andIsPrivate:isPrivate andIsEncrypted:encrypted];
             [[mainKey subKeys] addObject:subKey];
         }
         return mainKey;
     } else {
         PGPPublicKeyPacket* mainKeyPacket = [[parser getPacketsWithTag:6] objectAtIndex:0];
-        PGPUserIDPacket* userIDPacket = [[parser getPacketsWithTag:13] objectAtIndex:0];
+        int keyLen = [[[mainKeyPacket mpis] objectAtIndex:0] length]*8;
+        NSMutableArray* userIDs = [[NSMutableArray alloc] init];
+        for (int i = 0; i < [[parser getPacketsWithTag:13] count]; i++) {
+            PGPUserIDPacket* userIDPacket = [[parser getPacketsWithTag:13] objectAtIndex:i];
+            [userIDs addObject:[userIDPacket userID]];
+        }
         NSData* keyID = [parser generateKeyID:mainKeyPacket];
-        PGPKey* mainKey = [[PGPKey alloc] initWithKeyID:keyID andWithUserID:[userIDPacket userID] andWithKeyData:mainKeyPacket andIsPrivate:isPrivate andIsEncrypted:false];
+        NSData* fingerprint = [parser generateFingerprint:mainKeyPacket];
+        PGPKey* mainKey = [[PGPKey alloc] initWithKeyID:keyID andWithFingerPrint:fingerprint andWithUserIDs:userIDs andWithKeyLength:keyLen andWithKeyData:mainKeyPacket andIsPrivate:isPrivate andIsEncrypted:false];
         for (int i = 0; i < [[parser getPacketsWithTag:14] count]; i++) {
             PGPPublicKeyPacket *subKeyPacket = [[parser getPacketsWithTag:14] objectAtIndex:i];
             NSData* subKeyID = [parser generateKeyID:subKeyPacket];
-            PGPKey* subKey = [[PGPKey alloc] initWithKeyID:subKeyID andWithUserID:[userIDPacket userID] andWithKeyData:subKeyPacket andIsPrivate:isPrivate andIsEncrypted:false];
+            NSData* subFingerprint = [parser generateFingerprint:subKeyPacket];
+            PGPKey* subKey = [[PGPKey alloc] initWithKeyID:subKeyID andWithFingerPrint:subFingerprint andWithUserIDs:userIDs andWithKeyLength:keyLen andWithKeyData:subKeyPacket andIsPrivate:isPrivate andIsEncrypted:false];
             [[mainKey subKeys] addObject:subKey];
         }
         return mainKey;

@@ -12,16 +12,20 @@
 @interface PGPKey : NSObject
 
 @property (nonatomic) NSData* keyID;
-@property (nonatomic) NSString* userID;
+@property (nonatomic) NSData* fingerprint;
+@property (nonatomic) NSMutableArray* userIDs;
+@property (nonatomic) int keyLength;
 @property (nonatomic) PGPPacket* keyData;
 @property (nonatomic) NSMutableArray* subKeys;
 @property (nonatomic) BOOL encryted;
 @property (nonatomic) BOOL isPrivate;
 
-- (id)initWithKeyID:(NSData*)keyID andWithUserID:(NSString*)userID andWithKeyData:(PGPPacket*)keyData andIsPrivate:(BOOL)isPrivate andIsEncrypted:(BOOL)encrypted;
+- (id)initWithKeyID:(NSData*)keyID andWithFingerPrint:(NSData*)fingerprint andWithUserIDs:(NSMutableArray*)userIDs andWithKeyLength:(int)keyLength andWithKeyData:(PGPPacket*)keyData andIsPrivate:(BOOL)isPrivate andIsEncrypted:(BOOL)encrypted;
 
 - (NSString*)getKeyID;
-- (NSString*)getUserID;
+- (NSString*)getFingerPrint;
+- (NSMutableArray*)getUserIDs;
+- (int)getKeyLength;
 - (int)getKeyVersion;
 - (NSDate*)getCreationDate;
 - (int)getTimeInDaysTillExpiration;
