@@ -254,17 +254,25 @@
     }
 }
 
-- (NSData*)buildPGPMessageFromData:(NSData*)data WithKey:(PGPKey*)pubKey {
+- (NSData*)buildPGPMessageFromData:(NSData*)data WithKey:(PGPKey*)key {
     PGPMessageBuilder* builder = [[PGPMessageBuilder alloc] init];
     PGPKey* keyToEncrypt;
-    if ([[pubKey subKeys] count] > 0) {
-        keyToEncrypt = [[pubKey subKeys] objectAtIndex:0];
+    if ([[key subKeys] count] > 0) {
+        keyToEncrypt = [[key subKeys] objectAtIndex:0];
     } else {
-        keyToEncrypt = pubKey;
+        keyToEncrypt = key;
     }
     PGPPacketParser* parser = [[PGPPacketParser alloc] init];
-    NSData* keyData = [parser getPEMFromPublicKeyPacket:(PGPPublicKeyPacket*)[keyToEncrypt keyData]];
-    return [builder buildPGPEncryptedMessageFromData:data withPGPPublicKey:keyData andPubKeyID:(unsigned char*)[[keyToEncrypt keyID] bytes]];
+    PGPPublicKeyPacket* pubKey;
+    if (keyToEncrypt.isPrivate) {
+        pubKey = [((PGPSecretKeyPacket*)[keyToEncrypt keyData]) pubKey];
+    } else {
+        pubKey = (PGPPublicKeyPacket*)[keyToEncrypt keyData];
+    }
+    NSData* keyData = [parser getPEMFromPublicKeyPacket:pubKey];
+    NSData* messageData = [builder buildPGPEncryptedMessageFromData:data withPGPPublicKey:keyData andPubKeyID:(unsigned char*)[[keyToEncrypt keyID] bytes]];
+    NSData* messageChecksum = [builder getChecksumForPGPMessageData:messageData];
+    return [builder buildArmouredPGPMessageFromMessageData:messageData andChecksum:messageChecksum];
 }
 
 @end

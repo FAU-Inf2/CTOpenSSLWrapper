@@ -117,6 +117,7 @@
     fileContent = [NSData dataWithContentsOfURL:fileUrl];
     NSString* keyID = [pgp getKeyIDFromArmoredPGPMessage:fileContent];
     NSData* decrypted = [pgp decryptPGPMessageWithKey:key fromArmouredFile:fileContent WithPassphrase:@"GoMADyoumust1!"];
+    NSData* message = [pgp buildPGPMessageFromData:[NSData dataWithBytes:(const void*)[@"bla" UTF8String] length:3] WithKey:key];
 }
 
 - (void)didReceiveMemoryWarning {

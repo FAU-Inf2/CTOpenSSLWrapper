@@ -16,6 +16,6 @@
 - (nullable NSString*)getKeyIDFromArmoredPGPMessage:(nonnull NSData*)messageData;
 - (nullable NSData*)decryptPGPMessageWithKey:(nonnull PGPKey*)secKey fromArmouredFile:(nonnull NSData*)fileContent;
 - (nullable NSData*)decryptPGPMessageWithKey:(nonnull PGPKey*)secKey fromArmouredFile:(nonnull NSData*)fileContent WithPassphrase:(nullable NSString*)passphrase;
-- (nullable NSData*)buildPGPMessageFromData:(nonnull NSData* )data WithKey:(nonnull PGPKey*)pubKey;
+- (nullable NSData*)buildPGPMessageFromData:(nonnull NSData* )data WithKey:(nonnull PGPKey*)key;
 
 @end
