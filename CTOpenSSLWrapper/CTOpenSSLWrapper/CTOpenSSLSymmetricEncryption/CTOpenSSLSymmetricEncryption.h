@@ -10,8 +10,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef enum {
     CTOpenSSLCipherAES256 = 0,
-    CTOpenSSLCipherAES256CFB = 1,
-    CTOpenSSLCipherCAST5CFB = 2
+    CTOpenSSLCipherAES128CFB = 1,
+    CTOpenSSLCipherAES192CFB = 2,
+    CTOpenSSLCipherAES256CFB = 3,
+    CTOpenSSLCipherCAST5CFB = 4
 } CTOpenSSLCipher;
 
 NSString *NSStringFromCTOpenSSLCipher(CTOpenSSLCipher cipher);

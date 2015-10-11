@@ -27,6 +27,12 @@ NSString *NSStringFromCTOpenSSLCipher(CTOpenSSLCipher cipher)
         case CTOpenSSLCipherAES256:
             cipherString = @"AES256";
             break;
+        case CTOpenSSLCipherAES128CFB:
+            cipherString = @"AES-128-CFB";
+            break;
+        case CTOpenSSLCipherAES192CFB:
+            cipherString = @"AES-192-CFB";
+            break;
         case CTOpenSSLCipherAES256CFB:
             cipherString = @"AES-256-CFB";
             break;

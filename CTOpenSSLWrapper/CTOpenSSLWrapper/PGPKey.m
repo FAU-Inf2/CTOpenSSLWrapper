@@ -92,12 +92,23 @@
     }
     PGPSecretKeyPacket* packet = (PGPSecretKeyPacket*)self.keyData;
     int keyLen = 0;
+    CTOpenSSLCipher algo;
     switch (packet.symmetricEncAlgorithm) {
         case 3:
             keyLen = 16;
+            algo = CTOpenSSLCipherCAST5CFB;
+            break;
+        case 7:
+            keyLen = 16;
+            algo = CTOpenSSLCipherAES128CFB;
+            break;
+        case 8:
+            keyLen = 24;
+            algo = CTOpenSSLCipherAES192CFB;
             break;
         case 9:
             keyLen = 32;
+            algo = CTOpenSSLCipherAES256CFB;
             break;
         default: //All other values are not supported yet
             return NULL;
@@ -107,7 +118,7 @@
     NSData* symKey = [self generateSymmKeyFromPassphrase:passphrase withSaltSpecifier:packet.s2kSpecifier andHashalgorithm:packet.s2kHashAlgorithm andSaltValue:packet.s2kSaltValue andSaltCount:packet.s2kCount andKeyLen:keyLen];
     
     NSData* mpis = NULL;
-    CTOpenSSLSymmetricDecryptWithIV(CTOpenSSLCipherCAST5CFB, packet.initialVector, symKey, packet.encryptedData, &mpis);
+    CTOpenSSLSymmetricDecryptWithIV(algo, packet.initialVector, symKey, packet.encryptedData, &mpis);
     
     // parse mpis
     PGPSecretKeyPacket* tmp = [[PGPSecretKeyPacket alloc] initWithBytes:packet.bytes andWithTag:packet.tag andWithFormat:packet.format];
