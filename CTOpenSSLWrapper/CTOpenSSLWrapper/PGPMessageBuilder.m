@@ -52,6 +52,10 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
     PGPSymmetricEncryptedIntegrityProtectedDataPacket* encryptedData = [self buildSymmetricEncryptedIntegrityProtectedDataPacketWithBytes:[self getbytesFromPacket:dataPacket] andSessionKey:sessionKey];
     PGPPublicKeyEncryptedSessionKeyPacket* encryptedKey = [self buildPublicKeyEncryptedSessionKeyPacketWithPGPPublicKey:pubKey andSessionKey:sessionKey andPubKeyID:pubKeyID];
     
+    if (encryptedData == NULL || encryptedKey == NULL) {
+        return NULL;
+    }
+    
     NSData* encryptedDataBytes = [self getbytesFromPacket:encryptedData];
     NSData* encryptedKeyBytes = [self getbytesFromPacket:encryptedKey];
     
@@ -316,7 +320,10 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
     }
     
     packet_length += 1+octetcount;
-    unsigned char packet_bytes[packet_length];
+    unsigned char* packet_bytes = malloc(packet_length);
+    if (packet_bytes == NULL) {
+        return NULL;
+    }
     packet_bytes[0] = packet_header;
     for (int i = 0; i < octetcount; i++) {
         packet_bytes[i+1] = length_octets[i];
@@ -325,7 +332,10 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
         packet_bytes[i+1+octetcount] = ((unsigned char*)[packet.bytes bytes])[i];
     }
     
-    return [[NSData alloc] initWithBytes:(const void*)packet_bytes length:packet_length];
+    NSData* ret = [[NSData alloc] initWithBytes:(const void*)packet_bytes length:packet_length];
+    free(packet_bytes);
+    
+    return ret;
 }
 
 @end
