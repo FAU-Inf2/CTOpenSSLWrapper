@@ -345,6 +345,8 @@
         case 3:
             blockSize = 8;
             break;
+        case 7:
+        case 8:
         case 9:
             blockSize = 16;
             break;
