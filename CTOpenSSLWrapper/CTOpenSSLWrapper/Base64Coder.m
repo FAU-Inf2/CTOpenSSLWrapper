@@ -49,7 +49,9 @@
     
 }
 
-+ (NSData *)getDecodedBase64StringFromString:(NSString *)encodedString {
++ (NSData *)getDecodedBase64StringFromString:(NSString *)encString {
+    
+    NSString *encodedString = [self checkFormatOfBase64EncryptedData:encString];
     
     BIO *b64;
     BIO *input = NULL;
@@ -123,6 +125,25 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *basePath = paths.firstObject;
     return basePath;
+}
+
++ (NSString *)checkFormatOfBase64EncryptedData:(NSString *)encryptedString {
+    NSCharacterSet *newLineAndWhiteSpaceCS = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *trimmedString = [encryptedString stringByTrimmingCharactersInSet:newLineAndWhiteSpaceCS];
+    NSMutableString *returnString = trimmedString.mutableCopy;
+    for (int i = 64; i < encryptedString.length; i= i+65) {
+        if (i > encryptedString.length) {
+            break;
+        }
+        NSString *charAtIndex = [encryptedString substringWithRange:NSMakeRange(i, 1)];
+        if (![charAtIndex isEqualToString:@"\n"]) {
+            [returnString insertString:@"\n" atIndex:i];
+        } else {
+            continue;
+        }
+    }
+    
+    return returnString;
 }
 
 @end
