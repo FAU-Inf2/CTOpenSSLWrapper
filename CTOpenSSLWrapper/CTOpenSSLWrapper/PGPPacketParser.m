@@ -416,12 +416,16 @@
     }
     
     //Encrypted data, the output of the selected symmetric-key cipher operating in Cipher Feedback mode with shift amount equal to the block size of the cipher (CFB-n where n is the block size)
-    unsigned char data[[packet.bytes length]-pos];
+    unsigned char* data = malloc([packet.bytes length]-pos);
+    if (data == NULL) {
+        return -1;
+    }
     for (int i = 0; i < [packet.bytes length]-pos; i++) {
         data[i] = bytes[i+pos];
     }
     packet.encryptedData = [NSData dataWithBytes:data length:[packet.bytes length]-pos];
     
+    free(data);
     free(bytes);
     
     return [packet.bytes length];
