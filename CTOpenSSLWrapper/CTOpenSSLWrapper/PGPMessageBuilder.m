@@ -56,15 +56,19 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
     NSData* encryptedKeyBytes = [self getbytesFromPacket:encryptedKey];
     
     int length = [encryptedDataBytes length] + [encryptedKeyBytes length];
-    unsigned char pgpmessage[length];
+    unsigned char* pgpmessage = malloc(length);
+    if (pgpmessage == NULL) {
+        return NULL;
+    }
     for (int i = 0; i < [encryptedKeyBytes length]; i++) {
         pgpmessage[i] = ((unsigned char*)[encryptedKeyBytes bytes])[i];
     }
     for (int i = 0; i < [encryptedDataBytes length]; i++) {
         pgpmessage[i+[encryptedKeyBytes length]] = ((unsigned char*)[encryptedDataBytes bytes])[i];
     }
-    
-    return [NSData dataWithBytes:(const void *)pgpmessage length:length];
+    NSData* ret = [NSData dataWithBytes:(const void *)pgpmessage length:length];
+    free(pgpmessage);
+    return ret;
 }
 
 - (NSData*)getChecksumForPGPMessageData:(NSData*)pgpmessage {
@@ -100,7 +104,10 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
     packet.literalData = dataToEncrypt;
     
     int length = 1+1+0+4+[dataToEncrypt length];
-    unsigned char bytes[length];
+    unsigned char* bytes = malloc(length);
+    if (bytes == NULL) {
+        return NULL;
+    }
     bytes[0] = (unsigned char) packet.formatType;
     bytes[1] = '\0';
     bytes[2] = (unsigned char)(packet.date >> 24);
@@ -112,6 +119,8 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
     }
     
     packet.bytes = [NSData dataWithBytes:(const void *)bytes length:length];
+    
+    free(bytes);
     
     return packet;
 }
@@ -127,13 +136,18 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
     NSError* error;
     packet.compressedData = [dataToCompress dataByGZipCompressingWithError:&error];
     int length = 1+[packet.compressedData length];
-    unsigned char bytes[length];
+    unsigned char* bytes = malloc(length);
+    if (bytes == NULL) {
+        return NULL;
+    }
     bytes[0] = (unsigned char)packet.algorithm;
     for (int i = 0; i < [packet.compressedData length]; i++) {
         bytes[i+1] = ((unsigned char*)[packet.compressedData bytes])[i];
     }
     
     packet.bytes = [NSData dataWithBytes:(const void *)bytes length:length];
+    
+    free(bytes);
     
     return packet;
 }
@@ -152,7 +166,10 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
         /* OpenSSL reports a failure, act accordingly */
     }
     int length = 16+2+[dataToEncrypt length]+2;
-    unsigned char data[length+20];
+    unsigned char* data = malloc(length+20);
+    if (data == NULL) {
+        return NULL;
+    }
     for (int i = 0; i < 16; i++) {
         data[i] = randomBytes[i];
     }
@@ -177,13 +194,19 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
     }
     
     length = [encryptedData length]+1;
-    unsigned char bytes[length];
+    unsigned char* bytes = malloc(length);
+    if (bytes == NULL) {
+        return NULL;
+    }
     bytes[0] = packet.version;
     for (int i = 1; i < length; i++) {
         bytes[i] = ((unsigned char*)[encryptedData bytes])[i-1];
     }
     
     packet.bytes = [NSData dataWithBytes:(const void *)bytes length:length];
+    
+    free(data);
+    free(bytes);
     
     return packet;
 }
@@ -218,7 +241,9 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
     m[length-1] = (unsigned char)checksum;
     
     NSData* encryptedSessionKey = CTOpenSSLRSAEncrypt(pubKey, [NSData dataWithBytes:(const void *)m length:length]);
-    
+    for (int i = 0; i < length; i++) {
+        m[i] = '\0';
+    }
     [packet.mpis addObject:encryptedSessionKey];
     
     length = 1+8+1+2+[encryptedSessionKey length];

@@ -107,7 +107,13 @@
 }
 
 - (int)extractPacketsFromBytes:(NSData*)bytes atPostion:(int)position {
-    unsigned char* data = (unsigned char*)bytes.bytes;
+    unsigned char* data = malloc([bytes length]);//(unsigned char*)bytes.bytes;
+    if (data == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < [bytes length]; i++) {
+        data[i] = ((unsigned char*)[bytes bytes])[i];
+    }
     
     int pos = position;
     int packet_tag = -1;
@@ -197,12 +203,20 @@
         return 0; //End of bytes
     }
     
+    free(data);
+    
     return pos+packet_length;
 }
 
 - (int)parsePublicKeyPacket:(PGPPublicKeyPacket*) packet {
     int pos = 0;
-    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    unsigned char* bytes = malloc([packet.bytes length]);
+    if (bytes == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < [packet.bytes length]; i++) {
+       bytes[i] = ((unsigned char*)[packet.bytes bytes])[i];
+    }
     packet.version =  bytes[pos++];
     
     if (packet.version == 3 || packet.version == 4) {
@@ -237,6 +251,9 @@
         p += byteLen+2;
     }
     packet.bytes = [NSData dataWithBytes:[packet.bytes bytes] length:p+pos];
+    
+    free(bytes);
+    
     return p+pos; // bytes read
 }
 
@@ -245,7 +262,13 @@
     unsigned char* bmpi = NULL;
     int p = 0;
     int mpiCount = 0;
-    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    unsigned char* bytes = malloc([packet.bytes length]);
+    if (bytes == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < [packet.bytes length]; i++) {
+        bytes[i] = ((unsigned char*)[packet.bytes bytes])[i];
+    }
     NSData* dataToCheck;
     int checksum = 0;
     int checkValue = 0;
@@ -336,12 +359,20 @@
     packet.initialVector = [NSData dataWithBytes:(const void *)iv length:blockSize];
     packet.encryptedData = [NSData dataWithBytes:(const void *)bytes+pos length:[packet.bytes length]-pos];
     
+    free(bytes);
+    
     return [packet.bytes length]; // bytes read
 }
 
 - (int)parsePublicKeyEncryptedSessionKeyPacket:(PGPPublicKeyEncryptedSessionKeyPacket *)packet {
     int pos = 0;
-    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    unsigned char* bytes = malloc([packet.bytes length]);
+    if (bytes == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < [packet.bytes length]; i++) {
+        bytes[i] = ((unsigned char*)[packet.bytes bytes])[i];
+    }
     packet.version = bytes[pos++];
     packet.pubKeyID = calloc(8, sizeof(char));
     for (int i = 0; i < 8; i++) {
@@ -362,12 +393,20 @@
     }
     [packet.mpis addObject:[NSData dataWithBytes:(const void*)mpi length:byteLen]];
     
+    free(bytes);
+    
     return pos+byteLen+2; // bytes read
 }
 
 - (int)parseSymmetricEncryptedIntegrityProtectedDataPacket:(PGPSymmetricEncryptedIntegrityProtectedDataPacket *)packet{
     int pos = 0;
-    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    unsigned char* bytes = malloc([packet.bytes length]);
+    if (bytes == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < [packet.bytes length]; i++) {
+        bytes[i] = ((unsigned char*)[packet.bytes bytes])[i];
+    }
     packet.version = bytes[pos++]; //RFC: A one-octet version number.  The only currently defined value is 1.
     
     if (packet.version != 1) {
@@ -381,31 +420,55 @@
     }
     packet.encryptedData = [NSData dataWithBytes:data length:[packet.bytes length]-pos];
     
+    free(bytes);
+    
     return [packet.bytes length];
 }
 
 - (int)parseSymmetricallyEncryptedDataPacket:(PGPSymmetricallyEncryptedDataPacket *)packet {
-    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    unsigned char* bytes = malloc([packet.bytes length]);
+    if (bytes == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < [packet.bytes length]; i++) {
+        bytes[i] = ((unsigned char*)[packet.bytes bytes])[i];
+    }
     
     packet.encryptedData = [NSData dataWithBytes:(const void *)bytes length:[packet.bytes length]];
+    
+    free(bytes);
     
     return [packet.bytes length];
 }
 
 - (int)parseCompressedDataPacket:(PGPCompressedDataPacket *)packet {
     int pos = 0;
-    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    unsigned char* bytes = malloc([packet.bytes length]);
+    if (bytes == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < [packet.bytes length]; i++) {
+        bytes[i] = ((unsigned char*)[packet.bytes bytes])[i];
+    }
     
     packet.algorithm = bytes[pos++];
     
     packet.compressedData = [NSData dataWithBytes:(const void*)bytes+pos length:[packet.bytes length]-pos];
+    
+    free(bytes);
     
     return [packet.bytes length];
 }
 
 - (int)parseLiteralDataPacket:(PGPLiteralDataPacket *)packet {
     int pos = 0;
-    unsigned char* bytes = (unsigned char*)[packet.bytes bytes];
+    unsigned char* bytes = malloc([packet.bytes length]);
+    if (bytes == NULL) {
+        return -1;
+    }
+    for (int i = 0; i < [packet.bytes length]; i++) {
+        bytes[i] = ((unsigned char*)[packet.bytes bytes])[i];
+    }
     
     packet.formatType = bytes[pos++];
     
@@ -424,6 +487,8 @@
     pos += 4;
     
     packet.literalData = [NSData dataWithBytes:(const void *) bytes+pos length:[packet.bytes length]-pos];
+    
+    free(bytes);
     
     return [packet.bytes length];
 }

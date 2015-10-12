@@ -154,7 +154,6 @@
         }
         NSData* decryptedData;
         if ([[parser getPacketsWithTag:9] count] > 0) {
-            // not supported yet
             PGPSymmetricallyEncryptedDataPacket* encData = [[parser getPacketsWithTag:9] objectAtIndex:0];
             int algorithm = ((unsigned char*)[decryptedSessionKey bytes])[0];
             switch (algorithm) {
