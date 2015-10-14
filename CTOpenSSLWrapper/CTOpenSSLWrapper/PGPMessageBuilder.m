@@ -71,6 +71,10 @@ static crc24 crc_octets(unsigned char *octets, size_t len)
         pgpmessage[i+[encryptedKeyBytes length]] = ((unsigned char*)[encryptedDataBytes bytes])[i];
     }
     NSData* ret = [NSData dataWithBytes:(const void *)pgpmessage length:length];
+    for (int i = 0; i < sizeof(key); i++) {
+        key[i] = '\0';
+    }
+    memset((void*)[sessionKey bytes], 0, [sessionKey length]);
     free(pgpmessage);
     return ret;
 }

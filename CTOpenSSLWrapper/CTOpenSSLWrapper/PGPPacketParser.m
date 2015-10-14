@@ -311,6 +311,7 @@
                 return -1;
             }
             packet.encryptedData = NULL;
+            free(bytes);
             return p+pos+2;
             break;
         case 255:
@@ -486,6 +487,7 @@
         for (int i = 0; i < strLen; i++) {
             str[i] = bytes[pos+i];
         }
+        packet.fileName = [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
     }
     pos += strLen;
     
@@ -535,7 +537,15 @@
     
     privateRSA->iqmp = BN_mod_inverse(NULL, privateRSA->q, privateRSA->p, ctx);
     
-    return [PEMHelper writeKeyToPEMWithRSA:privateRSA andIsPrivate:YES];
+    NSData* ret = [PEMHelper writeKeyToPEMWithRSA:privateRSA andIsPrivate:YES];
+    
+    RSA_free(privateRSA);
+    BN_CTX_free(ctx);
+    memset((void*)[d bytes], 0, [d length]);
+    memset((void*)[p bytes], 0, [p length]);
+    memset((void*)[q bytes], 0, [q length]);
+    
+    return ret;
 }
 
 - (NSData*) getPEMFromPublicKeyPacket:(PGPPublicKeyPacket *)packet {
@@ -559,7 +569,11 @@
     
     publicRSA->iqmp = NULL;
     
-    return [PEMHelper writeKeyToPEMWithRSA:publicRSA andIsPrivate:NO];
+    NSData* ret = [PEMHelper writeKeyToPEMWithRSA:publicRSA andIsPrivate:NO];
+    
+    RSA_free(publicRSA);
+    
+    return ret;
 }
 
 - (NSData*)generateKeyID:(PGPPublicKeyPacket *)packet {

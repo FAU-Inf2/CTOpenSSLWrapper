@@ -164,6 +164,7 @@
     }
     
     PGPPacketParser* parser = [[PGPPacketParser alloc] init];
+    memset((void*)[symKey bytes], 0, [symKey length]);
     return [parser getPEMFromSecretKeyPacket:tmp];
 }
 

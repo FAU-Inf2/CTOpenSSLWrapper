@@ -188,6 +188,8 @@
         } else {
             return NULL;
         }
+        memset((void*)[decryptedSessionKey bytes], 0, [decryptedSessionKey length]);
+        memset((void*)[sessionKey bytes], 0, [sessionKey length]);
         nextpos = 0;
         if ([parser extractPacketsFromBytes:decryptedData atPostion:nextpos] == -1) {
             return NULL;
